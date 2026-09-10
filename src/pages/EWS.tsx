@@ -121,26 +121,6 @@ export default function EWS() {
 
     <div className="min-h-screen">
 
-      {/* TOPBAR */}
-      <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] bg-[#FFF8F9]/90 px-6 backdrop-blur-xl lg:px-10">
-
-        <div>
-          <p className="text-xs font-medium text-[#171717]/40">
-            SIMONPEDIA / Sistem / EWS
-          </p>
-          <h1 className="mt-0.5 text-lg font-bold tracking-tight text-[#171717]">
-            Early Warning System
-          </h1>
-        </div>
-
-        <div className="flex items-center gap-2 text-xs text-[#171717]/40">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-          Monitoring aktif
-        </div>
-
-      </header>
-
-
       <main className="px-6 py-8 lg:px-10 lg:py-10">
 
         {/* HEADER */}

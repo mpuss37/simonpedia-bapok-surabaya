@@ -104,13 +104,6 @@ export default function Prediksi() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] bg-[#FFF8F9]/90 px-6 backdrop-blur-xl lg:px-10">
-        <div>
-          <p className="text-xs font-medium text-[#171717]/40">SIMONPEDIA / Prediksi</p>
-          <h1 className="mt-0.5 text-lg font-bold text-[#171717]">Prediksi Harga</h1>
-        </div>
-      </header>
-
       <main className="px-6 py-8 lg:px-10 lg:py-10">
         <section className="mb-7">
           <p className="mb-2 text-sm font-semibold text-[#C93742]">Price Prediction</p>

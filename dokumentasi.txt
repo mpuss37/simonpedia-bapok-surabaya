@@ -1,7 +1,6 @@
 ================================================================================
-DOKUMENTASI SIMONPEDIA BAPOK SURABAYA — VERSI 2
-Tanggal: 10 September 2026
-Cakupan: Task 1, 2, 3 + Integrasi Halaman
+DOKUMENTASI SIMONPEDIA BAPOK SURABAYA
+Update terakhir: 10 September 2026 — mencakup Task 1, 2, 3
 ================================================================================
 
 Dokumentasi ini terdiri dari DUA BAGIAN:
@@ -10,6 +9,10 @@ Dokumentasi ini terdiri dari DUA BAGIAN:
 
 Jika Anda pengguna yang hanya ingin MENJALANKAN aplikasi ini,
 cukup baca BAGIAN A saja.
+
+Prinsip: file ini SATU-SATUNYA dokumentasi. Setiap ada perubahan
+besar proyek, EDIT file ini (jangan buat file dokumentasi baru)
+agar repository tidak menumpuk file versi-versi lama.
 
 
 ================================================================================
@@ -20,13 +23,13 @@ A.1. APA ITU SIMONPEDIA?
 --------------------------------------------------------------------------------
 
 SIMONPEDIA adalah aplikasi untuk MEMANTAU HARGA BAHAN POKOK (bapok)
-di Kota Surabaya. Bayangkan seperti " aplikasi cuaca", tetapi yang
+di Kota Surabaya. Bayangkan seperti "aplikasi cuaca", tetapi yang
 dipantau bukan cuaca melainkan HARGA.
 
 Contoh pertanyaan yang bisa dijawab aplikasi ini:
 
   - "Berapa harga cabai di Pasar Wonokromo hari ini?"
-  - "Komoditas mana yang harganya naik aneh-aneh?"          (EWS)
+  - "Komoditas mana yang harganya naik aneh-aneh?"           (EWS)
   - "Kalau trend ini lanjut, berapa harga beras minggu depan?"(Prediksi)
   - "Apa yang harus saya lakukan kalau harga cabai melonjak?" (Rekomendasi)
 
@@ -49,7 +52,7 @@ A.2. ISTILAH PENTING (BACA DAHULU AGAR TIDAK BINGUNG)
   Survei           = Kegiatan pencatatan harga pada tanggal tertentu
                      di sebuah pasar.
 
-  EWS               = Early Warning System. Sistem peringatan dini.
+  EWS              = Early Warning System. Sistem peringatan dini.
                      Seperti "alarm" yang berbunyi kalau harga bergerak
                      tidak wajar.
 
@@ -246,7 +249,7 @@ A.6. ALUR KERJA PENGGUNA (CONTOH SKENARIO HARIAN)
 
   Skenario: Anda petugas pemantau harga yang bekerja pagi ini.
 
-  1. Buka Dashboard             → lihat ringkasan. Ada alert? 
+  1. Buka Dashboard             → lihat ringkasan. Ada alert?
   2. Kalau ada alert, buka EWS   → lihat komoditas mana yang Waspada/Kritis
   3. Buka Detail Komoditas       → cek grafik perjalanan harga komoditas itu
   4. Buka Prediksi               → lihat apakah trend naik terus atau tidak
@@ -325,13 +328,17 @@ B.2. STRUKTUR DIREKTORI
   |   |   |-- EWS.tsx                     Early warning (API: ews)
   |   |   |-- Prediksi.tsx                Prediksi 7 hari (API: prediction)
   |   |   +-- Recommendations.tsx         Rekomendasi (API: ews/analyze)
-  |   |-- components/layout/              (Sidebar, Topbar, layout)
+  |   |-- components/layout/
+  |   |   |-- DashboardLayout.tsx         (layout + header global — SATU-SATUNYA
+  |   |   |                                header di aplikasi, semua halaman
+  |   |   |                                memakai header ini)
+  |   |   |-- Sidebar.tsx                 (navigasi kiri)
+  |   |   +-- Topbar.tsx, Navbar.tsx, MainLayout.tsx (tidak terpakai)
   |   |-- services/priceService.ts        (API client terpusat)
   |   |-- App.tsx                         (react-router routes)
   |   +-- main.tsx
   |
-  |-- dokumentasiver1.txt                 (dokumentasi Task 1)
-  |-- dokumentasiver2.txt                 (file ini)
+  |-- dokumentasi.txt                    (FILE INI — satu-satunya dokumentasi)
   +-- package.json                        (frontend deps)
 
 
@@ -454,7 +461,18 @@ B.5. PENJELASAN FILE FRONTEND (BAGAIMANA KERJANYA)
     3. Render: kalau loading → spinner; kalau error → console.error;
        kalau sukses → render UI dengan data real.
 
+  POLA LAYOUT (PENTING — jangan duplikasi lagi):
+    Header global (breadcrumb + tombol notifikasi + update terakhir)
+    hanya ada di DashboardLayout.tsx. Halaman TIDAK PERNAH membuat
+    header sendiri lagi — cukup tulis isi halamannya saja.
+
   File-file penting:
+
+  components/layout/DashboardLayout.tsx
+    - Wrapper semua halaman: Sidebar + header global + <Outlet/> tempat
+      halaman aktif dirender.
+    - pageInfo map: breadcrumb & title per route (edit di sini kalau
+      ingin mengganti judul halaman).
 
   services/priceService.ts
     - PUSAT semua panggilan API frontend (getKomoditas, getPasar, getHarga).
@@ -622,14 +640,16 @@ B.8. KONVENSI & POLA KODE
     - Fetch data di useEffect, simpan di useState.
     - Interface TypeScript didefinisikan lokal di file halaman
       (meniru bentuk JSON API).
+    - Header GLOBAL hanya di DashboardLayout.tsx. Halaman cukup isi.
     - Tailwind class inline, skema warna konsisten:
       #C93742 (merah brand), #171717 (hitam), #FFF8F9 (bg lembut).
     - Komponen kecil (StatusCard, SummaryCard, dsb.) didefinisikan di
       bagian bawah file halaman yang sama (colocation, tanpa folder
       components tambahan — YAGNI).
 
-  Style dokumentasi file lama (dokumentasiver1.txt): teks murni agar mudah
-  dibaca semua orang tanpa render markdown.
+  Dokumentasi: file teks murni ini (dokumentasi.txt) agar mudah dibaca
+  semua orang tanpa render markdown. EDIT file ini untuk update,
+  jangan buat file baru.
 
 
 B.9. STATUS FITUR & ROADMAP
@@ -641,6 +661,8 @@ B.9. STATUS FITUR & ROADMAP
     [x] Task 3 — Prediksi harga 7 hari (Linear Regression + MA + ES)
     [x] Semua halaman utama tersambung API real (Home, Monitoring,
         CommodityDetail, Pasar, MapPage, EWS, Prediksi, Recommendations)
+    [x] Header global tunggal di DashboardLayout (duplikasi header
+        per-halaman sudah dihapus)
 
   DITUNDA (sesuai keputusan user):
     [ ] Task 4 — Modul Urban Farm (sistem eksternal; kita hanya
@@ -661,7 +683,45 @@ B.9. STATUS FITUR & ROADMAP
       Railway/Fly.io, DB → Supabase/Neon (managed PostgreSQL)
 
 
-B.10. GITHUB REPOSITORY
+B.10. RIWAYAT PENGERJAAN (LOG TASK)
+--------------------------------------------------------------------------------
+
+  TASK 1 — MIGRASI & PERSIAPAN BACKEND (selesai)
+    Tahap 1: Audit — 8 halaman React, semua data hardcoded; Supabase
+             hanya di 3 file; tanpa koneksi database.
+    Tahap 2: Hapus Supabase (supabase.ts, SupabaseTest.tsx, dependency).
+    Tahap 3: Setup server/ Express + Prisma + TypeScript + .env.
+    Tahap 4: Schema 5 tabel + import data real Bapanas Jan 2024:
+             7 pasar, 60 komoditas, 217 survei, 10.844 harga.
+    Tahap 5: REST API dasar: health, komoditas, pasar, harga.
+    Tahap 6: Frontend Monitoring & Pasar pakai data PostgreSQL via API.
+
+  TASK 2 — EARLY WARNING SYSTEM (selesai)
+    - Route server/src/routes/ews.ts: /api/ews/analyze (analisis 60
+      komoditas + alerts) dan /api/ews/chart/:id.
+    - Threshold risiko: Normal <5%, Siaga 5-10%, Waspada 10-20%,
+      Kritis >20% (perubahan antara dua tanggal survei terakhir).
+    - Halaman EWS.tsx: 4 kartu status, banner alert, grafik per
+      komoditas, daftar alert, ringkasan risiko, rekomendasi.
+
+  TASK 3 — PREDIKSI HARGA (selesai)
+    - Route server/src/routes/prediction.ts: /api/prediction/all dan
+      /api/prediction/komoditas/:id.
+    - Tiga metode: Linear Regression, Moving Average (7 hari),
+      Exponential Smoothing (alpha=0.3).
+    - Halaman Prediksi.tsx: tabel + filter kategori + panel detail
+      dengan grafik ComposedChart (historis vs prediksi).
+
+  INTEGRASI HALAMAN (selesai)
+    - Recommendations.tsx: rekomendasi otomatis dari data EWS.
+    - MapPage.tsx: peta dari /api/pasar.
+    - CommodityDetail.tsx: detail dari /api/harga + grafik Recharts.
+    - Hapus Prediction.tsx lama (dead code).
+    - Hapus header duplikat di Home/EWS/Prediksi/Recommendations —
+      cukup header global DashboardLayout.
+
+
+B.11. GITHUB REPOSITORY
 --------------------------------------------------------------------------------
 
   https://github.com/mpuss37/simonpedia-bapok-surabaya
@@ -674,8 +734,7 @@ B.10. GITHUB REPOSITORY
   token lagi di chat/manapun.
 
 ================================================================================
-DOKUMENTASI VERSI 2 DIBUAT: 10 September 2026
-Task 1-3 selesai. Dokumentasi mencakup panduan pengguna (Bagian A)
-dan panduan developer (Bagian B).
+DOKUMENTASI TERAKHIR DIUPDATE: 10 September 2026
+Satu file, di-edit saat proyek berubah. Jangan buat file versi baru.
 Dikerjakan dengan bantuan AI (OpenCode / opencode.ai)
 ================================================================================

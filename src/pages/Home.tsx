@@ -3,7 +3,6 @@ import {
   ArrowDownRight,
   ArrowRight,
   ArrowUpRight,
-  Bell,
   CheckCircle2,
   MapPin,
   TrendingUp,
@@ -108,23 +107,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* TOPBAR */}
-      <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] bg-[#FFF8F9]/90 px-6 backdrop-blur-xl lg:px-10">
-        <div>
-          <p className="text-xs font-medium text-[#171717]/40">SIMONPEDIA / Dashboard</p>
-          <h1 className="mt-0.5 text-lg font-bold text-[#171717]">Dashboard</h1>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="hidden items-center gap-2 text-xs text-[#171717]/40 sm:flex">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            Data diperbarui 5 menit lalu
-          </div>
-          <button className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#171717]/[0.06] bg-white text-[#171717]/60">
-            <Bell size={17} />
-            <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#C93742]" />
-          </button>
-        </div>
-      </header>
 
       <main className="px-6 py-8 lg:px-10 lg:py-10">
         {/* HERO */}
