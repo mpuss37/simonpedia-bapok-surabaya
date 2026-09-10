@@ -8,7 +8,7 @@ import Home from "./pages/Home"
 import MapPage from "./pages/MapPage"
 import Monitoring from "./pages/Monitoring"
 import Pasar from "./pages/Pasar"
-import Prediction from "./pages/Prediction"
+import Prediction from "./pages/Prediksi"
 import Recommendations from "./pages/Recommendations"
 
 
