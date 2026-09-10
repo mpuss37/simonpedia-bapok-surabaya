@@ -10,6 +10,7 @@ import {
 
 import React, { useEffect, useMemo, useState } from "react"
 import { getHarga, type Harga } from "../services/priceService"
+import PageHeader from "../components/layout/PageHeader"
 
 
 // =====================================================
@@ -124,6 +125,8 @@ export default function Monitoring() {
   return (
 
     <div className="min-h-screen bg-[#FAF7F7]">
+
+      <PageHeader breadcrumb="Monitoring" title="Monitoring Harga" />
 
       {/* =================================================
           PAGE HEADER

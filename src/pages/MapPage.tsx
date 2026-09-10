@@ -18,6 +18,7 @@ import L from "leaflet"
 import "leaflet/dist/leaflet.css"
 
 import { getPasar, type Pasar } from "../services/priceService"
+import PageHeader from "../components/layout/PageHeader"
 
 const marketIcon = new L.DivIcon({
   className: "",
@@ -72,7 +73,9 @@ export default function MapPage() {
   }, [search, filterKecamatan, markets])
 
   return (
-    <div className="px-6 py-10 lg:px-8 lg:py-12">
+    <div className="min-h-screen bg-[#FAF7F7]">
+      <PageHeader breadcrumb="Monitoring" title="Peta Pasar" />
+      <div className="px-6 py-10 lg:px-8 lg:py-12">
       <section>
         <p className="text-sm font-semibold text-[#C93742]">Monitoring Wilayah</p>
         <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-[#171717] lg:text-5xl">Peta Pasar Surabaya</h1>
@@ -213,6 +216,7 @@ export default function MapPage() {
       <div className="mt-5 flex items-center gap-2 text-xs text-[#171717]/35">
         <MapPin size={13} />
         <span>Lokasi pasar ditampilkan sebagai titik pemantauan bahan pokok Kota Surabaya.</span>
+      </div>
       </div>
     </div>
   )

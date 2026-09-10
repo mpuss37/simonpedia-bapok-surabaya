@@ -462,9 +462,10 @@ B.5. PENJELASAN FILE FRONTEND (BAGAIMANA KERJANYA)
        kalau sukses → render UI dengan data real.
 
   POLA LAYOUT (PENTING — jangan duplikasi lagi):
-    Header global (breadcrumb + tombol notifikasi + update terakhir)
-    hanya ada di DashboardLayout.tsx. Halaman TIDAK PERNAH membuat
-    header sendiri lagi — cukup tulis isi halamannya saja.
+    DashboardLayout.tsx HANYA berisi Sidebar + Outlet (tanpa header).
+    Setiap halaman memasang sendiri header sticky via komponen
+    PageHeader (components/layout/PageHeader.tsx) — breadcrumb, judul,
+    status, dan tombol notifikasi. Satu definisi, dipakai semua halaman.
 
   File-file penting:
 
@@ -661,8 +662,8 @@ B.9. STATUS FITUR & ROADMAP
     [x] Task 3 — Prediksi harga 7 hari (Linear Regression + MA + ES)
     [x] Semua halaman utama tersambung API real (Home, Monitoring,
         CommodityDetail, Pasar, MapPage, EWS, Prediksi, Recommendations)
-    [x] Header global tunggal di DashboardLayout (duplikasi header
-        per-halaman sudah dihapus)
+    [x] Header per-halaman via komponen PageHeader bersama; layout
+        hanya Sidebar + Outlet (tanpa header global)
 
   DITUNDA (sesuai keputusan user):
     [ ] Task 4 — Modul Urban Farm (sistem eksternal; kita hanya
@@ -717,8 +718,8 @@ B.10. RIWAYAT PENGERJAAN (LOG TASK)
     - MapPage.tsx: peta dari /api/pasar.
     - CommodityDetail.tsx: detail dari /api/harga + grafik Recharts.
     - Hapus Prediction.tsx lama (dead code).
-    - Hapus header duplikat di Home/EWS/Prediksi/Recommendations —
-      cukup header global DashboardLayout.
+    - Pola header final: komponen PageHeader dipasang per-halaman;
+      DashboardLayout hanya Sidebar + Outlet.
 
 
 B.11. GITHUB REPOSITORY

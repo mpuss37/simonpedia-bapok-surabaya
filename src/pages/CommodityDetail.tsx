@@ -20,6 +20,7 @@ import {
 } from "recharts"
 
 import { getHarga, type Harga } from "../services/priceService"
+import PageHeader from "../components/layout/PageHeader"
 
 function formatRupiah(value: number) {
   return `Rp${value.toLocaleString("id-ID")}`
@@ -88,7 +89,9 @@ export default function CommodityDetail() {
 
   if (!loading && filteredHarga.length === 0) {
     return (
-      <div className="min-h-screen bg-[#FAF7F7] px-6 py-12 lg:px-8">
+      <div className="min-h-screen bg-[#FAF7F7]">
+        <PageHeader breadcrumb="Monitoring" title="Detail Komoditas" />
+        <div className="px-6 py-12 lg:px-8">
         <Link to="/monitoring" className="inline-flex items-center gap-2 text-sm font-semibold text-[#C93742]">
           <ArrowLeft size={16} /> Kembali ke Monitoring
         </Link>
@@ -96,12 +99,14 @@ export default function CommodityDetail() {
           <h1 className="text-2xl font-bold text-[#171717]">Komoditas tidak ditemukan</h1>
           <p className="mt-2 text-sm text-[#171717]/45">Data untuk "{commodityName}" belum tersedia.</p>
         </div>
+        </div>
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-[#FAF7F7]">
+      <PageHeader breadcrumb="Monitoring" title="Detail Komoditas" />
       <section className="px-6 pb-8 pt-10 lg:px-8 lg:pt-12">
         <Link to="/monitoring" className="inline-flex items-center gap-2 text-xs font-semibold text-[#171717]/45 transition hover:text-[#C93742]">
           <ArrowLeft size={15} /> Kembali ke Monitoring

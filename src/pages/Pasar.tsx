@@ -8,6 +8,7 @@ import {
   SlidersHorizontal,
 } from "lucide-react"
 import { getPasar, type Pasar as PasarType } from "../services/priceService"
+import PageHeader from "../components/layout/PageHeader"
 
 export default function Pasar() {
   const [search, setSearch] = useState("")
@@ -56,7 +57,9 @@ export default function Pasar() {
   })
 
   return (
-    <div className="px-6 py-10 lg:px-8 lg:py-12">
+    <div className="min-h-screen bg-[#FAF7F7]">
+      <PageHeader breadcrumb="Data Pasar" title="Daftar Pasar" />
+      <div className="px-6 py-10 lg:px-8 lg:py-12">
 
       {/* PAGE INTRO */}
       <section>
@@ -291,6 +294,7 @@ export default function Pasar() {
       </>
       )}
 
+      </div>
     </div>
   )
 }
