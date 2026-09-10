@@ -40,7 +40,7 @@ interface DetailPrediksi {
     trenPersen: number
     movingAverage: number
     exponentialSmoothing: number
-    confidence: number
+    confidence: number | null
   }
   prediksi7Hari: { tanggal: string; harga: number }[]
   prediksiRingkasan: {
@@ -48,8 +48,17 @@ interface DetailPrediksi {
     confidenceInterval: number
     prediksiRendah: number
     prediksiTinggi: number
-    confidence: number
+    confidence: number | null
   }
+  backtest: {
+    trainSize: number
+    testSize: number
+    hasil: { metode: string; mape: number; rmse: number }[]
+    terbaik: string
+    mapeTerbaik: number
+    mapeBlend: number
+    akurasiBlend: number
+  } | null
 }
 
 function formatRupiah(value: number) {
@@ -236,8 +245,15 @@ export default function Prediksi() {
                     </p>
                   </div>
                   <div className="rounded-xl bg-[#FFF8F9] p-4">
-                    <p className="text-[10px] text-[#171717]/35">Confidence</p>
-                    <p className="mt-1 text-sm font-bold text-[#171717]">{detail.prediksiRingkasan.confidence}%</p>
+                    <p className="text-[10px] text-[#171717]/35">Akurasi terukur (backtest)</p>
+                    <p className="mt-1 text-sm font-bold text-[#171717]">
+                      {detail.backtest ? `${detail.backtest.akurasiBlend}%` : "-"}
+                    </p>
+                    {detail.backtest && (
+                      <p className="mt-0.5 text-[9px] text-[#171717]/30">
+                        rata-rata meleset {detail.backtest.mapeBlend}% dari harga aktual
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -259,7 +275,55 @@ export default function Prediksi() {
                   </div>
                 </div>
 
-                {/* METODE */}
+                {/* BACKTEST */}
+                {detail.backtest && (
+                  <div className="mb-6 rounded-2xl border border-[#171717]/[0.05] p-5">
+                    <div className="mb-1 flex items-center justify-between">
+                      <p className="text-xs font-bold text-[#171717]">Uji Akurasi (Backtest)</p>
+                      <span className="rounded-full bg-[#FFF8F9] px-2.5 py-1 text-[9px] font-semibold text-[#171717]/40">
+                        latih {detail.backtest.trainSize} hari → uji {detail.backtest.testSize} hari terakhir
+                      </span>
+                    </div>
+                    <p className="mb-4 text-[10px] leading-4 text-[#171717]/40">
+                      Model dilatih pada data lama, lalu "menebak" hari-hari terakhir yang sudah
+                      diketahui harga aktualnya. MAPE = rata-rata persentase meleset — makin kecil makin baik.
+                    </p>
+                    <div className="overflow-x-auto">
+                      <table className="w-full min-w-[480px]">
+                        <thead>
+                          <tr className="border-b border-[#171717]/[0.05]">
+                            <th className="pb-2 text-left text-[9px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">Metode</th>
+                            <th className="pb-2 text-right text-[9px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">MAPE (%)</th>
+                            <th className="pb-2 text-right text-[9px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">RMSE (Rp)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {detail.backtest.hasil.map(h => (
+                            <tr
+                              key={h.metode}
+                              className={`border-b border-[#171717]/[0.03] last:border-0 ${
+                                h.metode.startsWith("Blend") ? "bg-[#FFF3F4]" : ""
+                              }`}
+                            >
+                              <td className="py-2.5 text-xs font-semibold text-[#171717]">{h.metode}</td>
+                              <td className="py-2.5 text-right text-xs font-bold text-[#C93742]">{h.mape}</td>
+                              <td className="py-2.5 text-right text-xs text-[#171717]/50">{h.rmse.toLocaleString("id-ID")}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className="mt-4 rounded-xl bg-[#FFF8F9] p-3">
+                      <p className="text-[10px] leading-5 text-[#171717]/45">
+                        <span className="font-bold text-[#171717]">Metode terbaik:</span> {detail.backtest.terbaik}{" "}
+                        (meleset {detail.backtest.mapeTerbaik}%).{" "}
+                        {detail.backtest.hasil.find(h => h.metode === "Naive (besok = hari ini)")!?.mape < detail.backtest.mapeBlend
+                          ? "Peringatan: prediksi sistem masih kalah dari baseline naif — anggap prediksi ini indikatif, bukan presisi."
+                          : "Prediksi sistem mengalahkan baseline naif pada data ini."}
+                      </p>
+                    </div>
+                  </div>
+                )}
                 <div className="rounded-2xl border border-[#171717]/[0.05] p-5">
                   <p className="mb-4 text-xs font-bold text-[#171717]">Metode Prediksi</p>
                   <div className="grid gap-3 sm:grid-cols-3">

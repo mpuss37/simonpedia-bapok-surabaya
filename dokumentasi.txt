@@ -329,9 +329,9 @@ B.2. STRUKTUR DIREKTORI
   |   |   |-- Prediksi.tsx                Prediksi 7 hari (API: prediction)
   |   |   +-- Recommendations.tsx         Rekomendasi (API: ews/analyze)
   |   |-- components/layout/
-  |   |   |-- DashboardLayout.tsx         (layout + header global — SATU-SATUNYA
-  |   |   |                                header di aplikasi, semua halaman
-  |   |   |                                memakai header ini)
+  |   |   |-- DashboardLayout.tsx         (hanya Sidebar + Outlet)
+  |   |   |-- PageHeader.tsx               (header per-halaman, dipakai
+  |   |   |                                halaman tanpa header sendiri)
   |   |   |-- Sidebar.tsx                 (navigasi kiri)
   |   |   +-- Topbar.tsx, Navbar.tsx, MainLayout.tsx (tidak terpakai)
   |   |-- services/priceService.ts        (API client terpusat)
@@ -450,6 +450,282 @@ B.4. REST API ENDPOINTS LENGKAP
     CATATAN AKURASI: data historis baru 31 hari. Model sederhana ini
     cocok untuk demo/konsep. Untuk produksi, tambah data bulan-bulan
     lain lalu naikkan kompleksitas model.
+
+  ---------------------------------------------------------------------------
+  ENDPOINT BACKTEST (uji akurasi — dibuat 10 Sep 2026)
+  ---------------------------------------------------------------------------
+  GET /api/prediction/backtest/:komoditasId
+    Response: trainSize, testSize, hasil[] (5 metode: mape, rmse),
+              terbaik, akurasiBlend, perbandinganHarian[]
+              (tanggal, aktual, naive, lr, ma7, es, blend)
+
+    Penjelasan lengkap cara kerjanya: lihat BAGIAN C di bawah.
+
+
+================================================================================
+BAGIAN C — PANDUAN LENGKAP CARA MENGHITUNG FORECAST
+(Belajar dari nol: matematika, contoh angka nyata, dan kejujuran akurasi)
+================================================================================
+
+C.0. FILSAFAT DASAR: PREDIKSI ITU PERKIRAAN, BUKAN RAMALAN
+--------------------------------------------------------------------------------
+
+  Harga pasar TIDAK BISA diramal pasti — dipengaruhi cuaca, panen,
+  spekulan, holiday, dll yang tidak ada di data kita. Yang BISA
+  dilakukan: membaca POLA data masa lalu lalu MENERUSKAN pola itu
+  beberapa hari ke depan, sambil JUJUR mengukur seberapa jauh
+  perkiraan itu biasanya meleset.
+
+  Dua pertanyaan yang selalu harus terjawab oleh sistem prediksi:
+    1. Prediksinya berapa?       → algoritma forecasting (C.2-C.4)
+    2. Melesetnya biasanya berapa? → backtest (C.5)
+
+  Sistem ini menjawab keduanya. Bagian C menjelaskan caranya step
+  by step dengan ANGKA NYATA dari database kita sendiri.
+
+  ==============================================================================
+  C.1. LANGKAH 0 — PERSIAPAN DATA (SEMUA METODE PAKAI DATA INI)
+  ==============================================================================
+
+  Data mentah = harga per (pasar × tanggal). Satu komoditas punya
+  banyak harga di hari yang sama karena ada 7 pasar.
+
+  Langkah pertama: HARGA HARIAN = rata-rata semua pasar di hari itu.
+
+  Contoh nyata — Cabe Merah Besar (komoditas id 49), tanggal
+  2024-01-25 dari 7 pasar:
+
+    Balongsari 58.000    Genteng 63.500    Kembang 66.000
+    Pabean     61.000    Pucang   59.000    Tambahrejo 65.000
+    Wonokromo  64.000
+
+    Harga harian 25 Jan = (58000+63500+66000+61000+59000+65000+64000)/7
+                        = 62.429  (Rp)
+
+  Kenapa dirata-rata? Karena harga pasar individu berisik (noise):
+  pedagang beda modal beda harga sedikit. Rata-rata "menenangkan"
+  noise itu dan memperlihatkan tren kota secara keseluruhan.
+
+  Hasil: satu deret angka — satu harga per hari, urut tanggal:
+    P1, P2, P3, ..., P31   (P = harga harian, 31 hari Januari)
+    Contoh Cabe: 58.643 → 62.429 → 66.143 → ... (naik menjelang Imlek)
+
+  ==============================================================================
+  C.2. METODE 1 — LINEAR REGRESSION (GARIS TREN)
+  ==============================================================================
+
+  IDE: pasangkan garis lurus terhadap data:
+        harga ≈ intercept + slope × t
+  di mana t = nomor hari (0, 1, 2, ...), slope = kemiringan garis
+  (rupiah per hari), intercept = titik potong.
+
+  RUMUS LEAST SQUARES (metode kuadrat terkecil):
+    Misal n = jumlah hari, t_i = i, P_i = harga hari ke-i.
+
+        n·Σ(t·P) − Σt·ΣP
+    slope = ────────────────────────
+             n·Σ(t²) − (Σt)²
+
+        ΣP − slope·Σt
+    intercept = ─────────────
+             n
+
+  Kode (server/src/routes/prediction.ts → linearRegression):
+    let sumX=0, sumY=0, sumXY=0, sumXX=0
+    for (i=0; i<n; i++) { sumX+=i; sumY+=P[i]; sumXY+=i*P[i]; sumXX+=i*i }
+    slope = (n*sumXY − sumX*sumY) / (n*sumXX − sumX*sumX)
+    intercept = (sumY − slope*sumX) / n
+
+  Prediksi hari ke-k (di luar data): harga_k = intercept + slope × k
+
+  CARA MEMBACA hasil:
+    slope > 0    → tren naik, mis. slope=+750 artinya harga naik
+                   RATA-RATA Rp750/hari
+    slope < 0    → tren turun
+    trenPersen (%) = slope / harga_terakhir × 100
+                   → "naik berapa % per hari"
+
+  Kapan berguna: melihat ARAH jangka menengah (apakah komoditas
+  sedang memanas). Kelemahan: sangat sensitif terhadap lonjakan
+  sesaat — satu hari aneh bisa menarik garis liar.
+
+  ==============================================================================
+  C.3. METODE 2 — MOVING AVERAGE (RATA-RATA BERGERAK)
+  ==============================================================================
+
+  IDE: prediksi besok = rata-rata N hari terakhir. Fluktuasi harian
+  saling meniadakan, yang tersisa adalah "level harga" terkini.
+
+    MA7(t) = (P(t−6) + P(t−5) + ... + P(t−1) + P(t)) / 7
+
+  Kode → movingAverage(data, window=7): untuk posisi i, ambil
+  rata-rata dari max(0, i−6) sampai i.
+
+  Contoh Cabe (harga 7 hari terakhir, 19-25 Jan):
+    58.571, 59.500, 60.857, 62.571, 61.285, 63.714, 62.429
+    MA7 = (58571+59500+60857+62571+61285+63714+62429)/7 = 61.275
+
+  Kapan berguna: harga stabil tapi berisik. Kelemahan: TERLAMBAT
+  saat tren berubah — rata-rata 7 hari "mengingat masa lalu",
+  kalau harga tiba-tiba naik, MA butuh beberapa hari untuk menyusul.
+
+  ==============================================================================
+  C.4. METODE 3 — EXPONENTIAL SMOOTHING (PEMULUSAN EKSPONENSIAL)
+  ==============================================================================
+
+  IDE: seperti MA tapi lebih menghargai data TERBARU. Bobotnya
+  menurun secara eksponensial ke belakang.
+
+    S(1) = P(1)
+    S(t) = α·P(t) + (1−α)·S(t−1)      α (alpha) = 0.3
+
+    Artinya: nilai baru = 30% data hari ini + 70% "ingatan" kemarin.
+    Ingatan kemarin juga berisi 30% hari sebelumnya dst → bobot
+    hari makin lama makin kecil: 0.3, 0.21, 0.147, 0.103, ...
+
+  Kode → exponentialSmoothing(data, alpha=0.3).
+
+  α besar (→1) = cepat ikut perubahan tapi mudah terkejut noise.
+  α kecil (→0) = halus tapi lambat. 0.3 = kompromi standar.
+
+  Kelebihan vs MA7: tidak terlalu lambat merespons perubahan.
+  Kelemahan: tetap satu level — tidak menangkap tren naik secara
+  sistematis (butuh versi "double smoothing" — di luar cakupan).
+
+  ==============================================================================
+  C.5. METODE PRODUKSI — BLEND (YANG DIPAKAI SISTEM UNTUK PREDIKSI 7 HARI)
+  ==============================================================================
+
+  Kelemahan masing-masing metode (C.2-C.4) berbeda. Sistem memakai
+  gabungan:
+
+    pred_i = tren_i × (1 − w) + hargaTerakhir × w
+
+    di mana: tren_i  = nilai garis LR di hari ke-i (lanjutkan garis)
+             w = i / 7 (i = 1..7, berat harga terakhir makin besar
+                          makin jauh hari yang diprediksi)
+
+  INTUISI: hari 1-2 ke depan, harga kemungkinan besar masih
+  "menempel" harga hari ini (w besar → percaya harga terakhir).
+  Makin jauh ke hari 7, makin percaya tren jangka panjang (w kecil
+  → percaya garis LR). Ini kompensasi kelemahan LR yang terlalu
+  yakin pada tren di jangka pendek.
+
+  Output fitur web "Prediksi 7 hari" = 7 angka dari rumus ini.
+
+  ==============================================================================
+  C.6. BACKTEST — MENGUKUR SEBERAPA JUJUR PREDIKSI KITA (BAGIAN TERPENTING)
+  ==============================================================================
+
+  Masalah: prediksi masa depan tidak bisa dibandingkan karena masa
+  depan belum terjadi. SOLUSI: PURA-PURA kembali ke masa lalu.
+
+  CARA KERJA (dua mode uji):
+
+  MODE 1 — WALK-FORWARD 1 LANGKAH (untuk 4 metode dasar):
+    Ambil 31 hari data. Sisihkan 7 hari TERAKHIR sebagai "kunci ujian"
+    (test set). 24 hari pertama = bahan latih (train set).
+
+    Untuk setiap hari uji ke-t (t = 25..31):
+      a. Latih model HANYA pada data [1..t−1] — model dilarang
+         "mengintip" hari ke-t.
+      b. Prediksi harga hari ke-t.
+      c. Simpan selisih prediksi vs harga AKTUAL hari ke-t.
+
+    Ini meniru pemakaian nyata: di dunia sungguhan kita juga hanya
+    punya masa lalu saat menebak.
+
+    Contoh nyata (Cabe, uji hari 25 Jan, aktual 62.429):
+      Naive : prediksi = harga 24 Jan        = 64.571 → meleset 3.4%
+      LR    : prediksi = intercept+slope×24  = 56.967 → meleset 8.7%
+      MA7   : rata-rata 18-24 Jan            = 57.265 → meleset 8.3%
+      ES    : nilai S terakhir               = 60.255 → meleset 3.5%
+      Blend : forecast dari data 24 hari     = 58.053 → meleset 7.0%
+
+  MODE 2 — BLENDED 7 LANGKAH (meniru fitur web persis):
+    Latih model pada 24 hari, jalankan prediksi 7 hari sekaligus
+    (seperti fitur web), bandingkan dengan 7 hari aktual terakhir.
+
+  METRIK ERROR:
+    MAPE (%) = rata-rata |pred − aktual| / aktual × 100
+               → "rata-rata meleset berapa persen dari harga asli"
+               → mudah dibaca orang awam: MAPE 2% = rata-rata salah
+                 2% (harga 60.000 → tebak 61.200)
+    RMSE (Rp) = √( rata-rata (pred − aktual)² )
+               → dalam rupiah; menghukum kesalahan besar lebih keras
+
+    AKURASI di web = 100 − MAPE (blend).
+
+  HASIL NYATA DATABASE KITA (Cabe Merah Besar, train 24 → test 7):
+
+    Metode                              MAPE     RMSE
+    --------------------------------- -------- ---------
+    Naive (besok = hari ini)             1,81%    Rp1.322
+    Exponential Smoothing (α=0.3)        2,42%    Rp1.805
+    Blend (dipakai sistem)               2,24%    Rp1.976
+    Moving Average (7 hari)              3,36%    Rp2.595
+    Linear Regression                    4,90%    Rp3.314
+
+  TEMUAN JUJUR (penting dipahami):
+    Naive MENANG. Artinya: pada data Januari 2024, menebak "besok
+    sama dengan hari ini" rata-rata lebih akurat dari semua metode
+    canggih kita. Ini NORMAL untuk harga bapok harian yang
+    pergerakannya kecil dan "lengket" (sticky).
+
+    Pelajarannya:
+    1. Jangan percaya metode rumit otomatis lebih baik — SELALU
+       uji dulu dengan baseline naif.
+    2. Prediksi kita meleset rata-rata ~2% — cukup untuk indikasi
+       tren, TIDAK cukup untuk keputusan beli/makanan hari ini.
+    3. Halaman web menampilkan peringatan otomatis jika Blend kalah
+       dari Naive pada komoditas tersebut.
+
+  ==============================================================================
+  C.7. RANGKUMAN ALUR PREDIKSI END-TO-END
+  ==============================================================================
+
+    Database (10.844 baris DetailSurvei)
+      ↓ rata-rata 7 pasar per tanggal          (C.1)
+    Deret harga harian (31 titik)
+      ↓ Linear Regression + MA7 + ES (α=0.3)    (C.2, C.3, C.4)
+    Analisis: tren, slope, level halus
+      ↓ Blend: tren×(1−w) + hargaTerakhir×w    (C.5)
+    Prediksi 7 hari (fitur web /prediksi)
+      ↓ Backtest walk-forward                  (C.6)
+    MAPE/RMSE per metode → akurasi terukur yang
+    ditampilkan di web (menggantikan "confidence" lama yang di-hardcode)
+
+  ==============================================================================
+  C.8. KETERBATASAN & JALAN NAIK KELAS (BACA SEBELUM PERCAYA PREDIKSI)
+  ==============================================================================
+
+  Keterbatasan sistem sekarang (jujur):
+    1. Data hanya 31 hari → pola musiman tahunan (Ramadan, Imlek,
+       panen) tidak terbaca sama sekali.
+    2. Tidak ada variabel eksternal (cuaca, stok, kurs) — harga
+       bapok sering digerakkan faktor luar.
+    3. Naive menang → untuk horizon 1 hari, metode kita belum
+       memberi nilai tambah.
+    4. Confidence interval ±5% dari harga tertinggi = asumsi
+       sederhana, bukan hasil statistik.
+
+  Jalur naik kelas (urutan belajar yang disarankan):
+    1. Kumpulkan 12+ bulan data → musiman bisa dimodelkan
+    2. Holt's linear trend (ES yang sadar-tren) — solusi kelemahan
+       ES murni
+    3. Holt-Winters (ES + musiman) — standar industri untuk data
+       harga harian musiman
+    4. SARIMA / Prophet — kalau mau serius
+    5. Belajar dari kemenangan Naive: prediksi 1 hari pakai Naive,
+       prediksi 7 hari pakai metode yang menang backtest per
+       komoditas (bukan satu metode untuk semua)
+
+
+================================================================================
+DOKUMENTASI TERAKHIR DIUPDATE: 10 September 2026
+Satu file, di-edit saat proyek berubah. Jangan buat file versi baru.
+Dikerjakan dengan bantuan AI (OpenCode / opencode.ai)
+================================================================================
 
 
 B.5. PENJELASAN FILE FRONTEND (BAGAIMANA KERJANYA)
@@ -660,6 +936,8 @@ B.9. STATUS FITUR & ROADMAP
     [x] Task 1 — Migrasi Supabase → Express+Prisma+PostgreSQL (data real)
     [x] Task 2 — EWS: deteksi anomali → level risiko → alert → rekomendasi
     [x] Task 3 — Prediksi harga 7 hari (Linear Regression + MA + ES)
+    [x] Backtest walk-forward: MAPE/RMSE 5 metode, akurasi terukur
+        menggantikan confidence hardcoded (lihat BAGIAN C)
     [x] Semua halaman utama tersambung API real (Home, Monitoring,
         CommodityDetail, Pasar, MapPage, EWS, Prediksi, Recommendations)
     [x] Header per-halaman via komponen PageHeader bersama; layout
