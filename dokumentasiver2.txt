@@ -1,0 +1,681 @@
+================================================================================
+DOKUMENTASI SIMONPEDIA BAPOK SURABAYA — VERSI 2
+Tanggal: 10 September 2026
+Cakupan: Task 1, 2, 3 + Integrasi Halaman
+================================================================================
+
+Dokumentasi ini terdiri dari DUA BAGIAN:
+  BAGIAN A — Panduan Penggunaan (untuk orang awam)
+  BAGIAN B — Dokumentasi Teknis Kode (untuk developer)
+
+Jika Anda pengguna yang hanya ingin MENJALANKAN aplikasi ini,
+cukup baca BAGIAN A saja.
+
+
+================================================================================
+BAGIAN A — PANDUAN PENGGUNAAN (UNTUK ORANG AWAM)
+================================================================================
+
+A.1. APA ITU SIMONPEDIA?
+--------------------------------------------------------------------------------
+
+SIMONPEDIA adalah aplikasi untuk MEMANTAU HARGA BAHAN POKOK (bapok)
+di Kota Surabaya. Bayangkan seperti " aplikasi cuaca", tetapi yang
+dipantau bukan cuaca melainkan HARGA.
+
+Contoh pertanyaan yang bisa dijawab aplikasi ini:
+
+  - "Berapa harga cabai di Pasar Wonokromo hari ini?"
+  - "Komoditas mana yang harganya naik aneh-aneh?"          (EWS)
+  - "Kalau trend ini lanjut, berapa harga beras minggu depan?"(Prediksi)
+  - "Apa yang harus saya lakukan kalau harga cabai melonjak?" (Rekomendasi)
+
+Data yang dipakai adalah data REAL dari Bapanas/SP2KP:
+  - 7 pasar di Surabaya
+  - 60 komoditas bahan pokok
+  - Periode Januari 2024 (31 hari, 10.844 titik harga)
+
+
+A.2. ISTILAH PENTING (BACA DAHULU AGAR TIDAK BINGUNG)
+--------------------------------------------------------------------------------
+
+  Bapok            = Bahan Pokok. Barang kebutuhan sehari-hari.
+                     Contoh: beras, cabai, minyak goreng, telur.
+
+  Komoditas        = Nama barang yang dipantau. Contoh: "Cabai Merah Besar".
+
+  Pasar            = Tempat survei harga dilakukan. Ada 7 pasar.
+
+  Survei           = Kegiatan pencatatan harga pada tanggal tertentu
+                     di sebuah pasar.
+
+  EWS               = Early Warning System. Sistem peringatan dini.
+                     Seperti "alarm" yang berbunyi kalau harga bergerak
+                     tidak wajar.
+
+  Level Risiko     = Tingkat bahaya perubahan harga, ada 4 tingkat:
+                     Normal  : perubahan < 5%      (hijau, aman)
+                     Siaga   : perubahan 5-10%    (kuning, mulai waspada)
+                     Waspada : perubahan 10-20%   (merah, perlu tindakan)
+                     Kritis  : perubahan > 20%    (hitam, darurat)
+
+  Prediksi         = Perkiraan harga 7 hari ke depan berdasarkan pola
+                     data masa lalu. BUKAN ramalan, tapi hitungan matematis.
+
+  API              = "Juru bicara" antara tampilan aplikasi dan database.
+                     Frontend mengirim permintaan, backend menjawab dengan
+                     data. Anda tidak perlu memahaminya untuk memakai aplikasi.
+
+
+A.3. PRASYARAT (YANG HARUS ADA SEBELUM MENJALANKAN)
+--------------------------------------------------------------------------------
+
+  1. Komputer dengan Node.js versi 18 atau lebih baru
+     Cek dengan perintah:  node -v
+
+  2. PostgreSQL 18 (tempat menyimpan data harga)
+     Cek dengan perintah:  psql --version
+
+  3. Browser modern (Chrome, Firefox, Edge)
+
+  Kalau Node.js belum ada, download di https://nodejs.org
+  Kalau PostgreSQL belum ada, install via package manager Linux:
+     sudo pacman -S postgresql     (Arch Linux)
+     sudo apt install postgresql   (Ubuntu/Debian)
+
+
+A.4. CARA MENJALANKAN APLIKASI (LANGKAH DEMI LANGKAH)
+--------------------------------------------------------------------------------
+
+  Aplikasi ini terdiri dari DUA program yang harus berjalan BERSAMAAN:
+     1. BACKEND  — otaknya (mengolah data, jalan di port 3001)
+     2. FRONTEND — wajahnya (tampilan yang dilihat, port 5173)
+
+  Keduanya jalan di terminal yang BERBEDA.
+
+  ---------------------------------------------------------------------------
+  LANGKAH 1 — Nyalakan PostgreSQL
+  ---------------------------------------------------------------------------
+     sudo rc-service postgresql start
+     (kalau diminta password, masukkan password sudo Anda)
+
+  ---------------------------------------------------------------------------
+  LANGKAH 2 — Masuk ke folder proyek
+  ---------------------------------------------------------------------------
+     cd "/home/mpuss/doc/tugas-kuliah/EWS PROJECT/SOURCE CODE/simonpedia-bapok-surabaya"
+
+  ---------------------------------------------------------------------------
+  LANGKAH 3 — Jalankan BACKEND (terminal pertama)
+  ---------------------------------------------------------------------------
+     cd server
+     npm run dev
+
+     Kalau benar, akan muncul tulisan:
+       "Server running on http://localhost:3001"
+
+     Biarkan terminal ini TERBUKA selama aplikasi dipakai.
+     (Untuk berhenti: tekan Ctrl+C)
+
+  ---------------------------------------------------------------------------
+  LANGKAH 4 — Jalankan FRONTEND (terminal kedua, JANGAN tutup terminal 1)
+  ---------------------------------------------------------------------------
+     cd "/home/mpuss/doc/tugas-kuliah/EWS PROJECT/SOURCE CODE/simonpedia-bapok-surabaya"
+     npm run dev
+
+     Kalau benar, akan muncul tulisan:
+       "Local: http://localhost:5173"
+
+  ---------------------------------------------------------------------------
+  LANGKAH 5 — Buka aplikasi
+  ---------------------------------------------------------------------------
+     Buka browser, ketik alamat:
+       http://localhost:5173
+
+     Muncul halaman Dashboard SIMONPEDIA. Selesai!
+
+  ---------------------------------------------------------------------------
+  TROUBLESHOOTING UMUM
+  ---------------------------------------------------------------------------
+     Gejala                                    | Penyebab & Solusi
+     -----------------------------------------|---------------------------
+     Browser putih / data kosong               | Backend belum jalan.
+                                               | Ulangi Langkah 3.
+     "Connection refused" saat curl health     | PostgreSQL mati.
+                                               | sudo rc-service postgresql start
+     Halaman blank + error CORS di console     | Restart backend.
+     npm install gagal                         | Cek koneksi internet.
+     Data kosong setelah install baru          | Jalankan import data
+                                               | (lihat B.7 di Bagian B).
+
+
+A.5. PANDUAN MEMAKAI SETIAP MENU (FITUR)
+--------------------------------------------------------------------------------
+
+  Sidebar kiri berisi menu-menu berikut:
+
+  ============================================================================
+  MENU 1 — DASHBOARD  (alamat: /)
+  ============================================================================
+    Halaman utama. Berisi ringkasan kondisi pasar:
+      - Jumlah komoditas yang dipantau
+      - Berapa komoditas naik / stabil / alert aktif
+      - Grafik tren harga (contoh: Cabai Merah Besar)
+      - Tabel pergerakan komoditas
+    Cocok dibuka pertama kali untuk "menyapa" kondisi pasar hari ini.
+
+  ============================================================================
+  MENU 2 — MONITORING HARGA  (/monitoring)
+  ============================================================================
+    Tabel lengkap semua harga komoditas di semua pasar.
+      - Klik nama komoditas untuk buka halaman Detail Komoditas.
+      - Di sana ada: harga rata-rata, perubahan, kategori, satuan,
+        grafik riwayat harga per hari, dan harga di tiap-tiap pasar.
+
+  ============================================================================
+  MENU 3 — PASAR  (/pasar)
+  ============================================================================
+    Daftar 7 pasar yang jadi titik pemantauan, lengkap dengan kecamatan
+    dan kelas pasarnya.
+
+  ============================================================================
+  MENU 4 — PETA SURABAYA  (/peta)
+  ============================================================================
+    Peta interaktif (OpenStreetMap) dengan pin merah di lokasi tiap pasar.
+      - Klik pin untuk melihat nama pasar, kecamatan, dan kelas.
+      - Ada pencarian nama pasar dan filter kecamatan.
+      - Total pasar, pasar aktif, jumlah ditampilkan tercantum di atas.
+
+  ============================================================================
+  MENU 5 — EARLY WARNING SYSTEM  (/ews)
+  ============================================================================
+    Ini fitur "ALARM" harga.
+      - 4 kartu status: berapa komoditas Normal / Siaga / Waspada / Kritis.
+      - Banner peringatan merah jika ada kondisi Waspada/Kritis.
+      - Grafik perubahan harga per komoditas (bisa ganti komoditas
+        lewat dropdown).
+      - Daftar alert terbaru (per pasar) di panel kanan.
+      - Ringkasan risiko + tindakan yang disarankan.
+
+    CARA MEMBACANYA:
+      Normal (hijau)   = tidak perlu melakukan apa-apa
+      Siaga (kuning)   = cukup dipantau saja
+      Waspada (merah)  = perlu cek lapangan / stok distributor
+      Kritis (hitam)   = darurat, butuh tindakan segera (intervensi)
+
+  ============================================================================
+  MENU 6 — PREDIKSI  (/prediksi)
+  ============================================================================
+    Perkiraan harga 7 hari ke depan untuk setiap komoditas.
+      - Tabel semua komoditas: harga terakhir, hasil prediksi, perubahan %,
+        dan badge tren (Naik/Turun/Stabil).
+      - Filter kategori di atas tabel.
+      - Klik baris komoditas → muncul panel detail:
+        - Prediksi harga 7 hari, range prediksi (batas bawah-atas)
+        - Tingkat keyakinan (confidence)
+        - Grafik historis (garis hitam) + garis putus-putus merah prediksi
+        - Penjelasan 3 metode: Linear Regression, Moving Average,
+          Exponential Smoothing.
+
+    CATATAN PENTING: prediksi ini PERKIRAAN matematis dari data historis,
+    bukan kepastian. Semakin panjang data historis, semakin akurat.
+    Saat ini data baru 1 bulan (Januari 2024), jadi confidence dibatasi.
+
+  ============================================================================
+  MENU 7 — REKOMENDASI  (/rekomendasi)
+  ============================================================================
+    Daftar tindakan yang disarankan sistem, dibuat OTOMATIS dari data EWS.
+      - Kartu ringkasan: total rekomendasi, prioritas tinggi/sedang.
+      - Filter: Semua / Tinggi / Sedang.
+      - Setiap kartu rekomendasi berisi:
+        komoditas, pasar, harga, perubahan %, tindakan yang disarankan,
+        alasan, dan tenggat waktu.
+      - Tombol "Tandai ditangani" (saat ini hanya tampilan).
+      - Bagian "Bagaimana rekomendasi dibuat?" menjelaskan alurnya:
+        Monitoring → Analisis → Tindakan.
+
+  ============================================================================
+  MENU LAIN (masih placeholder / belum berisi data)
+  ============================================================================
+    Analisis (/analisis), Notifikasi (/notifikasi),
+    Watchlist (/watchlist), Data & Export (/data), Pengaturan (/settings)
+    → Halaman-halaman ini masih kosong (placeholder). Dikerjakan nanti.
+
+
+A.6. ALUR KERJA PENGGUNA (CONTOH SKENARIO HARIAN)
+--------------------------------------------------------------------------------
+
+  Skenario: Anda petugas pemantau harga yang bekerja pagi ini.
+
+  1. Buka Dashboard             → lihat ringkasan. Ada alert? 
+  2. Kalau ada alert, buka EWS   → lihat komoditas mana yang Waspada/Kritis
+  3. Buka Detail Komoditas       → cek grafik perjalanan harga komoditas itu
+  4. Buka Prediksi               → lihat apakah trend naik terus atau tidak
+  5. Buka Rekomendasi            → baca tindakan yang disarankan sistem
+  6. Laporkan / tindak lanjuti sesuai kewenangan Anda
+
+
+================================================================================
+BAGIAN B — DOKUMENTASI TEKNIS (UNTUK DEVELOPER)
+================================================================================
+
+B.1. ARSITEKTUR SISTEM
+--------------------------------------------------------------------------------
+
+  [Browser: React + TypeScript]
+            |
+            | fetch() HTTP
+            v
+  [Backend: Node.js + Express 4 :3001]
+            |
+            | Prisma ORM
+            v
+  [Database: PostgreSQL 18 :5432]
+            |
+            v
+  [Data real: Bapanas/SP2KP Jan 2024 — data/archive/*.csv]
+
+  Kenapa dua program (frontend + backend)?
+  - Frontend = tampilan, jalan di browser pengguna.
+  - Backend = pengolahan data + koneksi database. Database TIDAK BOLEH
+    diakses langsung dari browser demi keamanan.
+  - Frontend memanggil backend lewat REST API (HTTP request).
+
+  Stack teknologi:
+    Frontend: React 19, Vite 8, TypeScript, Tailwind CSS 4,
+              Recharts (grafik), Leaflet (peta), react-router-dom
+    Backend : Express 4 (bukan v5 — router v5 breaking changes),
+              Prisma 6 ORM, ts-node-dev
+    DB      : PostgreSQL 18
+
+
+B.2. STRUKTUR DIREKTORI
+--------------------------------------------------------------------------------
+
+  simonpedia-bapok-surabaya/
+  |
+  |-- data/archive/
+  |   |-- rekap_januari_2024_harian.xlsx   (sumber asli)
+  |   +-- rekap_januari_2024_harian.csv    (hasil konversi, dipakai import)
+  |
+  |-- server/                            (BACKEND)
+  |   |-- prisma/
+  |   |   |-- schema.prisma               (definisi 5 tabel)
+  |   |   |-- import.ts                   (import CSV → PostgreSQL)
+  |   |   +-- seed.ts                     (seed kecil, hampir tak dipakai)
+  |   |-- src/
+  |   |   |-- index.ts                    (entry point Express)
+  |   |   |-- lib/prisma.ts               (Prisma client singleton)
+  |   |   +-- routes/
+  |   |       |-- komoditas.ts            GET /api/komoditas, /api/komoditas/:id
+  |   |       |-- pasar.ts                GET /api/pasar, /api/pasar/:id
+  |   |       |-- harga.ts                GET /api/harga (+filter)
+  |   |       |-- ews.ts                  GET /api/ews/analyze, /api/ews/chart/:id
+  |   |       +-- prediction.ts           GET /api/prediction/all,
+  |   |                                   GET /api/prediction/komoditas/:id
+  |   |-- .env                           (DATABASE_URL, JANGAN di-commit)
+  |   +-- package.json
+  |
+  |-- src/                               (FRONTEND)
+  |   |-- pages/
+  |   |   |-- Home.tsx                    Dashboard (API: ews/analyze, chart)
+  |   |   |-- Monitoring.tsx              Tabel harga (API: harga)
+  |   |   |-- CommodityDetail.tsx         Detail komoditas (API: harga)
+  |   |   |-- Pasar.tsx                   Daftar pasar (API: pasar)
+  |   |   |-- MapPage.tsx                 Peta Leaflet (API: pasar)
+  |   |   |-- EWS.tsx                     Early warning (API: ews)
+  |   |   |-- Prediksi.tsx                Prediksi 7 hari (API: prediction)
+  |   |   +-- Recommendations.tsx         Rekomendasi (API: ews/analyze)
+  |   |-- components/layout/              (Sidebar, Topbar, layout)
+  |   |-- services/priceService.ts        (API client terpusat)
+  |   |-- App.tsx                         (react-router routes)
+  |   +-- main.tsx
+  |
+  |-- dokumentasiver1.txt                 (dokumentasi Task 1)
+  |-- dokumentasiver2.txt                 (file ini)
+  +-- package.json                        (frontend deps)
+
+
+B.3. DATABASE SCHEMA (5 TABEL)
+--------------------------------------------------------------------------------
+
+  Wilayah (1) ----< (N) Pasar (1) ----< (N) Survei (1) ----< (N) DetailSurvei (N) >---- (1) Komoditas
+
+  model Wilayah      { id, nama, kode(unique) }
+  model Pasar        { id, nama, kecamatan, kelas, lat?, lng?, wilayahId }
+  model Komoditas    { id, nama, kategori, satuan }
+  model Survei       { id, tanggal, pasarId, sumber?, }
+  model DetailSurvei { id, surveiId, komoditasId, harga }
+
+  Alur data: Pasar → Survei → DetailSurvei → Komoditas → Harga → Dashboard
+
+  Logika desain:
+  - Survei = "kegiatan pencatatan di pasar X pada tanggal Y".
+    Satu survei punya BANYAK DetailSurvei (satu baris per komoditas).
+    Kenapa tidak langsung simpan harga di Survei? Karena satu kegiatan
+    survei mencatat banyak komoditas sekaligus.
+  - lat/lng nullable: kalau koordinat kosong, pasar tetap tersimpan
+    (tapi tidak muncul di peta — filter di MapPage memeriksa lat && lng).
+
+
+B.4. REST API ENDPOINTS LENGKAP
+--------------------------------------------------------------------------------
+
+  Base URL: http://localhost:3001/api
+
+  ---------------------------------------------------------------------------
+  ENDPOINT DASAR
+  ---------------------------------------------------------------------------
+  GET /api/health
+    Response: { status: "ok", message: "SIMONPEDIA API is running" }
+    Fungsi: cek server hidup. Test: curl http://localhost:3001/api/health
+
+  GET /api/komoditas
+    Response: Komoditas[] (60 item, sorted by nama)
+  GET /api/komoditas/:id
+    Response: Komoditas single / 404
+
+  GET /api/pasar
+    Response: Pasar[] include wilayah (7 item)
+  GET /api/pasar/:id
+    Response: Pasar single / 404
+
+  GET /api/harga?pasar_id=&komoditas_id=
+    Response: Harga[] — join DetailSurvei + Komoditas + Survei + Pasar
+    Contoh: GET /api/harga?komoditas_id=9
+            GET /api/harga?pasar_id=13&komoditas_id=9
+
+  ---------------------------------------------------------------------------
+  ENDPOINT EWS (Early Warning System) — Task 2
+  ---------------------------------------------------------------------------
+  GET /api/ews/analyze
+    Response:
+      ringkasan: { totalKomoditas, normal, siaga, waspada, kritis }
+      analisis : KomoditasAnalisis[]   (per komoditas, sorted by |persenPerubahan|)
+      alerts   : Alert[]                (max 20, hanya level != Normal)
+
+    Logika perhitungan (server/src/routes/ews.ts):
+      1. Ambil semua harga per komoditas (join survei+pasar).
+      2. hargaRataRata = mean semua harga komoditas itu.
+      3. persenPerubahan = (hargaTerakhir - hargaSebelumnya) / hargaSebelumnya
+         * 100, di mana hargaTerakhir/Sebelumnya = rata-rata pada
+         dua tanggal survei TERAKHIR (bukan harga satu pasar).
+      4. levelRisiko dihitung dari |persenPerubahan|:
+           < 5%   → Normal
+           < 10%  → Siaga
+           < 20%  → Waspada
+           >= 20% → Kritis
+      5. Jika levelRisiko != Normal → generate alert per pasar.
+
+  GET /api/ews/chart/:komoditasId
+    Response: [{ tanggal, harga }] — harga rata-rata harian per komoditas,
+    sorted ascending. Dipakai Home.tsx dan EWS.tsx untuk grafik Area.
+
+  ---------------------------------------------------------------------------
+  ENDPOINT PREDIKSI (Task 3)
+  ---------------------------------------------------------------------------
+  GET /api/prediction/all
+    Response: PrediksiItem[] — untuk semua komoditas:
+      { id, nama, kategori, satuan, hargaTerakhir, tren, trenPersen,
+        prediksiHarga, perubahanPrediksi }
+
+  GET /api/prediction/komoditas/:id
+    Response lengkap per komoditas:
+      komoditas, dataHistoris[], analisis{...}, prediksi7Hari[],
+      prediksiRingkasan{...}, metode{...}
+
+    Logika prediksi (server/src/routes/prediction.ts):
+      1. Harga harian dihitung dulu: rata-rata semua pasar per tanggal.
+      2. TIGA metode dihitung dan disandingkan:
+         a. Linear Regression — garis tren (slope & intercept) dari
+            seluruh titik harga. Arah: slope > 50 → naik, < -50 → turun.
+         b. Moving Average (window=7) — rata-rata bergerak 7 hari,
+            untuk haluskan fluktuasi.
+         c. Exponential Smoothing (alpha=0.3) — memberi bobot lebih
+            pada data terbaru.
+      3. Prediksi 7 hari: forecastRange() menggabungkan nilai tren
+         regression dengan harga terakhir (interpolasi weight).
+         harga_prediksi = trendValue*(1-w) + lastPrice*w, w = i/days.
+         (ponytail: blending naif; upgrade path: ARIMA/proper ML model)
+      4. Confidence interval = ±5% dari harga tertinggi historis.
+         Confidence % = min(95, 50 + jumlahHari*5) — data 1 bulan → ~95%.
+         (ponytail: confidence heuristic, bukan statistik formal)
+
+    CATATAN AKURASI: data historis baru 31 hari. Model sederhana ini
+    cocok untuk demo/konsep. Untuk produksi, tambah data bulan-bulan
+    lain lalu naikkan kompleksitas model.
+
+
+B.5. PENJELASAN FILE FRONTEND (BAGAIMANA KERJANYA)
+--------------------------------------------------------------------------------
+
+  Pola umum setiap halaman:
+    1. useState untuk data + loading
+    2. useEffect → fetch(`${API_URL}/endpoint`) → set state
+    3. Render: kalau loading → spinner; kalau error → console.error;
+       kalau sukses → render UI dengan data real.
+
+  File-file penting:
+
+  services/priceService.ts
+    - PUSAT semua panggilan API frontend (getKomoditas, getPasar, getHarga).
+    - Di sinilah API_URL didefinisikan: http://localhost:3001/api
+    - Interface TypeScript (Komoditas, Pasar, Harga) menjamin bentuk data.
+    - Halaman dengan EWS/prediksi mem-fetch langsung dengan URL sendiri
+      (lihat konstanta API_URL di masing-masing file).
+
+  pages/Home.tsx (Dashboard)
+    - fetch /ews/analyze → ringkasan status + /ews/chart/49 (Cabai Merah Besar)
+    - getHarga() → agregasi manual per komoditas → tabel pergerakan.
+    - Angka "perubahan" di tabel dashboard di-generate Math.random()
+      untuk demo selama data masih 1 bulan. (ponytail: ganti dengan
+      persenPerubahan dari /ews/analyze saat data multi-bulan)
+
+  pages/Monitoring.tsx
+    - getHarga() → render tabel. Klik baris → CommodityDetail.
+
+  pages/CommodityDetail.tsx
+    - getHarga() → filter client-side by nama komoditas (dari URL param).
+    - Agregasi: harga rata-rata, perubahan %, harga per pasar,
+      chart harian (Recharts AreaChart).
+    - Kalau komoditas tak ditemukan → halaman "tidak ditemukan".
+
+  pages/Pasar.tsx — getPasar() → kartu daftar pasar.
+
+  pages/MapPage.tsx
+    - getPasar() → Leaflet MapContainer, marker per pasar yang punya lat/lng.
+    - Custom DivIcon pin merah. Popup menampilkan nama/kecamatan/kelas.
+    - Search + filter kecamatan (useMemo).
+
+  pages/EWS.tsx
+    - fetch /ews/analyze → 4 kartu status, banner alert, grafik per
+      komoditas (dropdown pilih), daftar alert, ringkasan risiko,
+      rekomendasi tindakan.
+    - fetch /ews/chart/:id saat dropdown diganti.
+
+  pages/Prediksi.tsx
+    - fetch /prediction/all → tabel semua komoditas + filter kategori.
+    - Klik baris → fetch /prediction/komoditas/:id → panel detail:
+      ringkasan, grafik ComposedChart (historis Area + prediksi Line
+      putus-putus), 3 kartu metode.
+
+  pages/Recommendations.tsx
+    - fetch /ews/analyze → generateRekomendasi() memetakan alerts +
+      komoditas waspada/kritis menjadi kartu rekomendasi dengan
+      prioritas (Tinggi utk Kritis, Sedang utk Waspada/Siaga),
+      tindakan & alasan yang di-generate dari template string
+      sesuai level risiko.
+
+  App.tsx — routing react-router-dom:
+    /            → Home
+    /monitoring  → Monitoring
+    /monitoring/:commodity → CommodityDetail
+    /pasar       → Pasar
+    /peta        → MapPage
+    /ews         → EWS
+    /prediksi    → Prediksi
+    /rekomendasi → Recommendations
+    /analisis, /notifikasi, /watchlist, /data, /settings → placeholder
+
+
+B.6. PENJELASAN FILE BACKEND (BAGAIMANA KERJANYA)
+--------------------------------------------------------------------------------
+
+  src/index.ts (entry point, 31 baris)
+    - dotenv.config() → baca server/.env (DATABASE_URL)
+    - Middleware: cors() (izinkan browser lintas origin),
+      express.json() (parse body JSON).
+    - Daftarkan 5 router: komoditas, pasar, harga, ews, prediction.
+    - app.listen(3001).
+    - MENAMBAH FITUR BARU = 2 langkah: buat file routes/baru.ts lalu
+      tambahkan 2 baris (import + app.use) di sini.
+
+  src/lib/prisma.ts
+    - PrismaClient singleton. Semua route memakai instance sama.
+
+  routes/komoditas.ts, routes/pasar.ts
+    - CRUD dasar findMany/findUnique. Pola: try/catch → res.json /
+      res.status(404) / res.status(500).
+
+  routes/harga.ts
+    - findMany dengan include join + filter optional query params.
+
+  routes/ews.ts
+    - Kode inti EWS. Baca komentar di file.
+    - hitungRisiko() — pemetaan |%change| → 4 level (tabel B.4).
+
+  routes/prediction.ts
+    - Tiga fungsi statistik (linearRegression, movingAverage,
+      exponentialSmoothing) + forecastRange().
+    - Endpoint "all" loop semua komoditas (N+1 query — ponytail:
+      masih OK untuk 60 komoditas; refactor ke groupBy jika data membengkak).
+
+  prisma/schema.prisma
+    - Definisi 5 tabel (lihat B.3). Ubah schema → jalankan
+      npx prisma db push (dev) atau prisma migrate dev.
+
+  prisma/import.ts
+    - Baca CSV rekap_januari_2024_harian.csv → parse (handle koma dalam
+      kutip, mis. nama produk) → insert Wilayah, 7 Pasar (dengan koordinat
+      hardcoded di pasarCoords), 60 Komoditas, Survei, DetailSurvei.
+    - Normalisasi: kategori "C A B E" → "CABAI", "I K A N" → "IKAN",
+      "S U S U" → "SUSU"; nama pasar distrip prefix.
+    - Aman dijalankan berulang? TIDAK — akan duplikat. Jalankan sekali,
+      atau truncate tabel dulu (lihat B.7).
+
+  .env (JANGAN PERNAH di-commit)
+    DATABASE_URL="postgresql://postgres:postgres@localhost:5432/simonpedia_bapok"
+
+
+B.7. PERINTAH OPERASIONAL DEVELOPER (CHEAT SHEET)
+--------------------------------------------------------------------------------
+
+  Start PostgreSQL (OpenRC):
+    sudo rc-service postgresql start
+
+  Setup awal (sekali saja, komputer baru):
+    cd server && npm install
+    npm run dev  (root) → pastikan node_modules frontend ter-install juga
+    npx prisma db push          (sinkron schema → DB)
+    ./node_modules/.bin/ts-node prisma/import.ts   (import data CSV)
+
+  Reset data total (HATI-HATI, hapus semua harga):
+    cd server
+    npx prisma migrate reset --force    (drop + rebuild + seed)
+    ./node_modules/.bin/ts-node prisma/import.ts   (import ulang)
+
+  Hapus hanya data harga (tanpa drop schema):
+    psql -U postgres -d simonpedia_bapok \
+      -c "TRUNCATE \"DetailSurvei\", \"Survei\", \"Komoditas\", \"Pasar\", \"Wilayah\" RESTART IDENTITY CASCADE;"
+
+  Menjalankan:
+    Terminal 1: cd server && npm run dev     (backend :3001)
+    Terminal 2: npm run dev                   (frontend :5173)
+
+  Type check frontend:
+    npx tsc --noEmit
+
+  Prisma Studio (lihat/edit data via GUI):
+    cd server && npx prisma studio
+    → buka http://localhost:5555
+
+  Test API manual:
+    curl http://localhost:3001/api/health
+    curl http://localhost:3001/api/komoditas
+    curl http://localhost:3001/api/ews/analyze | head -c 500
+    curl http://localhost:3001/api/prediction/all | head -c 500
+
+  Commit (kalau ada perubahan):
+    git add . && git commit -m "pesan" && git push origin main
+
+
+B.8. KONVENSI & POLA KODE
+--------------------------------------------------------------------------------
+
+  Backend (Express):
+    - Setiap fitur = 1 file di routes/, default export Router.
+    - Pola respons: sukses res.json(data); tidak valid res.status(400);
+      tak ada res.status(404); error server res.status(500).
+    - try/catch di setiap handler, console.error untuk debug.
+
+  Frontend (React):
+    - Satu halaman = 1 file di pages/, default export komponen.
+    - Fetch data di useEffect, simpan di useState.
+    - Interface TypeScript didefinisikan lokal di file halaman
+      (meniru bentuk JSON API).
+    - Tailwind class inline, skema warna konsisten:
+      #C93742 (merah brand), #171717 (hitam), #FFF8F9 (bg lembut).
+    - Komponen kecil (StatusCard, SummaryCard, dsb.) didefinisikan di
+      bagian bawah file halaman yang sama (colocation, tanpa folder
+      components tambahan — YAGNI).
+
+  Style dokumentasi file lama (dokumentasiver1.txt): teks murni agar mudah
+  dibaca semua orang tanpa render markdown.
+
+
+B.9. STATUS FITUR & ROADMAP
+--------------------------------------------------------------------------------
+
+  SELESAI:
+    [x] Task 1 — Migrasi Supabase → Express+Prisma+PostgreSQL (data real)
+    [x] Task 2 — EWS: deteksi anomali → level risiko → alert → rekomendasi
+    [x] Task 3 — Prediksi harga 7 hari (Linear Regression + MA + ES)
+    [x] Semua halaman utama tersambung API real (Home, Monitoring,
+        CommodityDetail, Pasar, MapPage, EWS, Prediksi, Recommendations)
+
+  DITUNDA (sesuai keputusan user):
+    [ ] Task 4 — Modul Urban Farm (sistem eksternal; kita hanya
+        mengintegrasikan, tidak membangun — API eksternal belum tersedia)
+    [ ] Task 5 — Integrasi SIMONPEDIA ↔ Urban Farm
+
+  BELUM DIKERJAKAN (placeholder):
+    [ ] Halaman Analisis, Notifikasi, Watchlist, Data & Export, Pengaturan
+
+  IDE PENYEMPURNAAN (kalau dilanjutkan):
+    - Ganti perubahan% di tabel Dashboard (masih Math.random) dengan
+      data EWS real
+    - Tambah data bulan Feb-Des 2024 ke database agar prediksi & EWS
+      lebih bermakna
+    - Refactor N+1 query di /prediction/all dan /ews/analyze
+      (groupBy/agregasi SQL) jika data membengkak
+    - Deploy: frontend → Vercel (vercel.json sudah ada), backend →
+      Railway/Fly.io, DB → Supabase/Neon (managed PostgreSQL)
+
+
+B.10. GITHUB REPOSITORY
+--------------------------------------------------------------------------------
+
+  https://github.com/mpuss37/simonpedia-bapok-surabaya
+  Branch: main
+  File sensitif server/.env sudah masuk .gitignore.
+
+  KEAMANAN: token GitHub pernah terekspos di percakapan AI.
+  SEGERA revoke token lama dan buat token baru di GitHub Settings →
+  Developer settings → Personal access tokens. Jangan pernah paste
+  token lagi di chat/manapun.
+
+================================================================================
+DOKUMENTASI VERSI 2 DIBUAT: 10 September 2026
+Task 1-3 selesai. Dokumentasi mencakup panduan pengguna (Bagian A)
+dan panduan developer (Bagian B).
+Dikerjakan dengan bantuan AI (OpenCode / opencode.ai)
+================================================================================
