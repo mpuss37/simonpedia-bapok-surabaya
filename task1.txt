@@ -1,0 +1,53 @@
+TASK 1 — MIGRASI DAN PERSIAPAN BACKEND SIMONPEDIA
+
+Tujuan:
+Melanjutkan source code SIMONPEDIA Bapok Surabaya menjadi sistem berbasis React + REST API + PostgreSQL, tanpa menggunakan Supabase.
+
+Arsitektur target:
+React + TypeScript
+        ↓
+REST API
+        ↓
+Node.js + Express + TypeScript
+        ↓
+PostgreSQL
+        ↓
+Modul Urban Farm
+
+Pekerjaan Task 1:
+1. Audit source code React yang sudah ada.
+2. Pertahankan frontend yang sudah selesai dan identifikasi bagian yang masih menggunakan dummy data.
+3. Hapus ketergantungan pada Supabase.
+4. Siapkan backend menggunakan Node.js, Express, dan TypeScript.
+5. Hubungkan backend dengan PostgreSQL.
+6. Buat struktur database awal untuk:
+   - wilayah
+   - pasar
+   - komoditas
+   - survei
+   - detail_survei
+7. Buat migration/schema dan seed data awal.
+8. Buat REST API dasar untuk:
+   - komoditas
+   - pasar
+   - harga/survei
+9. Ubah frontend agar mengambil data melalui REST API, bukan langsung dari Supabase.
+
+Alur data:
+Pasar → Survei → Detail Survei → Komoditas → Harga → Dashboard/Grafik
+
+Target setelah Task 1:
+- Frontend React tetap dapat berjalan.
+- Supabase tidak lagi digunakan.
+- PostgreSQL sudah terhubung ke backend.
+- Data komoditas, pasar, dan harga dapat diakses melalui API.
+- Halaman monitoring mulai menggunakan data PostgreSQL melalui API.
+
+Tahap lanjutan:
+Task 2: Implementasi EWS (deteksi anomali → tingkat risiko → early warning → rekomendasi).
+Task 3: Prediksi harga.
+Task 4: Modul Urban Farm (petani, lahan, penanaman, panen, produksi).
+Task 5: Integrasi data SIMONPEDIA dengan Urban Farm.
+
+Catatan:
+Jangan langsung membuat seluruh 20+ tabel. Bangun sistem secara bertahap agar setiap tahap dapat diuji dan dikembangkan.

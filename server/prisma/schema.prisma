@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Wilayah {
+  id    Int     @id @default(autoincrement())
+  nama  String
+  kode  String  @unique
+  pasar Pasar[]
+}
+
+model Pasar {
+  id        Int      @id @default(autoincrement())
+  nama      String
+  kecamatan String
+  kelas     String
+  lat       Float?
+  lng       Float?
+  wilayahId Int
+  wilayah   Wilayah  @relation(fields: [wilayahId], references: [id])
+  survei    Survei[]
+}
+
+model Komoditas {
+  id           Int           @id @default(autoincrement())
+  nama         String
+  kategori     String
+  satuan       String
+  detailSurvei DetailSurvei[]
+}
+
+model Survei {
+  id        Int            @id @default(autoincrement())
+  tanggal   DateTime
+  pasarId   Int
+  pasar     Pasar          @relation(fields: [pasarId], references: [id])
+  sumber    String?
+  details   DetailSurvei[]
+}
+
+model DetailSurvei {
+  id          Int       @id @default(autoincrement())
+  surveiId    Int
+  survei      Survei    @relation(fields: [surveiId], references: [id])
+  komoditasId Int
+  komoditas   Komoditas @relation(fields: [komoditasId], references: [id])
+  harga       Float
+}
