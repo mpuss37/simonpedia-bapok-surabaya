@@ -37,6 +37,7 @@ interface EWSResponse {
   }
   analisis: KomoditasAnalisis[]
   alerts: Alert[]
+  lastUpdate: string | null
 }
 
 function hitungRisiko(persenPerubahan: number): "Normal" | "Siaga" | "Waspada" | "Kritis" {
@@ -47,8 +48,13 @@ function hitungRisiko(persenPerubahan: number): "Normal" | "Siaga" | "Waspada" |
   return "Kritis"
 }
 
-router.get("/analyze", async (_req, res) => {
+  router.get("/analyze", async (_req, res) => {
   try {
+    const surveiTerakhir = await prisma.survei.findFirst({
+      orderBy: { tanggal: "desc" },
+      select: { tanggal: true },
+    })
+
     const komoditasList = await prisma.komoditas.findMany({
       orderBy: { nama: "asc" },
     })
@@ -153,6 +159,7 @@ router.get("/analyze", async (_req, res) => {
       ringkasan,
       analisis: analisis.sort((a, b) => Math.abs(b.persenPerubahan) - Math.abs(a.persenPerubahan)),
       alerts: alerts.slice(0, 20),
+      lastUpdate: surveiTerakhir ? surveiTerakhir.tanggal.toISOString() : null,
     }
 
     res.json(response)

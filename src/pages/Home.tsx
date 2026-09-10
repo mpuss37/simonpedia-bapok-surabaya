@@ -33,6 +33,13 @@ interface EWSRingkasan {
   kritis: number
 }
 
+interface EWSAnalisis {
+  nama: string
+  kategori: string
+  hargaRataRata: number
+  persenPerubahan: number
+}
+
 interface KomoditasItem {
   nama: string
   kategori: string
@@ -51,6 +58,8 @@ export default function Home() {
   const [komoditasList, setKomoditasList] = useState<KomoditasItem[]>([])
   const [chartData, setChartData] = useState<ChartItem[]>([])
   const [ewsSummary, setEwsSummary] = useState<EWSRingkasan | null>(null)
+  const [ewsAnalisis, setEwsAnalisis] = useState<EWSAnalisis[]>([])
+  const [lastUpdate, setLastUpdate] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -60,6 +69,12 @@ export default function Home() {
           getHarga(),
           fetch(`${API_URL}/ews/analyze`).then(r => r.json()),
         ])
+
+        // Ambil persenPerubahan real dari analisis EWS (bukan random)
+        const changeMap = new Map<string, number>()
+        for (const a of (ewsRes.analisis || []) as EWSAnalisis[]) {
+          changeMap.set(a.nama, a.persenPerubahan)
+        }
 
         const grouped = new Map<string, { prices: number[]; kategori: string }>()
         for (const h of hargaData) {
@@ -72,26 +87,27 @@ export default function Home() {
         }
 
         const komoditasItems: KomoditasItem[] = Array.from(grouped.entries())
-          .map(([nama, info]) => ({
-            nama,
-            kategori: info.kategori,
-            harga: Math.round(info.prices.reduce((a, b) => a + b, 0) / info.prices.length),
-            change: Math.round((Math.random() * 20 - 10) * 10) / 10,
-            type: "up" as const,
-          }))
+          .map(([nama, info]) => {
+            const change = changeMap.get(nama) ?? 0
+            return {
+              nama,
+              kategori: info.kategori,
+              harga: Math.round(info.prices.reduce((a, b) => a + b, 0) / info.prices.length),
+              change,
+              type: (change > 0 ? "up" : change < 0 ? "down" : "stable") as "up" | "down" | "stable",
+            }
+          })
           .sort((a, b) => Math.abs(b.change) - Math.abs(a.change))
           .slice(0, 5)
-
-        for (const k of komoditasItems) {
-          k.type = k.change >= 0 ? "up" : "down"
-        }
 
         const chartRes = await fetch(`${API_URL}/ews/chart/49`)
         const chartRaw: ChartItem[] = await chartRes.json()
 
         setKomoditasList(komoditasItems)
         setChartData(chartRaw)
-        setEwsSummary(ewsSummary)
+        setEwsSummary(ewsRes.ringkasan)
+        setEwsAnalisis(ewsRes.analisis || [])
+        setLastUpdate(ewsRes.lastUpdate)
       } catch (err) {
         console.error("Gagal memuat dashboard:", err)
       } finally {
@@ -102,9 +118,17 @@ export default function Home() {
   }, [])
 
   const totalKomoditas = ewsSummary?.totalKomoditas || 0
+  const naikCount = ewsAnalisis.filter(a => a.persenPerubahan > 0).length
   const waspadaCount = (ewsSummary?.waspada || 0) + (ewsSummary?.kritis || 0)
-  const siagaCount = ewsSummary?.siaga || 0
   const normalCount = ewsSummary?.normal || 0
+  const alertCount = (ewsSummary?.siaga || 0) + waspadaCount
+
+  const lastUpdateText = lastUpdate
+    ? new Date(lastUpdate).toLocaleString("id-ID", {
+        dateStyle: "full",
+        timeStyle: "short",
+      })
+    : "Tidak ada data"
 
   return (
     <div className="min-h-screen">
@@ -117,7 +141,7 @@ export default function Home() {
         <div className="flex items-center gap-3">
           <div className="hidden items-center gap-2 text-xs text-[#171717]/40 sm:flex">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            Data diperbarui 5 menit lalu
+            Data survei terakhir: {lastUpdateText}
           </div>
           <button className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#171717]/[0.06] bg-white text-[#171717]/60">
             <Bell size={17} />
@@ -162,9 +186,9 @@ export default function Home() {
         {/* SUMMARY */}
         <section className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
           <Metric label="Komoditas dipantau" value={String(totalKomoditas)} description="komoditas" icon={<Wallet size={16} />} />
-          <Metric label="Harga naik" value={String(waspadaCount)} description="komoditas" danger icon={<ArrowUpRight size={16} />} />
-          <Metric label="Harga stabil" value={String(normalCount)} description="komoditas" success icon={<ArrowDownRight size={16} />} />
-          <Metric label="Alert aktif" value={String(siagaCount)} description="perlu perhatian" warning icon={<AlertTriangle size={16} />} />
+          <Metric label="Harga naik" value={String(naikCount)} description="dari data terakhir" danger icon={<ArrowUpRight size={16} />} />
+          <Metric label="Harga stabil/turun" value={String(normalCount)} description="kondisi normal" success icon={<ArrowDownRight size={16} />} />
+          <Metric label="Alert aktif" value={String(alertCount)} description="Siaga + Waspada + Kritis" warning icon={<AlertTriangle size={16} />} />
         </section>
 
         {/* CHART + EWS */}
