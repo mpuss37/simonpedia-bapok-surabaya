@@ -100,7 +100,7 @@ export default function Home() {
           .sort((a, b) => Math.abs(b.change) - Math.abs(a.change))
           .slice(0, 5)
 
-        const chartRes = await fetch(`${API_URL}/ews/chart/49`)
+        const chartRes = await fetch(`${API_URL}/ews/chart/108`)
         const chartRaw: ChartItem[] = await chartRes.json()
 
         setKomoditasList(komoditasItems)

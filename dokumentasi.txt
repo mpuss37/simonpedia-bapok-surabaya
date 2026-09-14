@@ -1,6 +1,6 @@
 ================================================================================
 DOKUMENTASI SIMONPEDIA BAPOK SURABAYA
-Update terakhir: 10 September 2026 — mencakup Task 1, 2, 3
+Update terakhir: 14 September 2026 — mencakup Task 1, 2, 3 + data 12 bulan
 ================================================================================
 
 Dokumentasi ini terdiri dari DUA BAGIAN:
@@ -35,8 +35,8 @@ Contoh pertanyaan yang bisa dijawab aplikasi ini:
 
 Data yang dipakai adalah data REAL dari Bapanas/SP2KP:
   - 7 pasar di Surabaya
-  - 60 komoditas bahan pokok
-  - Periode Januari 2024 (31 hari, 10.844 titik harga)
+  - 67 komoditas bahan pokok
+  - Periode Januari–Desember 2024 (366 hari, 138.054 titik harga)
 
 
 A.2. ISTILAH PENTING (BACA DAHULU AGAR TIDAK BINGUNG)
@@ -684,7 +684,7 @@ C.0. FILSAFAT DASAR: PREDIKSI ITU PERKIRAAN, BUKAN RAMALAN
   C.7. RANGKUMAN ALUR PREDIKSI END-TO-END
   ==============================================================================
 
-    Database (10.844 baris DetailSurvei)
+    Database (138.054 baris DetailSurvei)
       ↓ rata-rata 7 pasar per tanggal          (C.1)
     Deret harga harian (31 titik)
       ↓ Linear Regression + MA7 + ES (α=0.3)    (C.2, C.3, C.4)
@@ -842,7 +842,7 @@ B.6. PENJELASAN FILE BACKEND (BAGAIMANA KERJANYA)
     - Tiga fungsi statistik (linearRegression, movingAverage,
       exponentialSmoothing) + forecastRange().
     - Endpoint "all" loop semua komoditas (N+1 query — ponytail:
-      masih OK untuk 60 komoditas; refactor ke groupBy jika data membengkak).
+      masih OK untuk 67 komoditas; refactor ke groupBy jika data membengkak).
 
   prisma/schema.prisma
     - Definisi 5 tabel (lihat B.3). Ubah schema → jalankan
@@ -970,8 +970,11 @@ B.10. RIWAYAT PENGERJAAN (LOG TASK)
              hanya di 3 file; tanpa koneksi database.
     Tahap 2: Hapus Supabase (supabase.ts, SupabaseTest.tsx, dependency).
     Tahap 3: Setup server/ Express + Prisma + TypeScript + .env.
-    Tahap 4: Schema 5 tabel + import data real Bapanas Jan 2024:
-             7 pasar, 60 komoditas, 217 survei, 10.844 harga.
+    Tahap 4: Schema 5 tabel + import data real Bapanas Jan–Des 2024:
+             7 pasar, 67 komoditas, 2.562 survei, 138.054 harga.
+             Script import.ts: parser universal xlsx multi-bulan,
+             normalisasi kategori, penanganan sheet GRAFIK,
+             deteksi format tanggal (leading zero/no zero).
     Tahap 5: REST API dasar: health, komoditas, pasar, harga.
     Tahap 6: Frontend Monitoring & Pasar pakai data PostgreSQL via API.
 

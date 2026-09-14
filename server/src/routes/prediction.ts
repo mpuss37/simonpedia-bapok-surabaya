@@ -50,15 +50,16 @@ function exponentialSmoothing(data: number[], alpha: number): number[] {
 
 // Prediksi produksi (blend tren LR + harga terakhir):
 //   pred_i = trendValue_i * (1 - w) + lastPrice * w,  w = i/days
-function forecastRange(prices: number[], days: number): { tanggal: string; harga: number }[] {
+// lastDate = tanggal data terakhir (default 2024-12-31 bila tidak diketahui)
+function forecastRange(prices: number[], days: number, lastDate?: string): { tanggal: string; harga: number }[] {
   const { slope, intercept } = linearRegression(prices)
   const lastPrice = prices[prices.length - 1]
-  const lastDate = new Date("2024-01-31")
+  const baseDate = lastDate ? new Date(lastDate) : new Date("2024-12-31")
 
   const result: { tanggal: string; harga: number }[] = []
 
   for (let i = 1; i <= days; i++) {
-    const date = new Date(lastDate)
+    const date = new Date(baseDate)
     date.setDate(date.getDate() + i)
 
     const trendValue = Math.round(intercept + slope * (prices.length + i - 1))
@@ -391,7 +392,7 @@ router.get("/all", async (_req, res) => {
         ? Math.round((slope / prices[prices.length - 1]) * 100 * 100) / 100
         : 0
 
-      const prediksi = forecastRange(prices, 7)
+const prediksi = forecastRange(prices, 7, dailyAvg[dailyAvg.length - 1]?.tanggal)
       const prediksiHarga = prediksi[0].harga
       const lastPrice = prices[prices.length - 1]
       const perubahanPrediksi = Math.round(((prediksiHarga - lastPrice) / lastPrice) * 100 * 100) / 100

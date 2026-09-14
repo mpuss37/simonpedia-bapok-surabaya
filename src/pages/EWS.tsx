@@ -74,7 +74,7 @@ function formatRupiah(value: number) {
 
 export default function EWS() {
 
-  const [selectedCommodity, setSelectedCommodity] = useState("9")
+  const [selectedCommodity, setSelectedCommodity] = useState("108")
   const [ewsData, setEwsData] = useState<EWSResponse | null>(null)
   const [chartData, setChartData] = useState<ChartData[]>([])
   const [loading, setLoading] = useState(true)
