@@ -1,0 +1,497 @@
+================================================================================
+PR-JAWABAN1 — JAWABAN ATAS CATATAN "pr.txt"
+SIMONPEDIA BAPOK SURABAYA
+Dibuat: 16 September 2026
+================================================================================
+
+File ini menjawab SETIAP poin di pr.txt: daftar menu, progress, problem,
+3 pertanyaan utama, tambahan, dan batas kemampuan website.
+
+Semua jawaban berbasis KONDISI NYATA KODE proyek saat ini (bukan asumsi):
+  - Schema database: 5 tabel (Wilayah, Pasar, Komoditas, Survei,
+    DetailSurvei). BELUM ADA tabel User.
+  - API: 10 endpoint, SEMUA metode GET (read-only). Belum ada
+    POST/PUT/DELETE -> belum bisa input/ubah data dari web.
+  - Data: hanya 2024 (12 bulan, 138.054 baris, 67 komoditas, 7 pasar).
+  - Prediksi: Linear Regression + Moving Average(7) + Exponential
+    Smoothing + Blend, diukur backtest (MAPE/RMSE).
+
+
+================================================================================
+BAGIAN A — JAWABAN ATAS DAFTAR MENU
+================================================================================
+
+Ringkas status tiap menu + rekomendasi:
+
+MENU              | STATUS SAAT INI           | REKOMENDASI
+------------------|---------------------------|------------------------------
+Dashboard         | Jalan, data real          | Pertahankan. Ini pintu masuk.
+Monitoring Harga  | Jalan (baru diperbaiki)   | OK. Catatan: impian "banyak
+                  |                           | sumber (API/scraping/lapangan)"
+                  |                           | belum ada — sekarang 1 sumber.
+Pasar             | Jalan, data real          | OK.
+Peta Surabaya     | Jalan, Leaflet + 7 marker | OK.
+Analisis          | Belum (placeholder)       | Boleh, TAPI hati-hati tumpang
+                  |                           | tindih dengan Prediksi. Lihat A.1.
+Prediksi          | Jalan, akurasi jujur      | Pertahankan. Fokus perbaikan
+                  |                           | akurasi (lihat D.2).
+Early Warning     | Jalan, tapi kamu nilai    | Baca A.2 — ada 3 cara membuatnya
+(EWS)             | "kurang berguna"          | lebih berguna.
+Rekomendasi       | Jalan (auto dari EWS)     | Potensi TERBESAR. Lihat A.3.
+Notifikasi        | Placeholder               | Setuju: HAPUS (lihat A.4).
+Watchlist         | Placeholder               | Setuju: HAPUS (lihat A.4).
+Data & Export     | Belum                     | Rencana bagus. Lihat A.5.
+Pengaturan        | Belum, belum jelas        | Ada saran konkret. Lihat A.6.
+
+--------------------------------------------------------------------------------
+A.1. ANALISIS vs PREDIKSI — jangan tumpang tindih
+--------------------------------------------------------------------------------
+Kamu bilang "analisis: rencana menu khusus forecasting harga". Tapi menu
+Prediksi SUDAH melakukan forecasting harga (7 hari ke depan, 5 metode).
+
+Rekomendasi: jangan bikin dua menu yang isinya sama. Pilihan:
+  (a) HAPUS menu "Analisis", semua forecasting masuk ke "Prediksi".(
+      Paling bersih.)
+  (b) Pertahankan "Analisis" tapi isinya BERBEDA: analisis LANJUTAN,
+      misalnya:
+        - Perbandingan harga antar pasar (pasar mana termahal/murah).
+        - Deteksi musiman (bulan mana harga cabai selalu naik).
+        - Analisis korelasi antar komoditas (harga naik bersama?).
+        - Evaluasi hasil intervensi (lihat Bagian E.3).
+  Prediksi = "besok berapa?"; Analisis = "kenapa & apa polanya?"
+
+--------------------------------------------------------------------------------
+A.2. EWS "kurang terlalu berguna" — apa masalahnya & bagaimana memperbaiki
+--------------------------------------------------------------------------------
+Penilaian kamu wajar. Masalah EWS sekarang:
+  1. Hanya menghitung 2 titik data terakhir (survei terakhir vs sebelumnya).
+     Jadi "deteksi anomali" masih sederhana — bukan tren.
+  2. Ambang batas (5%/10%/20%) HARD-CODE, tidak bisa diubah pengguna.
+  3. Hasilnya baru "daftar", belum sampai "tindakan" (padahal ada menu
+     Rekomendasi yang sudah menghubungkan — tapi lemah).
+  4. Tidak ada notifikasi otomatis.
+
+Cara membuat EWS lebih berguna:
+  (a) Ubah dari "2 titik" jadi deteksi berbasis STATISTIK: bandingkan
+      dengan rata-rata + simpangan baku 30 hari (z-score). Jadi bisa
+      membedakan "naik wajar" vs "naik abnormal" secara ilmiah.
+  (b) Buat ambang batas BISA DIATUR (masuk menu Pengaturan, lihat A.6).
+  (c) Perkuat tautan EWS -> Rekomendasi -> (nanti) laporan intervensi.
+  (d) Tambah notifikasi (in-app dulu; push/WA nanti).
+  Kalau (a)+(b) dikerjakan, EWS naik dari "daftar harga naik" menjadi
+  "sistem deteksi anomali yang bisa dipertanggungjawabkan secara statistik".
+
+--------------------------------------------------------------------------------
+A.3. REKOMENDASI — potensi terbesar
+--------------------------------------------------------------------------------
+Ini yang paling selaras dengan tujuanmu ("intervensi pemerintah"). Sekarang
+Rekomendasi cuma memetakan level risiko EWS -> teks saran (statis). Supaya
+benar-benar berguna untuk pengambilan keputusan:
+  (a) Sertakan ANGKA & KONTEKS (mis. "cabai rawit naik 22% dalam 1 hari,
+      tertinggi 6 bulan terakhir").
+  (b) Petakan ke JENIS INTERVENSI NYATA (operasi pasar, subsidi, pantau
+      pasokan) + taksiran urgensi.
+  (c) Hubungkan ke hasil evaluasi intervensi sebelumnya (Bagian E.3).
+  (d) Aktifkan tombol "Tandai ditangani" -> sekarang masih mati.
+
+--------------------------------------------------------------------------------
+A.4. NOTIFIKASI & WATCHLIST — setuju dihapus
+--------------------------------------------------------------------------------
+Setuju. Alasannya:
+  - Notifikasi: nanti toh dibutuhkan, tapi bukan sebagai MENU terpisah.
+    Notifikasi yang baik itu OTOMATIS muncul dari EWS, bukan halaman yang
+    dibuka sendiri. Jadi sekarang hapus menu; fitur notifikasi dipasang
+    di dalam alur EWS/Rekomendasi nanti.
+  - Watchlist: fitur "pantau komoditas favorit" hanya berguna kalau ada
+    konsep user & preferensi tersimpan. Karena user belum ada (lihat C.3),
+    tunda dulu. Bisa muncul kembali setelah sistem user jadi.
+Aksi: hapus 2 entri dari Sidebar & 2 route placeholder di App.tsx.
+
+--------------------------------------------------------------------------------
+A.5. DATA & EXPORT — rencana JSON/CSV/Excel
+--------------------------------------------------------------------------------
+Rencana bagus dan mudah. Catatan teknis:
+  - Backend sekarang GET-only. Export bisa dibuat di back-end:
+    * /api/export/csv  -> generate CSV (paling simpel, tanpa library baru)
+    * /api/export/json -> cukup res.json() dari query
+    * /api/export/xlsx -> pakai library 'xlsx' yang SUDAH terpasang di
+      server (dipakai import). Jadi tidak perlu tambah dependency.
+  - Penting: JANGAN export /api/harga polos (138rb baris, 34MB) untuk
+    tampilan web. Export harus PAKAI FILTER (per komoditas/per pasar/
+    per rentang tanggal) atau streaming agar tidak memberatkan browser.
+  - Sebaiknya sediakan "template kolom" jelas: tanggal, pasar, komoditas,
+    kategori, satuan, harga -> langsung ramah diolah di Excel/Spreadsheet.
+
+--------------------------------------------------------------------------------
+A.6. PENGATURAN — saran konkret
+--------------------------------------------------------------------------------
+Kamu bingung menu Pengaturan untuk apa. Isi yang MASUK AKAL & berguna:
+  1. AMBANG RISIKO EWS: supaya batas 5%/10%/20% bisa diubah tanpa edit
+     kode. Ini langsung menjawab A.2(b).
+  2. DEFAULT TAMPILAN: pasar/komoditas default, periode default grafik.
+  3. MANAJEMEN USER (setelah sistem user jadi, Bagian B.3):
+     tambah/hapus user, atur role (viewer/admin).
+  4. PREFERENSI: unit tampilan, zona waktu, format tanggal.
+Kalau tidak ada rencana user, minimal isi #1 & #2 — itu sudah cukup
+membuat menu Pengaturan punya alasan hidup.
+
+Kesimpulan Bagian A: hapus Notif & Watchlist; putuskan Analisis vs Prediksi;
+prioritaskan memperkuat EWS + Rekomendasi; isi Pengaturan dengan ambang
+risiko & preferensi.
+
+
+================================================================================
+BAGIAN B — JAWABAN ATAS PROGRESS & RENCANA 2 ENTITAS
+================================================================================
+
+--------------------------------------------------------------------------------
+B.1. Migrasi Supabase -> PostgreSQL + Prisma  (SUDAH)
+--------------------------------------------------------------------------------
+Benar & terbukti. Lihat server/prisma/schema.prisma (5 model) dan
+server/.env (DATABASE_URL PostgreSQL). Supabase sudah dihapus.
+
+CATATAN penting soal "Prisma untuk GUI database":
+  - Prisma itu BUKAN GUI. Prisma = ORM (penghubung kode <-> database).
+  - GUI-nya namanya PRISMA STUDIO (jalan dengan: cd server && npm run
+    db:studio, buka localhost:5555). Ini untuk LIHAT/EDIT data manual
+    saat development — BUKAN untuk user aplikasi.
+  Jadi kalau kamu ingin "admin bisa ubah data lewat web", itu BUKAN
+  Prisma Studio, tapi harus dibuat API POST/PUT + halaman admin. (B.3)
+
+--------------------------------------------------------------------------------
+B.2. API sudah dibuat & testing berjalan  (SUDAH)
+--------------------------------------------------------------------------------
+Benar. Endpoint saat ini (semua GET):
+  /api/health
+  /api/komoditas, /api/komoditas/:id
+  /api/pasar, /api/pasar/:id
+  /api/harga, /api/harga/ringkasan
+  /api/ews/analyze, /api/ews/chart/:id
+  /api/prediction/all, /api/prediction/komoditas/:id,
+  /api/prediction/backtest/:id
+
+CATATAN: semua masih GET (baca). Belum ada satu pun POST/PUT/DELETE.
+Artinya: dari web, pengguna belum bisa menambah/merubah apa pun. Ini
+poin kunci untuk rencana admin di B.3.
+
+--------------------------------------------------------------------------------
+B.3. RENCANA 2 ENTITAS: USER (viewer/export) & ADMIN (ubah data)
+--------------------------------------------------------------------------------
+Pertanyaan kamu: "user melihat data & bisa export; admin merubah/
+menambahkan data; ada tambahan yang lain??"
+
+Jawaban: rencana ini BENAR dan merupakan langkah wajar berikutnya. Tapi
+butuh beberapa komponen. Rinciannya:
+
+1) TABEL USER (belum ada — harus dibuat)
+   Model baru di schema.prisma, misalnya:
+     model User {
+       id       Int    @id @default(autoincrement())
+       nama     String
+       email    String @unique
+       password String            // disimpan dalam bentuk HASH, bukan asli
+       role     String            // "viewer" | "admin"
+       ...
+     }
+   Tambah juga relasi ke aktivitas (audit log) — lihat poin 5.
+
+2) AUTENTIKASI (login) — belum ada sama sekali
+   Butuh: halaman login, penyimpanan sesi/token, dan middleware yang
+   memeriksa apakah permintaan sudah login sebelum akses data.
+   Pilihan sederhana: sesi + cookie. Pilihan modern: JWT.
+   Password WAJIB di-hash (mis. bcrypt), TIDAK boleh disimpan terbaca.
+
+3) API BARU (POST/PUT/DELETE) — belum ada
+   Untuk admin mengubah data, perlu endpoint tulis, misalnya:
+     POST   /api/komoditas
+     PUT    /api/komoditas/:id
+     DELETE /api/komoditas/:id
+   Plus proteksi: hanya role "admin" yang boleh akses endpoint ini
+   (middleware cek role).
+
+4) HALAMAN FRONTEND BARU
+   - Login.
+   - Dashboard admin (kelola pasar/komoditas/survei/harga).
+   - Viewer: tampilan read-only + tombol export.
+
+5) "TAMBAHAN YANG LAIN??" — yang sebaiknya ikut direncanakan:
+   (a) AUDIT LOG: catat siapa mengubah apa & kapan. Penting untuk data
+       pemerintah agar bisa dipertanggungjawabkan.
+   (b) HAK AKSES GRANULAR: admin penuh vs viewer read-only. Mungkin nanti
+       ada "operator" yang cuma boleh input harga harian.
+   (c) VALIDASI INPUT: cegah harga negatif/0, tanggal tidak masuk akal.
+   (d) APPROVAL/VERIFIKASI: input harga baru masuk "pending" dulu sebelum
+       tayang? (opsional, tergantung kebutuhan tata kelola).
+   (e) RESET PASSWORD & profil.
+
+ESTIMASI KASAR (untuk perencanaan, bukan janji):
+  Login + tabel User + 1 endpoint tulis contoh     : pekerjaan menengah.
+  CRUD lengkap semua entitas + audit log + halaman : pekerjaan besar.
+  Saran: MULAI KECIL — bikin login + CRUD 1 entitas (mis. harga) dulu
+  sebagai pola, lalu perluas ke entitas lain.
+
+  CATATAN JUJUR: saat ini proyek masih "prototipe read-only". Menambah
+  user & admin adalah LONJAKAN besar, bukan tambahan kecil. Alokasikan
+  waktu khusus.
+
+
+================================================================================
+BAGIAN C — JAWABAN ATAS 3 PROBLEM YANG DIHADAPI
+================================================================================
+
+--------------------------------------------------------------------------------
+C.1. PROBLEM 1: "Data masih kurang lengkap"
+--------------------------------------------------------------------------------
+Baca progress2.txt BAGIAN 5 (pembahasan lengkap). Ringkasnya:
+  - Dari data 2024: ~14% sel harga kosong di file sumber SP2KP.
+  - Kekosongan STRUKTURAL: tidak semua pasar menjual semua komoditas.
+    Contoh Januari: 33 komoditas lengkap 7 pasar; 26 komoditas hanya
+    di 1-6 pasar; 1 komoditas (Beras Medium) kosong total.
+  - Penanganan sekarang: rata-rata dari pasar YANG MELAPOR saja +
+    simpan field 'jumlahPasar'.
+  - INI BUKAN BUG SISTEM, tapi batasan sumber data.
+  Aksi: koordinasikan definisi kekosongan ke divisi analisis
+  (pertanyaan konkret ada di progress2.txt Bagian 5).
+
+--------------------------------------------------------------------------------
+C.2. PROBLEM 2: "Data terlalu banyak (laptopku gakuat duarr)"
+--------------------------------------------------------------------------------
+INI PENTING — mari kita perjelas dulu APA yang sebenarnya berat, karena
+"data banyak" bisa berarti 3 hal berbeda:
+
+  (1) DATA MENTAH (file xlsx)     : ~40 MB.  -> RINGAN. Bukan masalah.
+  (2) DATABASE (PostgreSQL)        : 138.054 baris harga. -> RINGAN untuk
+                                     PostgreSQL. Bukan masalah.
+  (3) YANG SUNGGUHAN BERAT:
+      a. ENDPOINT /api/harga polos : mengirim 34 MB ke browser dalam 1
+         permintaan. Ini yang bikin browser/laptop ngos-ngosan.
+         -> SUDAH DIPERBAIKI: halaman beranda & monitoring sekarang pakai
+            /api/harga/ringkasan (12 KB, bukan 34 MB).
+      b. node_modules (dependency)  : npm 248 MB + server 310 MB = ~558 MB.
+         Ini bukan "data", tapi kode library. Karena itu ukuran proyek
+         membengkak di laptop.
+      c. DEV SERVER yang jalan terus : Vite + ts-node-dev menahan RAM.
+
+  SOLUSI (dari paling mudah):
+  1. JANGAN pernah memanggil /api/harga TANPA FILTER dari halaman web.
+     Selalu pakai filter (pasar/komoditas/tanggal) atau endpoint
+     ringkasan. (Penyebab utama sudah dibereskan.)
+  2. Untuk export besar, pakai STREAMING atau batasi jumlah baris.
+  3. Kurangi beban pengembangan: tutup dev server saat tidak dipakai;
+     gunakan mode produksi (npm run build) bila mau ringan.
+  4. Untuk "di laptop gakuat": pertimbangkan menjalankan backend +
+     database di MESIN LAIN (laptop kedua, atau server kampus), lalu
+     frontend/laptop kamu hanya membuka browser. Ini paling masuk akal
+     untuk demo berat.
+  5. Database bisa tetap lokal; yang berat biasanya justru banyak query
+     sekaligus — hindari membuka banyak tab yang semuanya fetch data.
+
+  KESIMPULAN: "data banyak" bukan sumber masalahnya. Yang berat adalah
+  (a) payload API yang boros [sudah dibenahi] dan (b) dependency dev.
+  Data 138rb baris itu sepele bagi PostgreSQL.
+
+--------------------------------------------------------------------------------
+C.3. PROBLEM 3: "User"
+--------------------------------------------------------------------------------
+Belum ada sistem user sama sekali (tidak ada tabel User, tidak ada login,
+API read-only). Ini terkait langsung dengan rencana 2 entitas (Bagian B.3).
+Status: belum dikerjakan. Rekomendasi: kerjakan BERTAHAP mulai dari login
++ 1 contoh CRUD (lihat B.3).
+
+
+================================================================================
+BAGIAN D — JAWABAN ATAS 3 PERTANYAAN UTAMA
+================================================================================
+
+--------------------------------------------------------------------------------
+D.1. "Data hanya 2024, sistem 2026. Cukup untuk EWS? Solusi?"
+--------------------------------------------------------------------------------
+JAWABAN JUJUR: TIDAK CUKUP untuk EWS real-time HARI INI, karena ada
+GAP 2 tahun (2025 & 2026 belum ada). 
+
+Kenapa penting:
+  - EWS kita menghitung "perubahan" dari 2 tanggal survei terakhir. Kalau
+    data terakhir = 31 Des 2024, maka EWS mencerminkan kondisi AKHIR 2024,
+    BUKAN kondisi "hari ini" (2026).
+
+TAPI ini tidak mematikan. Ada beberapa jalan:
+  (a) IMPOR DATA TERBARU (paling benar): lengkapi 2025 & 2026 dari SP2KP/
+      Bapanas. Kalau diperoleh, EWS langsung "hidup" lagi.
+  (b) MODE "AS-OF": sistem menampilkan EWS berdasarkan data terakhir yang
+      ADA, dan JUJUR menyebutkan tanggalnya ("kondisi per 31 Des 2024").
+      Ini sudah dilakukan — dashboard memang menampilkan "survei terakhir".
+      Kelemahan: bukan kondisi terkini.
+  (c) BANGUN JALUR INGEST HARIAN: buat mekanisme agar data harian bisa
+      rutin masuk (import terjadwal / input manual admin). EWS lalu
+      mengikuti data terbaru. Ini arah jangka panjang.
+  (d) UNTUK DEMO/PITCH: pakai 2024 sebagai STUDI KASUS bukan klaim
+      real-time. Framing: "sistem siap; begitu data terbaru masuk, EWS
+      otomatis menyesuaikan."
+
+  RINGKAS: solusinya = (a) dapatkan data 2025/2026, atau (b)+(c) bangun
+  jalur ingest rutin. Tanpa itu, EWS hanya menggambarkan 2024.
+
+--------------------------------------------------------------------------------
+D.2. "Modelling sekarang pakai apa? Sebaiknya bagaimana?"
+--------------------------------------------------------------------------------
+MODELLING SAAT INI (faktual, dari kode prediction.ts):
+  - Linear Regression (regresi garis lurus).
+  - Moving Average 7 hari.
+  - Exponential Smoothing (alpha = 0.3).
+  - BLEND: gabungan tren LR + harga terakhir (bobot bergerak).
+  - Diuji dengan BACKTEST walk-forward, diukur MAPE & RMSE.
+
+HASIL NYATA (contoh Cabe Merah Besar, uji 7 hari terakhir Des 2024):
+    Naive (besok = hari ini)      MAPE 3,31%   <- paling akurat
+    Exponential Smoothing         MAPE 6,61%
+    Moving Average (7 hari)       MAPE 7,60%
+    Linear Regression             MAPE 72,13%  <- meleset jauh
+    Blend (dipakai sistem)        MAPE 38,59%
+  Artinya: untuk komoditas ini, model sederhana MENANG. LR kacau karena
+  harga cabai naik-turun tajam (musiman), sedangkan LR menganggap garis
+  lurus.
+
+SEBAIKNYA BAGAIMANA (roadmap, urut prioritas):
+  1. PERBAIKI BLEND yang sekarang kalah dari Naive. Blend terlalu
+     membebani LR. -> Beri bobot adaptif per komoditas, atau minimal
+     pilih otomatis metode terbaik hasil backtest per komoditas.
+  2. Pilih MODEL PER KOMODITAS (bukan satu model untuk semua). Bawang
+     beda perilaku dari cabai. Simpan "metode terbaik" tiap komoditas.
+  3. TANGANI MUSIMAN: model yang sadar musiman (mis. SARIMA, atau
+     Prophet dari Facebook) bisa jauh lebih baik untuk harga pangan
+     yang selalu naik jelang Ramadan/Lebaran.
+  4. Naikkan KUALITAS DATA dulu (lihat C.1) — model sebagus apa pun
+     akan tersandung data bolong.
+  5. PERTIMBANGKAN faktor eksternal (musim panen, hari besar) sebagai
+     variabel tambahan.
+  RINGKAS: sekarang sudah punya KERANGKA yang jujur (backtest). Langkah
+  berikutnya = pemilihan model per komoditas + model musiman + data lebih baik.
+
+--------------------------------------------------------------------------------
+D.3. "EWS dari data realtime, tapi data tidak memungkinkan — mungkin?"
+--------------------------------------------------------------------------------
+JAWABAN: mungkin, dalam bentuk "NEAR-REAL-TIME" (hampir real-time), bukan
+real-time mutlak. Penjelasannya:
+
+  REAL-TIME MUTLAK butuh: sumber data streaming langsung dari SP2KP/
+  Bapanas (API resmi atau scraping terjadwal ketat). Kalau itu tidak
+  tersedia/tidak diizinkan, real-time mutlak TIDAK mungkin.
+
+  YANG MASIH MUNGKIN:
+  (a) NEAR-REAL-TIME: data di-import RUTIN (mis. tiap hari/minggu) dari
+      sumber yang tersedia. EWS selalu "sebaru data terakhir". Secara
+      fungsi mendekati real-time.
+  (b) SUMBER ALTERNATIF: kalau SP2KP terbatas, bisa tambah sumber lain
+      (data lapangan petugas, input manual admin). Kamu sendiri sebut
+      ini di pr.txt: "realtime banyak sumber API, scraping, data lapangan".
+  (c) INPUT MANUAL: admin memasukkan harga hari ini via halaman admin
+      (butuh sistem user — Bagian B.3). Ini paling realistis bila tidak
+      ada API.
+
+  KESIMPULAN: real-time murni bergantung pada akses sumber data. Tanpa
+  itu, capai "near-real-time" lewat import rutin + input manual. Untuk
+  pitch, jujur sampaikan ini sebagai batasan + rencana.
+
+
+================================================================================
+BAGIAN E — JAWABAN ATAS TAMBAHAN
+================================================================================
+
+--------------------------------------------------------------------------------
+E.1. 3 STATUS (aman, waspada, intervensi)
+--------------------------------------------------------------------------------
+Sekarang sistem pakai 4 level: Normal, Siaga, Waspada, Kritis.
+
+Usulan 3 status kamu (aman / waspada / intervensi) sebenarnya LEBIH BAIK
+untuk pengambilan keputusan, karena langsung mengarah ke TINDAKAN.
+Pemetaan yang disarankan:
+    Normal  (<5%)              -> AMAN
+    Siaga (5-10%)              -> AMAN/waspada (zona abu-abu)
+    Waspada (10-20%)           -> WASPADA
+    Kritis (>20%)              -> INTERVENSI
+Rekomendasi: pakai 3 status untuk TAMPILAN (ringkas, tindakan-oriented),
+tetapi pertahankan 4 level di perhitungan internal agar transisi tetap
+halus. Ini juga menyelaraskan EWS dengan menu Rekomendasi (intervensi).
+
+--------------------------------------------------------------------------------
+E.2. 1 page FAQ (informasi detail website)
+--------------------------------------------------------------------------------
+Ide bagus. Isi yang disarankan:
+  - Apa itu SIMONPEDIA? Untuk siapa?
+  - Dari mana datanya? Seberapa sering diperbarui? Seberapa lengkap?
+  - Apa arti status aman/waspada/intervensi?
+  - Bagaimana cara membaca Prediksi & angka MAPE?
+  - Kenapa harga bisa kosong di beberapa pasar? (kaitkan Bagian 5 progress2)
+  - Apakah ini menggantikan keputusan pemerintah? (TIDAK — lihat E.4)
+  - Siapa yang bisa mengakses? (setelah ada user)
+Lokasi: menu terpisah, atau tautan di kaki halaman.
+
+--------------------------------------------------------------------------------
+E.3. EVALUASI INTERVENSI -> LAPORAN -> MASUK KE WEB
+--------------------------------------------------------------------------------
+Alur yang kamu idamkan:
+  notifikasi -> intervensi dilakukan -> dibuat laporan hasil -> laporan
+  tersebut ditampilkan di web sebagai informasi yang telah diolah.
+
+Apakah cocok dengan arsitektur sekarang? BELUM, tapi BISA dibangun.
+Yang dibutuhkan:
+  1. Tabel baru: mis. "Intervensi" (komoditas, tanggal, jenis tindakan,
+     hasil sebelum/sesudah, catatan) dan "Laporan".
+  2. API POST/PUT untuk mencatat intervensi & hasilnya (butuh admin,
+     Bagian B.3).
+  3. Halaman "Laporan" yang menampilkan hasil evaluasi (mis. "setelah
+     operasi pasar, harga cabai turun X% dalam Y hari").
+  4. Hubungkan: EWS mendeteksi -> Rekomendasi menyarankan -> admin
+     mencatat tindakan -> sistem mengukur hasil -> jadi laporan.
+Ini fitur BERBOBOT dan selaras dengan misi "intervensi pemerintah".
+Rekomendasi: jadikan ini fase lanjutan setelah user/admin berdiri.
+
+--------------------------------------------------------------------------------
+E.4. BATAS KEMAMPUAN WEBSITE DALAM ANALISIS HARGA
+--------------------------------------------------------------------------------
+Kamu menyinggung "data kebijakan pemerintah". Penting untuk jujur soal batas:
+  1. WEB INI ALAT BANTU, BUKAN PENGGANTI KEBIJAKAN. Sistem menyajikan
+     data & prediksi; keputusan tetap di tangan pengambil kebijakan.
+  2. PREDIKSI = PERKIRAAN, BUKAN KEPASTIAN. Sudah diukur dengan MAPE
+     (rata-rata meleset). Angka ini harus ditampilkan agar tidak
+     disalahartikan sebagai kebenaran mutlak.
+  3. TIDAK SEMUA FAKTOR MASUK MODEL. Kebijakan pemerintah (operasi pasar,
+     subsidi, impor) MENGUBAH harga secara mendadak — hal yang tidak
+     bisa ditangkap model statistik dari data historis saja.
+  4. KUALITAS DATA MEMBATASI KUALITAS ANALISIS (lihat C.1).
+  5. Sistem SEBAIKNYA menyertakan disclaimer: "prediksi bersifat
+     indikatif, keputusan berdasarkan pertimbangan menyeluruh".
+  Ide lanjut: masukkan VARIABEL KEBIJAKAN sebagai catatan/timeline di
+  web, supaya lonjakan harga bisa dijelaskan ("naik karena menjelang
+  Lebaran" atau "turun setelah operasi pasar").
+
+
+================================================================================
+BAGIAN F — RINGKASAN PRIORITAS (SARAN URUTAN KERJA)
+================================================================================
+
+PRIORITAS | PEKERJAAN                                   | BEBAN
+----------|---------------------------------------------|--------
+1         | Rapikan menu: hapus Notif & Watchlist;      | Ringan
+          | putuskan Analisis vs Prediksi               |
+2         | Isi menu Pengaturan (ambang risiko EWS +    | Ringan
+          | default tampilan)                           |
+3         | Perkuat EWS (deteksi statistik z-score +    | Menengah
+          | ambang bisa diatur)                         |
+4         | Selesaikan Data Export (CSV/JSON/XLSX)      | Menengah
+5         | 3 status (aman/waspada/intervensi) di UI    | Ringan
+6         | Halaman FAQ                                  | Ringan
+7         | User + Login + CRUD admin (mulai 1 entitas) | BESAR
+8         | Modul Laporan Intervensi                     | BESAR
+9         | Dapatkan data 2025/2026 (untuk EWS hidup)   | Eksternal
+
+CATATAN PENUTUP:
+  - Kekuatan proyek ini: data asli, API jalan, prediksi jujur (ada backtest).
+  - Kelemahan utama: belum ada sistem user, data terbatas 2024, menu belum
+    rampung.
+  - Jangan kerjakan semua sekaligus. Selesaikan menu (1-6) dulu supaya
+    aplikasi rapi, baru masuk user/admin (7-8) yang berat.
+
+================================================================================
+SELESAI — pr-jawaban1.txt
+================================================================================

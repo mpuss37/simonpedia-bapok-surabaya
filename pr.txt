@@ -1,0 +1,31 @@
+menu yang dipakai :
+dashboard (menu utama mencakup informasi penting), monitoring harga (realtime banyak sumber api, scrapping, data lapangan), pasar(pasar yang dicakupi), peta surabaya
+, analisis (belum, rencana untuk menu khusus forecasting harga), prediksi (sudah tapi masih belum akurat datanya kurang)
+early warning(kurang terlalu berguna), rekomendasi(rekomendasi untuk intervensi pemerintah), notif (hapus), watchlist (hapus)
+data export (belum, rencana jadikan format json, csv, atau excel agar ramah untuk pengolahan data),
+pengaturan (belum tahu pakai atau tidak digunakan untuk apa juga, minta saran)
+
+progress :
+sudah migrasi dari supabase ke postgresql dan penambahan prisma untuk gui dari postgrenya
+sudah buat api dan sudah testing berjalan dengan baik.
+rencana mau penambahan 2 entitas (user melihat data yang ada dan bisa export datanya dan admin merubah menambahkan data dan ada tambahan yang lain??)
+
+problem yang dihadapi sekarang : 
+1. data masih kurang lengkap
+2. data terlalu banyak (laptopku gakuat duarr)
+3. user
+
+pertanyaan :
+1. mengenai data yang ditampilkan pada prediksi dan early warning sistem itu bagaimana? saya hanya punya data 2024 berarti masih kurang untuk ews
+sistem 2026 hari ini? solusi?
+2. modellingnya yang progress saat ini pakai apa? pakai metode apa? sebaiknya bagaimana?
+3. kalau kita ews dari data realtime sedangkan datanya tidak memungkinkan apakah mungkin?
+
+tambahan :
+3 status (aman, waspada, intervensi)
+1 page faq informasi website detail
+evaluasi dari intervensi dibuat laporan untuk kedepannya bagaimana berdasarkan dari notifikasi. dari laporan tersebut dimasukkan ke web
+sebagai bentuk informasi yang sudah diolah dan disajikan
+
+batas mengenai kemampuan website dalam analisa sebuah harganya :
+data kebijakan pemerintah
