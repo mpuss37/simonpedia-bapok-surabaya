@@ -59,20 +59,41 @@ function hitungRisiko(persenPerubahan: number): "Normal" | "Siaga" | "Waspada" |
       orderBy: { nama: "asc" },
     })
 
+    // OPTIMASI: ambil hanya 2 tanggal survei terakhir (bukan seluruh 138rb baris
+    // per komoditas). Semua perhitungan EWS hanya butuh dua titik terakhir.
+    const duaTanggalTerakhir = await prisma.survei.findMany({
+      orderBy: { tanggal: "desc" },
+      select: { tanggal: true },
+      distinct: ["tanggal"],
+      take: 2,
+    })
+
+    const semuaHarga = await prisma.detailSurvei.findMany({
+      where: { survei: { tanggal: { in: duaTanggalTerakhir.map((s) => s.tanggal) } } },
+      include: { survei: { select: { tanggal: true, pasarId: true, pasar: { select: { nama: true } } } } },
+    })
+
+    // Kelompokkan per komoditas
+    const perKomoditas = new Map<
+      number,
+      { harga: number; tanggal: string; pasarId: number; pasar: string }[]
+    >()
+    for (const h of semuaHarga) {
+      const komId = h.komoditasId
+      if (!perKomoditas.has(komId)) perKomoditas.set(komId, [])
+      perKomoditas.get(komId)!.push({
+        harga: h.harga,
+        tanggal: h.survei.tanggal.toISOString().slice(0, 10),
+        pasarId: h.survei.pasarId,
+        pasar: h.survei.pasar.nama,
+      })
+    }
+
     const analisis: KomoditasAnalisis[] = []
     const alerts: Alert[] = []
 
     for (const kom of komoditasList) {
-      const hargaData = await prisma.detailSurvei.findMany({
-        where: { komoditasId: kom.id },
-        include: {
-          survei: {
-            include: { pasar: true },
-          },
-        },
-        orderBy: { survei: { tanggal: "desc" } },
-      })
-
+      const hargaData = perKomoditas.get(kom.id) || []
       if (hargaData.length === 0) continue
 
       const hargaList = hargaData.map((h) => h.harga)
@@ -80,21 +101,15 @@ function hitungRisiko(persenPerubahan: number): "Normal" | "Siaga" | "Waspada" |
       const hargaTertinggi = Math.max(...hargaList)
       const hargaTerendah = Math.min(...hargaList)
 
-      const tanggalUnik = new Set(hargaData.map((h) => h.survei.tanggal.toISOString().slice(0, 10)))
-      const sortedTanggal = Array.from(tanggalUnik).sort()
+      const sortedTanggal = Array.from(new Set(hargaData.map((h) => h.tanggal))).sort()
 
       let persenPerubahan = 0
       if (sortedTanggal.length >= 2) {
         const tanggalTerakhir = sortedTanggal[sortedTanggal.length - 1]
         const tanggalSebelumnya = sortedTanggal[sortedTanggal.length - 2]
 
-        const hargaTerakhir = hargaData
-          .filter((h) => h.survei.tanggal.toISOString().slice(0, 10) === tanggalTerakhir)
-          .map((h) => h.harga)
-
-        const hargaSebelumnya = hargaData
-          .filter((h) => h.survei.tanggal.toISOString().slice(0, 10) === tanggalSebelumnya)
-          .map((h) => h.harga)
+        const hargaTerakhir = hargaData.filter((h) => h.tanggal === tanggalTerakhir).map((h) => h.harga)
+        const hargaSebelumnya = hargaData.filter((h) => h.tanggal === tanggalSebelumnya).map((h) => h.harga)
 
         if (hargaTerakhir.length > 0 && hargaSebelumnya.length > 0) {
           const avgTerakhir = hargaTerakhir.reduce((a, b) => a + b, 0) / hargaTerakhir.length
@@ -104,7 +119,7 @@ function hitungRisiko(persenPerubahan: number): "Normal" | "Siaga" | "Waspada" |
       }
 
       const levelRisiko = hitungRisiko(persenPerubahan)
-      const jumlahPasar = new Set(hargaData.map((h) => h.survei.pasarId)).size
+      const jumlahPasar = new Set(hargaData.map((h) => h.pasarId)).size
 
       analisis.push({
         id: kom.id,
@@ -122,9 +137,8 @@ function hitungRisiko(persenPerubahan: number): "Normal" | "Siaga" | "Waspada" |
       if (levelRisiko !== "Normal") {
         const perPasar = new Map<number, { pasar: string; harga: number }[]>()
         for (const h of hargaData) {
-          const pasarId = h.survei.pasarId
-          if (!perPasar.has(pasarId)) perPasar.set(pasarId, [])
-          perPasar.get(pasarId)!.push({ pasar: h.survei.pasar.nama, harga: h.harga })
+          if (!perPasar.has(h.pasarId)) perPasar.set(h.pasarId, [])
+          perPasar.get(h.pasarId)!.push({ pasar: h.pasar, harga: h.harga })
         }
 
         for (const [_, entries] of perPasar) {

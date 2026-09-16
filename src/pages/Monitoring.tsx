@@ -9,7 +9,16 @@ import {
 } from "lucide-react"
 
 import React, { useEffect, useMemo, useState } from "react"
-import { getHarga, type Harga } from "../services/priceService"
+import { Link } from "react-router-dom"
+import {
+  Area,
+  AreaChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts"
+import { getRingkasanHarga, type RingkasanHarga } from "../services/priceService"
 import PageHeader from "../components/layout/PageHeader"
 
 
@@ -31,15 +40,33 @@ export default function Monitoring() {
   const [search, setSearch] = useState("")
   const [category, setCategory] = useState("Semua Kategori")
   const [period, setPeriod] = useState("30 Hari")
-  const [data, setData] = useState<Harga[]>([])
+  const [ringkasan, setRingkasan] = useState<RingkasanHarga[]>([])
+  const [trenData, setTrenData] = useState<{ tanggal: string; harga: number }[]>([])
+  const [lastUpdate, setLastUpdate] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const harga = await getHarga()
-        setData(harga)
+        const res = await getRingkasanHarga()
+        setRingkasan(res.data)
+        setLastUpdate(res.lastUpdate)
+
+        // Ambil tren agregat: rata-rata harian seluruh komoditas (untuk grafik).
+        // Pakai komoditas dengan perubahan terbesar sebagai contoh tren nasional.
+        const top = res.data
+          .slice()
+          .sort((a, b) => Math.abs(b.persenPerubahan) - Math.abs(a.persenPerubahan))[0]
+        if (top) {
+          const chartRes = await fetch(
+            `http://localhost:3001/api/ews/chart/${top.id}`
+          )
+          if (chartRes.ok) {
+            const chartJson = await chartRes.json()
+            setTrenData(chartJson)
+          }
+        }
       } catch (err) {
         setError("Gagal memuat data dari server")
         console.error(err)
@@ -51,29 +78,14 @@ export default function Monitoring() {
   }, [])
 
   const commodities = useMemo(() => {
-    const grouped = new Map<string, { name: string; category: string; prices: number[] }>()
-
-    for (const item of data) {
-      const existing = grouped.get(item.komoditas.nama)
-      if (existing) {
-        existing.prices.push(item.harga)
-      } else {
-        grouped.set(item.komoditas.nama, {
-          name: item.komoditas.nama,
-          category: item.komoditas.kategori,
-          prices: [item.harga],
-        })
-      }
-    }
-
-    return Array.from(grouped.values()).map((item) => ({
-      name: item.name,
-      category: item.category,
-      price: Math.round(item.prices.reduce((a, b) => a + b, 0) / item.prices.length),
-      change: Math.round((Math.random() * 20 - 10) * 10) / 10,
-      status: "Stabil",
+    return ringkasan.map((item) => ({
+      name: item.nama,
+      category: item.kategori,
+      price: item.hargaRataRata,
+      change: item.persenPerubahan,
+      status: item.status,
     }))
-  }, [data])
+  }, [ringkasan])
 
 
   const filteredCommodities = useMemo(() => {
@@ -121,6 +133,18 @@ export default function Monitoring() {
       (item) => item.change === 0
     ).length
 
+  // Filter tren sesuai periode yang dipilih (7 Hari / 30 Hari / 3 Bulan / 6 Bulan)
+  const chartTren = useMemo(() => {
+    const hariMap: Record<string, number> = {
+      "7 Hari": 7,
+      "30 Hari": 30,
+      "3 Bulan": 90,
+      "6 Bulan": 180,
+    }
+    const n = hariMap[period] ?? 30
+    return trenData.slice(-n)
+  }, [trenData, period])
+
 
   return (
 
@@ -164,11 +188,13 @@ export default function Monitoring() {
             Update terakhir
 
             <span className="font-semibold text-[#171717]/65">
-              {new Date().toLocaleDateString("id-ID", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
+              {lastUpdate
+                ? new Date(lastUpdate).toLocaleDateString("id-ID", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })
+                : "—"}
             </span>
 
           </div>
@@ -303,108 +329,77 @@ export default function Monitoring() {
 
         <div className="p-6 lg:p-8">
 
-          <div className="relative h-[280px]">
+          {chartTren.length === 0 ? (
 
-            {/* GRID */}
+            <div className="flex h-[280px] items-center justify-center text-sm text-[#171717]/40">
+              Memuat grafik tren...
+            </div>
 
-            <div className="absolute inset-0 flex flex-col justify-between">
+          ) : (
 
-              {[1, 2, 3, 4, 5].map((line) => (
+            <div className="h-[280px]">
 
-                <div
-                  key={line}
-                  className="border-t border-dashed border-[#171717]/[0.06]"
-                />
+              <ResponsiveContainer width="100%" height="100%">
 
-              ))}
+                <AreaChart data={chartTren} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+
+                  <defs>
+
+                    <linearGradient id="areaGradient" x1="0" x2="0" y1="0" y2="1">
+
+                      <stop offset="0%" stopColor="#C93742" stopOpacity={0.2} />
+
+                      <stop offset="100%" stopColor="#C93742" stopOpacity={0} />
+
+                    </linearGradient>
+
+                  </defs>
+
+                  <XAxis
+                    dataKey="tanggal"
+                    tickFormatter={(v: string) => v.slice(5)}
+                    tick={{ fontSize: 10, fill: "#17171766" }}
+                    axisLine={false}
+                    tickLine={false}
+                    minTickGap={40}
+                  />
+
+                  <YAxis
+                    tickFormatter={(v: number) => `Rp${Math.round(v / 1000)}k`}
+                    tick={{ fontSize: 10, fill: "#17171766" }}
+                    axisLine={false}
+                    tickLine={false}
+                    width={60}
+                  />
+
+                  <Tooltip
+                    formatter={(value) => [
+                      `Rp${Number(value).toLocaleString("id-ID")}`,
+                      "Harga",
+                    ]}
+                    labelFormatter={(label) => `Tanggal ${label}`}
+                    contentStyle={{
+                      borderRadius: 12,
+                      border: "1px solid #17171710",
+                      fontSize: 12,
+                    }}
+                  />
+
+                  <Area
+                    type="monotone"
+                    dataKey="harga"
+                    stroke="#C93742"
+                    strokeWidth={2.5}
+                    fill="url(#areaGradient)"
+                  />
+
+                </AreaChart>
+
+              </ResponsiveContainer>
 
             </div>
 
-
-            {/* SVG */}
-
-            <svg
-              viewBox="0 0 900 250"
-              className="absolute inset-0 h-full w-full"
-              preserveAspectRatio="none"
-            >
-
-              <defs>
-
-                <linearGradient
-                  id="areaGradient"
-                  x1="0"
-                  x2="0"
-                  y1="0"
-                  y2="1"
-                >
-
-                  <stop
-                    offset="0%"
-                    stopColor="#C93742"
-                    stopOpacity="0.15"
-                  />
-
-                  <stop
-                    offset="100%"
-                    stopColor="#C93742"
-                    stopOpacity="0"
-                  />
-
-                </linearGradient>
-
-              </defs>
-
-
-              <path
-                d="
-                  M0 190
-                  C70 180 80 145 145 155
-                  S220 180 275 125
-                  S360 110 410 140
-                  S500 180 550 105
-                  S630 125 690 75
-                  S790 95 900 45
-                  L900 250
-                  L0 250
-                  Z
-                "
-                fill="url(#areaGradient)"
-              />
-
-
-              <path
-                d="
-                  M0 190
-                  C70 180 80 145 145 155
-                  S220 180 275 125
-                  S360 110 410 140
-                  S500 180 550 105
-                  S630 125 690 75
-                  S790 95 900 45
-                "
-                fill="none"
-                stroke="#C93742"
-                strokeWidth="4"
-                strokeLinecap="round"
-              />
-
-            </svg>
-
-          </div>
-
-
-          {/* DATE */}
-
-          <div className="mt-4 flex justify-between text-[10px] font-medium text-[#171717]/25">
-
-            <span>08 Jul</span>
-            <span>15 Jul</span>
-            <span>22 Jul</span>
-            <span>29 Jul</span>
-            <span>07 Aug</span>
-
-          </div>
+          )}
 
         </div>
 
@@ -452,17 +447,15 @@ export default function Monitoring() {
               className="h-11 w-full appearance-none rounded-xl border border-[#171717]/10 bg-[#FAF7F7] px-4 pr-10 text-sm text-[#171717]/60 outline-none transition focus:border-[#C93742]/40 lg:w-[200px]"
             >
 
-              <option>
+              <option value="Semua Kategori">
                 Semua Kategori
               </option>
 
-              <option>
-                Pangan Pokok
-              </option>
-
-              <option>
-                Bumbu Dapur
-              </option>
+              {Array.from(new Set(commodities.map((c) => c.category))).sort().map((kat) => (
+                <option key={kat} value={kat}>
+                  {kat}
+                </option>
+              ))}
 
             </select>
 
@@ -621,7 +614,7 @@ export default function Monitoring() {
                         <ArrowDownRight size={14} />
                       ) : null}
 
-                      {Math.abs(item.change)}%
+                      {item.change > 0 ? "+" : ""}{item.change}%
 
                     </span>
 
@@ -643,13 +636,14 @@ export default function Monitoring() {
 
                   <td className="px-6 py-4 text-right">
 
-                    <button
+                    <Link
+                      to={`/monitoring/${encodeURIComponent(item.name)}`}
                       className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#171717]/25 transition hover:bg-[#FFF0F1] hover:text-[#C93742]"
                     >
 
                       <ChevronRight size={16} />
 
-                    </button>
+                    </Link>
 
                   </td>
 

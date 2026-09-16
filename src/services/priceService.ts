@@ -64,3 +64,29 @@ export async function getHarga(filters?: {
   if (!res.ok) throw new Error("Gagal mengambil data harga")
   return res.json()
 }
+
+export interface RingkasanHarga {
+  id: number
+  nama: string
+  kategori: string
+  satuan: string
+  hargaRataRata: number
+  persenPerubahan: number
+  status: "Naik" | "Turun" | "Stabil"
+  jumlahPasar: number
+  tanggal: string
+}
+
+export interface RingkasanResponse {
+  lastUpdate: string | null
+  total: number
+  data: RingkasanHarga[]
+}
+
+// Ringkasan per komoditas (harga rata-rata, % perubahan, status)
+// — ringan, menggantikan getHarga() polos untuk halaman yang butuh agregat.
+export async function getRingkasanHarga(): Promise<RingkasanResponse> {
+  const res = await fetch(`${API_URL}/harga/ringkasan`)
+  if (!res.ok) throw new Error("Gagal mengambil ringkasan harga")
+  return res.json()
+}

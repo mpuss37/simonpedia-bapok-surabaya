@@ -1,0 +1,538 @@
+================================================================================
+PROGRESS2 — CATATAN PRIBADI: RIWAYAT, CARA RUNNING, BAHAN PITCHING, & DATA KOSONG
+SIMONPEDIA BAPOK SURABAYA
+Dibuat: 16 September 2026 (persiapan pitching besok)
+================================================================================
+
+File ini untuk KEPERLUAN PRIBADI (bukan dokumentasi teknis resmi).
+Dokumentasi resmi tetap di: dokumentasi.txt (referensi) & progress1.txt (panduan).
+
+Isi file ini:
+  BAGIAN 1 — Riwayat perubahan dari awal sampai sekarang
+  BAGIAN 2 — Cara running aplikasi (cheat sheet)
+  BAGIAN 3 — Bahan pitching 5 menit
+  BAGIAN 4 — Peta halaman: mana yang di-pitch (sudah) vs belum
+  BAGIAN 5 — Masalah data kosong (untuk koordinasi divisi analisis)
+
+
+================================================================================
+BAGIAN 1 — RIWAYAT PERUBAHAN (DARI AWAL SAMPAI SEKARANG)
+================================================================================
+
+Proyek ini awalnya memakai SUPABASE (backend online). Semua halaman React
+masih data hardcoded/dummy. Lalu dimigrasikan ke backend sendiri
+(Express + Prisma + PostgreSQL) dengan data REAL Bapanas/SP2KP.
+
+--- TASK 1: MIGRASI & BACKEND (selesai) --------------------------------
+- Hapus Supabase (file supabase.ts, SupabaseTest.tsx, dependency).
+- Bangun folder server/ : Express 4 + Prisma 6 + TypeScript.
+  (Express sengaja v4, bukan v5 — v5 ada breaking change di Router.)
+- Database PostgreSQL: 5 tabel (Wilayah, Pasar, Komoditas, Survei,
+  DetailSurvei).
+- Import data real Bapanas: awalnya Januari 2024 saja
+  (7 pasar, 60 komoditas, 217 survei, 10.844 harga).
+- REST API dasar: /api/health, /api/komoditas, /api/pasar, /api/harga.
+- Frontend Monitoring & Pasar tersambung ke PostgreSQL (bukan dummy lagi).
+
+--- TASK 2: EARLY WARNING SYSTEM / EWS (selesai) ------------------------
+- Route server/src/routes/ews.ts:
+    * GET /api/ews/analyze  → analisis semua komoditas + ringkasan 4 level
+    * GET /api/ews/chart/:id → data grafik harian 1 komoditas
+- Logika deteksi anomali + 4 level risiko:
+    Normal <5% | Siaga 5-10% | Waspada 10-20% | Kritis >20%
+  (perubahan antara 2 tanggal survei terakhir)
+- Halaman EWS.tsx: 4 kartu status, banner alert, grafik per komoditas
+  (dropdown), daftar alert, ringkasan risiko, rekomendasi tindakan.
+- Dashboard (Home.tsx) ikut pakai data EWS.
+
+--- TASK 3: PREDIKSI HARGA (selesai) -----------------------------------
+- Route server/src/routes/prediction.ts:
+    * GET /api/prediction/all             → prediksi ringkas semua komoditas
+    * GET /api/prediction/komoditas/:id   → detail 1 komoditas
+- Tiga metode: Linear Regression, Moving Average (7 hari),
+  Exponential Smoothing (alpha = 0.3).
+- Halaman Prediksi.tsx: tabel prediksi, filter kategori, panel detail
+  dengan grafik ComposedChart (historis vs prediksi 7 hari).
+
+--- PENYEMPURNAAN (selesai) --------------------------------------------
+- Semua 8 halaman utama tersambung ke API real:
+  Home, Monitoring, CommodityDetail, Pasar, MapPage, EWS, Prediksi,
+  Recommendations.
+- Hapus dead code (Prediction.tsx lama).
+- Dokumentasi disatukan jadi dokumentasi.txt (satu file, di-edit terus).
+- Header per-halaman via komponen PageHeader (DashboardLayout tanpa header).
+- Fix bug Dashboard: setEwsSummary(ewsSummary) → setEwsSummary(ewsSummary
+  .ringkasan) — sebelumnya semua angka 0. Math.random() di tabel pergerakan
+  diganti persenPerubahan real dari EWS.
+
+--- BACKTEST WALK-FORWARD (selesai) ------------------------------------
+- Endpoint baru: GET /api/prediction/backtest/:id
+- Uji 5 metode: Naive, Linear Regression, MA7, Exponential Smoothing,
+  dan Blend (metode yang dipakai sistem) dengan walk-forward.
+- Metrik: MAPE (%) dan RMSE (Rp).
+- Field 'confidence' yang dulu angka buatan → diganti AKURASI TERUKUR
+  (100 - MAPE).
+- Frontend Prediksi.tsx: kartu "Akurasi terukur (backtest)", tabel
+  MAPE/RMSE 5 metode, "metode terbaik", dan PERINGATAN otomatis bila
+  Blend kalah dari baseline Naive.
+- Temuan jujur: untuk banyak komoditas, Naive (besok = hari ini) lebih
+  akurat daripada metode kompleks. Ini tidak disembunyikan.
+
+--- DATA 12 BULAN + PERBAIKAN (selesai, paling akhir) ------------------
+- Import data Jan-Des 2024 (12 file xlsx bulanan):
+    7 pasar, 67 komoditas, 2.562 survei, 138.054 titik harga.
+  (sebelumnya cuma Januari: 60 komoditas, 10.844 harga)
+- import.ts ditulis ulang jadi parser universal xlsx:
+    * baca 12 file, sheet harian '01'-'31'
+    * normalisasi typo tahun (2023 → 2024 di sheet Januari)
+    * skip sheet GRAFIK/REKAPITULASI
+    * handle format tanggal beda (leading zero vs tidak)
+    * skip harga kosong: '-', 0, '', '#DIV/0!'
+- Fix bug penting: setelah reset DB, auto-increment ID komoditas TIDAK
+  mulai dari 1 lagi (jadi 136-202). Akibatnya hardcoded ID di frontend
+  salah → chart kosong. Diperbaiki: frontend ambil ID secara DINAMIS.
+- Fix prediction.ts: forecastRange dulu hardcode tanggal '2024-01-31',
+  jadi prediksi 7 hari mulai Februari 2024. Sekarang pakai tanggal data
+  terakhir (31 Des 2024 → prediksi 1-7 Jan 2025).
+
+--- OPTIMASI PERFORMA (selesai, terbaru) ------------------------------
+Masalah: halaman lambat karena endpoint berat.
+- /api/harga polos mengirim SELURUH 138.054 baris = 34 MB, 6,1 detik.
+  Dipakai Home & Monitoring → inilah penyebab utama lambat.
+- /api/ews/analyze melakukan 67 query berurutan (N+1) = 5,0 detik.
+
+Perbaikan:
+- Endpoint BARU /api/harga/ringkasan → ringkasan per komoditas
+  (harga rata-rata, % perubahan, status, jumlah pasar).
+  Hasil: 0,76 detik, 12 KB (dari 6,1 detik / 34 MB).
+- /api/ews/analyze diubah: ambil HANYA 2 tanggal survei terakhir
+  (bukan seluruh baris per komoditas). Hasil: 0,03 detik (dari 5,0 detik).
+- /api/prediction/all diubah jadi 1 query (bukan 67). Hasil: 1,98 detik.
+- Monitoring.tsx: hapus Math.random() (data perubahan palsu) → pakai
+  /api/harga/ringkasan. Chart tren SVG statis → Recharts AreaChart real.
+  Tombol periode (7 Hari/30 Hari/3 Bulan/6 Bulan) sekarang berfungsi.
+  Tombol "Detail" per baris sekarang navigasi ke Detail Komoditas.
+  Dropdown kategori sekarang dinamis dari data (dulu hardcoded
+  "Pangan Pokok"/"Bumbu Dapur" yang tidak cocok).
+
+
+================================================================================
+BAGIAN 2 — CARA RUNNING APLIKASI (CHEAT SHEET)
+================================================================================
+
+Aplikasi = 3 komponen yang harus hidup: PostgreSQL + Backend + Frontend.
+
+--- A. SEKALI SAJA (SETUP PERTAMA) -------------------------------------
+1) Nyalakan PostgreSQL (sistem pakai OpenRC, BUKAN systemd):
+     sudo rc-service postgresql start
+2) Masuk DB & buat database:
+     psql -U postgres -h localhost
+     CREATE DATABASE simonpedia_bapok;
+     \q
+3) Setup backend:
+     cd server
+     npm install
+     npx prisma db push
+     ./node_modules/.bin/ts-node prisma/import.ts   # import data 12 bulan
+   File server/.env harus berisi:
+     DATABASE_URL="postgresql://postgres:postgres@localhost:5432/simonpedia_bapok"
+4) Setup frontend:
+     cd ..        (kembali ke root project)
+     npm install
+
+--- B. PROSEDUR HARIAN (TIAP MAU PAKAI) --------------------------------
+Buka 2 terminal.
+
+  TERMINAL 1 — Backend (harus hidup dulu):
+     sudo rc-service postgresql start      # kalau DB belum jalan
+     cd server
+     npm run dev
+     → tunggu tulisan "Server running on http://localhost:3001"
+
+  TERMINAL 2 — Frontend:
+     cd "<root project>"
+     npm run dev
+     → buka http://localhost:5173 di browser
+
+--- C. RESET & IMPORT ULANG DATA (hati-hati: menghapus semua data) -----
+     cd server
+     npx prisma migrate reset --force
+     ./node_modules/.bin/ts-node prisma/import.ts
+
+--- D. LIHAT DATABASE SECARA VISUAL (Prisma Studio) --------------------
+     cd server
+     npm run db:studio     → buka http://localhost:5555
+
+--- E. TROUBLESHOOTING -------------------------------------------------
+- Halaman kosong / data tidak muncul:
+    * Pastikan backend (terminal 1) hidup: cek http://localhost:3001/api/health
+    * Pastikan PostgreSQL hidup: sudo rc-service postgresql start
+- Halaman lambat / muter lama:
+    * Dulu karena /api/harga kirim 34 MB. Sekarang Home & Monitoring pakai
+      /api/harga/ringkasan (12 KB). Kalau lambat lagi, cek endpoint yang
+      dipanggil halaman.
+- Port bentrok (3001 / 5173 sudah dipakai):
+    * Matikan proses lama: cari PID-nya lalu kill. Jangan asal pkill -f
+      pada pola yang cocok dengan proses sendiri.
+- Prediksi tanggalnya aneh (mulai 2024-02):
+    * Sudah diperbaiki. Kalau muncul lagi, cek forecastRange di prediction.ts.
+
+CATATAN PENTING soal backend sebagai proses background:
+    Gunakan pola "setsid nohup ... &" agar proses tidak mati saat terminal
+    ditutup. Pola "nohup ... &" biasa bisa ikut mati.
+
+
+================================================================================
+BAGIAN 3 — BAHAN PITCHING 5 MENIT
+================================================================================
+
+--- STRATEGI: seimbang bisnis + teknis, pakai ANGKA REAL -----------------
+Aturan emas: setiap klaim disertai angka dari data. Jangan bilang "bagus",
+bilang "138.054 titik harga dari 67 komoditas" (lihat angka di bawah).
+
+--- ANGKA KREDENSIAL (hafalkan) ---------------------------------------
+  * 7 pasar Surabaya
+  * 67 komoditas bahan pokok
+  * 2.562 kegiatan survei (366 hari x 7 pasar)
+  * 138.054 titik harga
+  * Periode: 1 Januari - 31 Desember 2024 (12 bulan penuh)
+  * Sumber data: Bapanas / SP2KP (data resmi pemerintah)
+
+--- ANGKA EWS HARI INI (contoh nyata, per 31 Des 2024) ----------------
+  * 67 komoditas dipantau
+  * 65 Normal | 1 Siaga | 0 Waspada | 1 KRITIS
+  * KRITIS: Cabe Merah Kecil-Rawit, NAIK +22,22%
+            (Rp 57.143 rata-rata, dilaporkan 7 pasar)
+  * SIAGA : Kangkung (Jenis Panjang), +5,56%
+
+--- ANGKA BACKTEST (contoh nyata: Cabe Merah Besar) -------------------
+  Metode                          MAPE (rata-rata meleset)
+  Naive (besok = hari ini)        3,31%   ← paling akurat
+  Exponential Smoothing (a=0.3)   6,61%
+  Moving Average (7 hari)         7,60%
+  Linear Regression               72,13%  ← meleset jauh
+  Blend (dipakai sistem)          38,59%
+  Akurasi terukur Blend: 61,4%
+
+--- KEPUTUSAN PENTING: EWS DIPITCH ATAU TIDAK? -----------------------
+Catatan Anda: EWS dinilai "kurang terlalu berguna".
+
+Dua pilihan:
+  (A) TETAP JADIKAN EWS SOROTAN — karena saat ini EWS punya ALERT NYATA
+      & dramatis (Cabe rawit +22,22% → KRITIS). Untuk pitch 5 menit,
+      ini "wow moment" yang kuat: sistem mendeteksi masalah sendiri.
+      Nilai tambahnya = DEMO, bukan keunikan algoritma.
+  (B) LEWATI EWS, pindahkan sorotan ke PREDIKSI (yang sudah punya
+      backtest jujur) atau REKOMENDASI (potensi intervensi pemerintah).
+
+REKOMENDASI: pakai (A) untuk 30-60 detik, TAPI bingkai EWS sebagai
+"sistem peringatan sederhana yang hasilnya bisa dievaluasi", bukan
+sebagai keunggulan utama. Setelah itu segera masuk ke Prediksi.
+Kalau ada pertanyaan "apa bedanya dengan sekadar lihat harga", jawab
+dengan skenario intervensi (EWS → Rekomendasi → keputusan).
+
+--- SUSUNAN 5 MENIT ---------------------------------------------------
+
+[0:00-0:30] HOOK (buka dengan masalah nyata, bukan fitur)
+  "Bayangkan Anda petugas dinas pangan. Hari ini harga cabai rawit
+   di Surabaya naik 22 persen. Kapan Anda tahu? Kalau menunggu laporan
+   manual, mungkin sudah terlambat.
+   SIMONPEDIA memberi tahu SEBELUM menjadi krisis — dan menunjukkan
+   kemana harga akan bergerak."
+
+[0:30-1:15] MASALAH & SOLUSI
+  Masalah: data harga bapok ada, tapi tersebar dan pasif (angka saja).
+  Solusi kami mengubah data menjadi 3 hal:
+    (1) Peringatan dini  — komoditas mana yang bahaya (EWS)
+    (2) Prediksi         — kemana harga bergerak 7 hari ke depan
+    (3) Rekomendasi      — apa yang harus dilakukan
+  Data: 138.054 titik harga, 67 komoditas, 12 bulan, sumber Bapanas.
+
+[1:15-4:15] DEMO LIVE (3 menit) — urutan klik (lihat BAGIAN 4)
+  1. Dashboard (~10 dtk): sebut angka kredensial, tunjuk kartu alert.
+  2. EWS (~60 dtk): ⭐ tunjuk 1 KRITIS (Cabe Rawit +22,22%) + 1 Siaga.
+     Ganti dropdown komoditas → grafik berubah. Ini "deteksi empiris".
+  3. Prediksi (~60 dtk): tunjuk tabel MAPE 5 metode. TUNJUKKAN KEJUJURAN:
+     "Naive menang di komoditas ini — kami tidak menyembunyikan. Ini
+      justru informasi: model perlu ditingkatkan."
+  4. Peta (~30 dtk): marker 7 pasar real, klik marker → popup.
+  5. Rekomendasi (~20 dtk): "dari data → tindakan". JANGAN klik tombol
+     aksi (belum jalan).
+
+[4:15-5:00] PENUTUP & ROADMAP
+  - Yang sudah: backend real, EWS, prediksi + backtest, peta, 6 halaman.
+  - Yang belum (jujur): Monitoring sedang disempurnakan; Analisis mendalam,
+    Notifikasi push, Watchlist, Export data, Pengaturan, dan integrasi
+    Urban Farm (menunggu sistem eksternal).
+  - Tantangan teknis nyata: DATA BANYAK KOSONG (lihat Bagian 5) — ini
+    batasan sumber data, bukan bug, dan kami sedang koordinasikan dengan
+    divisi analisis.
+
+--- ANTISIPASI Q&A (siapkan jawaban) ----------------------------------
+
+Q1: "Kenapa pakai Naive kalau lebih akurat dari metode kalian?"
+A : "Betul, dan itu temuan penting. Di data yang sangat volatil, model
+     sederhana bisa menang. Kami menampilkan ini secara jujur lewat
+     backtest, bukan menyembunyikannya. Ini justru dasar untuk memilih
+     model per komoditas, bukan satu model untuk semua."
+
+Q2: "Kenapa tidak pakai machine learning (ARIMA, Prophet, LSTM)?"
+A : "Itu roadmap. Kami mulai dari metode yang bisa dijelaskan dan
+     diaudit — penting untuk data pemerintah. Backtest sudah jadi
+     kerangka untuk membandingkan metode apa pun, termasuk ML nanti."
+
+Q3: "Sumber datanya dari mana? Valid?"
+A : "Bapanas / SP2KP, data resmi pemerintah. 138.054 titik harga dari
+     survei harian 7 pasar selama 12 bulan."
+
+Q4: "Kenapa datanya banyak kosong?"  → (lihat Bagian 5, jawab singkat)
+A : "Tidak semua pasar melaporkan semua komoditas. Kami jujur:
+     ~14% sel kosong di file sumber. Kami sudah tangani dengan agregasi
+     pasar-yang-melapor, dan sedang koordinasikan definisinya ke divisi
+     analisis."
+
+Q5: "Kenapa prediksi Blend lebih buruk dari Naive?"
+A : "Karena Linear Regression menganggap tren lurus, padahal harga cabai
+     sangat musiman (naik jelang Ramadan, turun setelahnya). LR
+     ekstrapolasi jadi meleset jauh. Blend kami masih terlalu
+     membebani LR. Perbaikannya: bobot adaptif per komoditas."
+
+Q6: "EWS-nya real-time?"
+A : "EWS menghitung dari survei terakhir yang tersedia (di data ini:
+     31 Des 2024). Arsitekturnya siap menerima data harian baru —
+     tinggal import. Real-time penuh butuh integrasi API langsung,
+     itu langkah berikutnya."
+
+Q7: "Kenapa headernya beda-beda tiap halaman?"
+A : "Kesengajaan. Tiap halaman punya konteks sendiri (breadcrumb + judul).
+     Kami pakai satu komponen PageHeader agar konsisten."
+
+Q8: "Apakah bisa dipakai petugas sekarang?"
+A : "Versi ini prototipe fungsional: monitoring, EWS, prediksi sudah
+     jalan dengan data real. Yang belum: login, notifikasi push, dan
+     deploy ke internet."
+
+--- KIAT PRESENTASI ----------------------------------------------------
+  * JANGAN buka Monitoring lebih dulu (baru diperbaiki, tapi kalau ada
+    bug mendadak lebih aman taruh di akhir atau hindari).
+  * Kuasai 2 angka: "138.054 titik harga" dan "Cabe rawit +22,22%".
+  * Kalau ditanya hal yang belum jadi: akui jujur + sebut sebagai roadmap.
+    Kejujuran adalah kekuatan pitch ini.
+  * Data kosong: angkat sebagai "kesadaran kualitas data", bukan kelemahan.
+
+
+================================================================================
+BAGIAN 4 — PETA HALAMAN: MANA YANG DI-PITCH (SUDAH) VS BELUM
+================================================================================
+
+--- 🟢 SIAP DIPAMERKAN (data 100% real dari API) ----------------------
+
+1. Dashboard — route "/"
+   - 4 kartu KPI real (komoditas dipantau, harga naik, stabil/turun,
+     alert aktif)
+   - Grafik tren komoditas dengan PERUBAHAN TERBESAR (dinamis)
+   - Tabel "pergerakan komoditas" (top 5, dari data EWS)
+   - Menampilkan tanggal survei terakhir (31 Des 2024)
+   - Status: AMAN untuk demo.
+
+2. Early Warning (EWS) — route "/ews"   ⭐ BINTANG UTAMA
+   - 4 kartu risiko: Normal/Siaga/Waspada/Kritis (real)
+   - Banner alert, daftar alert real
+   - Dropdown pilih komoditas → grafik berubah
+   - Ringkasan risiko + tindakan disarankan
+   - Status: AMAN. Ini yang paling kuat untuk pitch.
+
+3. Prediksi — route "/prediksi"          ⭐ PALING TEKNIS
+   - Prediksi 7 hari real (1-7 Jan 2025)
+   - Tabel MAPE/RMSE 5 metode + "metode terbaik"
+   - PERINGATAN jujur bila kalah dari Naive
+   - Status: AMAN. Sorot bagian backtest & kejujuran.
+
+4. Peta Surabaya — route "/peta"
+   - Leaflet asli, marker 7 pasar dari koordinat DB
+   - Klik marker → popup (nama, kecamatan, kelas)
+   - Filter kecamatan + search
+   - Status: AMAN (7 pasar punya koordinat semua).
+
+5. Pasar — route "/pasar"
+   - Grid kartu 7 pasar, filter search + kecamatan + kelas
+   - Status: AMAN.
+
+6. Detail Komoditas — route "/monitoring/:nama"
+   - Grafik riwayat harga real, breakdown harga per pasar
+   - KPI rata-rata, perubahan, kategori, satuan
+   - Status: AMAN (diakses dari tombol Detail di Monitoring).
+
+7. Rekomendasi — route "/rekomendasi"
+   - Auto-generate dari EWS (prioritas tinggi/sedang, tindakan)
+   - Status: AMAN untuk dilihat, TAPI jangan klik tombol aksi
+     ("Tandai ditangani", "Detail analisis", 4 Quick actions) — belum
+     berfungsi.
+
+--- 🟡 BARU DIPERBAIKI (dulu setengah jadi, sekarang data real) --------
+
+8. Monitoring Harga — route "/monitoring"
+   SEBELUMNYA (masalah):
+     - kolom Perubahan pakai Math.random() (angka acak tiap refresh)
+     - status selalu "Stabil"
+     - chart tren SVG statis (bukan data)
+     - tombol periode tidak berfungsi
+     - tombol Detail tidak berfungsi
+     - dropdown kategori hardcoded & tidak cocok
+   SEKARANG (sudah diperbaiki):
+     - Perubahan = persenPerubahan real dari /api/harga/ringkasan
+     - status real (Naik/Turun/Stabil)
+     - chart tren Recharts real (AreaChart), ikut periode
+     - tombol periode (7 Hari/30 Hari/3 Bulan/6 Bulan) berfungsi
+     - tombol Detail → navigasi ke Detail Komoditas
+     - dropdown kategori dinamis dari data
+   Status: Siap dipamerkan sekarang. Taruh di pertengahan demo.
+
+--- 🔴 BELUM JADI / RENCANA (catatan sendiri) -------------------------
+
+- Analisis      — route "/analisis"
+    RENCANA: menu khusus FORECASTING HARGA (lebih dalam dari Prediksi).
+- Data & Export — route "/data"
+    RENCANA: ekspor JSON / CSV / Excel agar ramah diolah lebih lanjut.
+- Pengaturan    — route "/settings"
+    STATUS: BELUM DIPUTUSKAN — belum jelas dipakai untuk apa.
+    (Butuh saran: kandidat isi = preferensi default pasar/komoditas,
+     threshold risiko EWS yang bisa diubah, manajemen pengguna.)
+- Notifikasi    — route "/notifikasi"   → RENCANA DIHAPUS
+- Watchlist     — route "/watchlist"    → RENCANA DIHAPUS
+- Task 4-5 Urban Farm — menunggu sistem eksternal.
+
+Catatan untuk dirimu sendiri (dari pr.txt):
+  * Monitoring harga dicita-citakan bisa dari BANYAK SUMBER (API realtime,
+    scraping, data lapangan) — sekarang baru 1 sumber (Bapanas).
+  * EWS: kamu menilai "kurang terlalu berguna" — pertimbangkan cara
+    menaikkan nilainya (mis. treshold bisa diatur, notifikasi otomatis).
+  * Prediksi: kamu tahu "belum akurat, data kurang" — ini selaras dengan
+    temuan backtest & masalah data kosong (Bagian 5).
+
+→ Jangan diklik saat demo. Sebut sebagai roadmap.
+
+--- URUTAN DEMO YANG DIREKOMENDASIKAN (3 menit) -----------------------
+  1. Dashboard    (10 dtk) — angka kredensial
+  2. EWS          (60 dtk) — ⭐ kritis + siaga, ganti dropdown
+  3. Prediksi     (60 dtk) — tabel MAPE + kejujuran
+  4. Peta         (30 dtk) — marker + popup
+  5. Rekomendasi  (20 dtk) — dari data ke tindakan
+  (Monitoring opsional; sekarang sudah aman kalau mau ditambahkan.)
+
+
+================================================================================
+BAGIAN 5 — MASALAH DATA KOSONG (UNTUK KOORDINASI DIVISI ANALISIS)
+================================================================================
+
+--- RINGKASAN UNTUK DIVISI ANALISIS -----------------------------------
+Data sumber Bapanas/SP2KP TIDAK lengkap: tidak semua pasar melaporkan
+semua komoditas setiap hari. Ini mempengaruhi kualitas model forecasting.
+Perlu koordinasi soal cara menangani & definisi resminya.
+
+--- FAKTA (dari pemeriksaan file sumber 12 bulan) ---------------------
+
+Di file mentah (sheet harian), nilai harga kosong muncul sebagai:
+  * "-"        (tanda hubung; kemungkinan: pasar tidak melapor / tidak jual)
+  * 0          (nol)
+  * ""         (string kosong; sisa formula)
+  * "#DIV/0!"  (formula Excel error saat pembagi 0 — tidak ada data)
+
+Dari total sel harga di sheet harian (12 bulan):
+  * valid (>0)   : 161.922 sel  (73%)
+  * kosong "-"   :  30.273 sel  (14%)
+  * nol (0)      :      49 sel  (0,03%)
+  * "#DIV/0!"    :       4 sel  (0,001%)
+
+Contoh Januari 2024 (60 komoditas, 7 pasar):
+  * 33 komoditas dilaporkan LENGKAP di 7 pasar
+  * 26 komoditas hanya di 1-6 pasar (partial)
+  * 1 komoditas (Beras Medium) kosong di semua pasar
+
+Contoh nyata komoditas partial (Januari):
+  - Tempe Kw III (campuran kulit)   → hanya 1/7 pasar
+  - Tempe Kw II (campuran jagung)   → 2/7 pasar
+  - Tempe Kw I (campuran kedelai)   → 3/7 pasar
+  - Ikan Lele Segar (Uk. Sedang)    → 4/7 pasar
+  - Ikan Teri Asin                  → 4/7 pasar
+  - Beras Jagung                    → 5/7 pasar
+  - Mentega Curah (Amanda)          → 5/7 pasar
+  - dst.
+
+--- AKAR MASALAH ------------------------------------------------------
+Ini KEKOSONGAN STRUKTURAL dari sumber, bukan kesalahan sistem kami:
+  * Pasar tradisional tidak semuanya menjual semua komoditas
+    (mis. tidak semua pasar punya tempe industri rumahan).
+  * Petugas survei mungkin tidak mengukur komoditas yang tidak ada.
+  * File Excel sumber memakai formula rata-rata yang menghasilkan
+    #DIV/0! saat semua pasar kosong.
+
+--- PENANGANAN SAAT INI (yang sudah dilakukan sistem) ----------------
+1. Saat import (import.ts): nilai kosong ("-", 0, "", #DIV/0!) DILEWATI,
+   tidak dimasukkan ke database. Jadi DB hanya berisi harga valid.
+2. Saat analisis (EWS & prediksi): dihitung RATA-RATA dari pasar yang
+   MELAPOR saja. Jadi "harga rata-rata" = rata-rata pasar pelapor,
+   BUKAN selalu 7 pasar.
+3. Field 'jumlahPasar' disimpan → bisa tahu harga itu dari berapa pasar.
+
+--- DAMPAK KE MODELLING FORECASTING (kenapa jadi problem) -------------
+1. BIAS RATA-RATA: rata-rata dari 3 pasar berbeda komposisinya dari
+   rata-rata 7 pasar. Harga komoditas jadi tidak sebanding antar hari
+   bila jumlah pasar pelapor berubah.
+2. TITIK DATA TIDAK SERAGAM: satu tanggal bisa didominasi 1 pasar,
+   tanggal lain 7 pasar. Grafik tren jadi "bergerak" bukan karena harga
+   berubah, tapi karena komposisi pasar berubah.
+3. MAPE tidak apple-to-apple antar komoditas (komoditas dengan sedikit
+   data punya error yang sulit dibandingkan).
+4. LR & Blend rentan: lonjakan/kelangkaan data membuat regresi miring.
+   Inilah sebagian sebab Naive menang di beberapa komoditas.
+
+--- USULAN SOLUSI (opsi untuk didiskusikan) ---------------------------
+
+OPSI A — Agregasi pasar-yang-melapor + laporkan jumlah pelapor
+  (sudah sebagian dilakukan). Tambahkan: selalu tampilkan "dari N pasar"
+  agar transparan.
+
+OPSI B — Interpolasi / forward-fill celah pendek
+  Isi kekosongan 1-3 hari dengan nilai terakhir. Cocok untuk celah
+  sesekali, TIDAK cocok untuk kekosongan struktural (pasar yang
+  memang tidak pernah jual komoditas itu).
+
+OPSI C — Filter komoditas dengan coverage minimum
+  Mis. hanya analisis komoditas yang dilaporkan >=5 dari 7 pasar.
+  Mengorbankan jumlah komoditas demi kualitas model.
+
+OPSI D — Imputasi dari pasar tetangga
+  Isi harga pasar kosong dengan rata-rata pasar lain di kecamatan
+  yang sama. Perlu asumsi harga antar pasar berdekatan mirip.
+
+OPSI E — Flag kualitas data per titik
+  Tandai tiap titik: berapa pasar melapor, confidence-nya. Model bisa
+  membobot titik dengan coverage tinggi.
+
+REKOMENDASI (default):
+  Kombinasi A + C + E:
+    - tetap agregasi pasar-yang-melapor, tampilkan jumlah pelapor (A)
+    - untuk model, utamakan komoditas coverage tinggi (C)
+    - simpan flag kualitas per titik (E)
+  Opsi B & D sebagai EKSPERIMEN, tergantung jawaban divisi analisis
+  soal definisi kekosongan.
+
+--- PERTANYAAN KONKRET UNTUK DIVISI ANALISIS --------------------------
+1. Tanda "-" di file sumber: apakah berarti
+   (a) komoditas TIDAK DIJUAL di pasar itu, atau
+   (b) petugas tidak survei di hari itu?
+   → Menentukan apakah forward-fill (B) masuk akal atau tidak.
+2. Apakah ada data pasar lain / tetangga yang bisa jadi proxy (untuk
+   opsi D)?
+3. Periode mana yang paling banyak bolong? (untuk fokus penanganan)
+4. Apakah #DIV/0! di file sumber bisa diperbaiki di hulu (saat ekspor
+   dari SP2KP), supaya tidak terbawa ke hilir?
+5. Standar minimum coverage yang dianggap layak untuk dianalisis?
+
+
+================================================================================
+SELESAI — progress2.txt
+Catatan: untuk keperluan pribadi (persiapan pitching 16 Sep 2026).
+Dokumentasi resmi: dokumentasi.txt (referensi) & progress1.txt (panduan).
+================================================================================

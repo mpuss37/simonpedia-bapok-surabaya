@@ -4,8 +4,7 @@ import {
   ArrowRight,
   ArrowUpRight,
   Bell,
-  CheckCircle2,
-  MapPin,
+  TrendingDown,
   TrendingUp,
   Wallet,
 } from "lucide-react"
@@ -21,7 +20,7 @@ import {
 } from "recharts"
 
 import { useEffect, useState } from "react"
-import { getHarga, getKomoditas } from "../services/priceService"
+import { getRingkasanHarga } from "../services/priceService"
 
 const API_URL = "http://localhost:3001/api"
 
@@ -34,6 +33,7 @@ interface EWSRingkasan {
 }
 
 interface EWSAnalisis {
+  id: number
   nama: string
   kategori: string
   hargaRataRata: number
@@ -60,39 +60,32 @@ export default function Home() {
   const [ewsSummary, setEwsSummary] = useState<EWSRingkasan | null>(null)
   const [ewsAnalisis, setEwsAnalisis] = useState<EWSAnalisis[]>([])
   const [lastUpdate, setLastUpdate] = useState<string | null>(null)
+  const [chartKomoditas, setChartKomoditas] = useState<{ nama: string; change: number } | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchDashboard() {
       try {
-        const [hargaData, ewsRes] = await Promise.all([
-          getHarga(),
+        const [ringkasanRes, ewsRes] = await Promise.all([
+          getRingkasanHarga(),
           fetch(`${API_URL}/ews/analyze`).then(r => r.json()),
         ])
 
-        // Ambil persenPerubahan real dari analisis EWS (bukan random)
+        const analisis = (ewsRes.analisis || []) as EWSAnalisis[]
+
+        // PersenPerubahan real dari analisis EWS
         const changeMap = new Map<string, number>()
-        for (const a of (ewsRes.analisis || []) as EWSAnalisis[]) {
+        for (const a of analisis) {
           changeMap.set(a.nama, a.persenPerubahan)
         }
 
-        const grouped = new Map<string, { prices: number[]; kategori: string }>()
-        for (const h of hargaData) {
-          const existing = grouped.get(h.komoditas.nama)
-          if (existing) {
-            existing.prices.push(h.harga)
-          } else {
-            grouped.set(h.komoditas.nama, { prices: [h.harga], kategori: h.komoditas.kategori })
-          }
-        }
-
-        const komoditasItems: KomoditasItem[] = Array.from(grouped.entries())
-          .map(([nama, info]) => {
-            const change = changeMap.get(nama) ?? 0
+        const komoditasItems: KomoditasItem[] = ringkasanRes.data
+          .map((r) => {
+            const change = changeMap.get(r.nama) ?? r.persenPerubahan
             return {
-              nama,
-              kategori: info.kategori,
-              harga: Math.round(info.prices.reduce((a, b) => a + b, 0) / info.prices.length),
+              nama: r.nama,
+              kategori: r.kategori,
+              harga: r.hargaRataRata,
               change,
               type: (change > 0 ? "up" : change < 0 ? "down" : "stable") as "up" | "down" | "stable",
             }
@@ -100,14 +93,27 @@ export default function Home() {
           .sort((a, b) => Math.abs(b.change) - Math.abs(a.change))
           .slice(0, 5)
 
-        const chartRes = await fetch(`${API_URL}/ews/chart/108`)
-        const chartRaw: ChartItem[] = await chartRes.json()
+        // Chart: pakai komoditas dengan PERUBAHAN TERBESAR (dinamis, bukan ID tetap)
+        const topKomoditas = analisis
+          .slice()
+          .sort((a, b) => Math.abs(b.persenPerubahan) - Math.abs(a.persenPerubahan))[0]
+        const chartId = topKomoditas?.id
+
+        const chartRes = chartId
+          ? await fetch(`${API_URL}/ews/chart/${chartId}`)
+          : null
+        const chartRaw: ChartItem[] = chartRes ? await chartRes.json() : []
 
         setKomoditasList(komoditasItems)
         setChartData(chartRaw)
         setEwsSummary(ewsRes.ringkasan)
         setEwsAnalisis(ewsRes.analisis || [])
         setLastUpdate(ewsRes.lastUpdate)
+        setChartKomoditas(
+          topKomoditas
+            ? { nama: topKomoditas.nama, change: topKomoditas.persenPerubahan }
+            : null
+        )
       } catch (err) {
         console.error("Gagal memuat dashboard:", err)
       } finally {
@@ -197,11 +203,16 @@ export default function Home() {
             <div className="mb-6 flex items-start justify-between">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30">Market trend</p>
-                <h3 className="mt-1 text-base font-bold text-[#171717]">Tren harga rata-rata</h3>
+                <h3 className="mt-1 text-base font-bold text-[#171717]">
+                  {chartKomoditas ? `Tren harga ${chartKomoditas.nama}` : "Tren harga rata-rata"}
+                </h3>
               </div>
-              <span className="flex items-center gap-1 rounded-full bg-[#FFF3F4] px-3 py-1.5 text-[10px] font-bold text-[#C93742]">
-                <TrendingUp size={12} /> +6,8%
-              </span>
+              {chartKomoditas && (
+                <span className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-[10px] font-bold ${chartKomoditas.change >= 0 ? "bg-[#FFF3F4] text-[#C93742]" : "bg-[#EFFAF3] text-[#1C8C4A]"}`}>
+                  {chartKomoditas.change >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                  {" "}{chartKomoditas.change >= 0 ? "+" : ""}{chartKomoditas.change.toFixed(2)}%
+                </span>
+              )}
             </div>
             <div className="h-[310px]">
               <ResponsiveContainer width="100%" height="100%">

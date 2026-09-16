@@ -74,7 +74,7 @@ function formatRupiah(value: number) {
 
 export default function EWS() {
 
-  const [selectedCommodity, setSelectedCommodity] = useState("108")
+  const [selectedCommodity, setSelectedCommodity] = useState("")
   const [ewsData, setEwsData] = useState<EWSResponse | null>(null)
   const [chartData, setChartData] = useState<ChartData[]>([])
   const [loading, setLoading] = useState(true)
@@ -86,6 +86,13 @@ export default function EWS() {
         const res = await fetch(`${API_URL}/ews/analyze`)
         const data = await res.json()
         setEwsData(data)
+        // Default chart: komoditas dengan PERUBAHAN TERBESAR (dinamis, bukan ID tetap)
+        const top = (data.analisis || [])
+          .slice()
+          .sort((a: { persenPerubahan: number }, b: { persenPerubahan: number }) =>
+            Math.abs(b.persenPerubahan) - Math.abs(a.persenPerubahan)
+          )[0]
+        if (top) setSelectedCommodity(String(top.id))
       } catch (err) {
         console.error("Gagal memuat data EWS:", err)
       } finally {

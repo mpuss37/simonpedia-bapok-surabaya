@@ -2,14 +2,12 @@ import { useEffect, useState } from "react"
 import { TrendingUp, TrendingDown, Minus, Target, BarChart3 } from "lucide-react"
 import {
   Area,
-  AreaChart,
   CartesianGrid,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
   Line,
-  LineChart,
   ComposedChart,
   Legend,
 } from "recharts"
@@ -90,12 +88,21 @@ export default function Prediksi() {
 
   useEffect(() => {
     if (!selectedId) return
-    setDetailLoading(true)
-    fetch(`${API_URL}/prediction/komoditas/${selectedId}`)
-      .then(r => r.json())
-      .then(setDetail)
-      .catch(console.error)
-      .finally(() => setDetailLoading(false))
+    let aktif = true
+    async function fetchDetail() {
+      try {
+        setDetailLoading(true)
+        const res = await fetch(`${API_URL}/prediction/komoditas/${selectedId}`)
+        const data = await res.json()
+        if (aktif) setDetail(data)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        if (aktif) setDetailLoading(false)
+      }
+    }
+    fetchDetail()
+    return () => { aktif = false }
   }, [selectedId])
 
   const filteredList = filterKategori === "Semua"
@@ -225,7 +232,7 @@ export default function Prediksi() {
                     <h3 className="mt-1 text-lg font-bold text-[#171717]">{detail.komoditas.nama}</h3>
                     <p className="text-xs text-[#171717]/40">{detail.komoditas.kategori} • {detail.komoditas.satuan}</p>
                   </div>
-                  <TrendBadge tren={detail.analisis.tren as any} large />
+                  <TrendBadge tren={detail.analisis.tren} large />
                 </div>
 
                 {/* RINGKASAN */}
@@ -317,7 +324,7 @@ export default function Prediksi() {
                       <p className="text-[10px] leading-5 text-[#171717]/45">
                         <span className="font-bold text-[#171717]">Metode terbaik:</span> {detail.backtest.terbaik}{" "}
                         (meleset {detail.backtest.mapeTerbaik}%).{" "}
-                        {detail.backtest.hasil.find(h => h.metode === "Naive (besok = hari ini)")!?.mape < detail.backtest.mapeBlend
+                        {(detail.backtest.hasil.find(h => h.metode === "Naive (besok = hari ini)")?.mape ?? Infinity) < detail.backtest.mapeBlend
                           ? "Peringatan: prediksi sistem masih kalah dari baseline naif — anggap prediksi ini indikatif, bukan presisi."
                           : "Prediksi sistem mengalahkan baseline naif pada data ini."}
                       </p>
@@ -373,8 +380,8 @@ export default function Prediksi() {
   )
 }
 
-function TrendBadge({ tren, large = false }: { tren: "naik" | "turun" | "stabil"; large?: boolean }) {
-  const config = {
+function TrendBadge({ tren, large = false }: { tren: string; large?: boolean }) {
+  const config: Record<string, { icon: typeof TrendingUp; bg: string; text: string; label: string }> = {
     naik: { icon: TrendingUp, bg: "bg-[#FFF3F4]", text: "text-[#C93742]", label: "Naik" },
     turun: { icon: TrendingDown, bg: "bg-emerald-50", text: "text-emerald-600", label: "Turun" },
     stabil: { icon: Minus, bg: "bg-[#FFF8F9]", text: "text-[#171717]/50", label: "Stabil" },

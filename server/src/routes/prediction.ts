@@ -379,10 +379,38 @@ router.get("/all", async (_req, res) => {
       orderBy: { nama: "asc" },
     })
 
+    // OPTIMASI: satu query untuk semua komoditas (bukan 67 query berurutan).
+    const semua = await prisma.detailSurvei.findMany({
+      select: {
+        komoditasId: true,
+        harga: true,
+        survei: { select: { tanggal: true } },
+      },
+    })
+
+    // dailyAvg per komoditas: rata-rata harga tiap tanggal, lalu diurutkan
+    const perKom = new Map<number, Map<string, number[]>>()
+    for (const h of semua) {
+      const t = h.survei.tanggal.toISOString().split("T")[0]
+      if (!perKom.has(h.komoditasId)) perKom.set(h.komoditasId, new Map())
+      const perTgl = perKom.get(h.komoditasId)!
+      if (!perTgl.has(t)) perTgl.set(t, [])
+      perTgl.get(t)!.push(h.harga)
+    }
+
     const results: any[] = []
 
     for (const k of komoditasList) {
-      const dailyAvg = await getDailyAvg(k.id)
+      const perTgl = perKom.get(k.id)
+      if (!perTgl) continue
+
+      const dailyAvg = Array.from(perTgl.entries())
+        .sort(([a], [b]) => (a < b ? -1 : 1))
+        .map(([tanggal, arr]) => ({
+          tanggal,
+          harga: Math.round(arr.reduce((a, b) => a + b, 0) / arr.length),
+        }))
+
       const prices = dailyAvg.map(d => d.harga)
       if (prices.length < 3) continue
 
@@ -392,7 +420,7 @@ router.get("/all", async (_req, res) => {
         ? Math.round((slope / prices[prices.length - 1]) * 100 * 100) / 100
         : 0
 
-const prediksi = forecastRange(prices, 7, dailyAvg[dailyAvg.length - 1]?.tanggal)
+      const prediksi = forecastRange(prices, 7, dailyAvg[dailyAvg.length - 1]?.tanggal)
       const prediksiHarga = prediksi[0].harga
       const lastPrice = prices[prices.length - 1]
       const perubahanPrediksi = Math.round(((prediksiHarga - lastPrice) / lastPrice) * 100 * 100) / 100
