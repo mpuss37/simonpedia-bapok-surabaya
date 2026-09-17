@@ -20,6 +20,7 @@ import {
 } from "recharts"
 import { getRingkasanHarga, type RingkasanHarga } from "../services/priceService"
 import PageHeader from "../components/layout/PageHeader"
+import { useChartTheme } from "../hooks/useChartTheme"
 
 
 // =====================================================
@@ -36,6 +37,8 @@ function formatRupiah(value: number) {
 // =====================================================
 
 export default function Monitoring() {
+
+  const chartTheme = useChartTheme()
 
   const [search, setSearch] = useState("")
   const [category, setCategory] = useState("Semua Kategori")
@@ -148,7 +151,7 @@ export default function Monitoring() {
 
   return (
 
-    <div className="min-h-screen bg-[#FAF7F7]">
+    <div className="min-h-screen bg-[#FAF7F7] dark:bg-[#121212]">
 
       <PageHeader breadcrumb="Monitoring" title="Monitoring Harga" />
 
@@ -166,11 +169,11 @@ export default function Monitoring() {
               Monitoring bahan pokok
             </p>
 
-            <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-[#171717] lg:text-5xl">
+            <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-[#171717] dark:text-white lg:text-5xl">
               Monitoring Harga
             </h1>
 
-            <p className="mt-4 max-w-2xl text-base leading-7 text-[#171717]/50">
+            <p className="mt-4 max-w-2xl text-base leading-7 text-[#171717]/50 dark:text-white/50">
               Pantau harga bahan pokok di berbagai pasar
               Kota Surabaya dan lihat perubahan harga
               dari waktu ke waktu.
@@ -181,13 +184,13 @@ export default function Monitoring() {
 
           {/* LAST UPDATE */}
 
-          <div className="flex w-fit items-center gap-2 rounded-full border border-[#171717]/5 bg-white px-4 py-2.5 text-xs text-[#171717]/45 shadow-sm">
+          <div className="flex w-fit items-center gap-2 rounded-full border border-[#171717]/5 dark:border-white/10 bg-white dark:bg-[#1E1E1E] px-4 py-2.5 text-xs text-[#171717]/45 dark:text-white/45 shadow-sm">
 
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
 
             Update terakhir
 
-            <span className="font-semibold text-[#171717]/65">
+            <span className="font-semibold text-[#171717]/65 dark:text-white/65">
               {lastUpdate
                 ? new Date(lastUpdate).toLocaleDateString("id-ID", {
                     day: "numeric",
@@ -206,16 +209,16 @@ export default function Monitoring() {
       {/* LOADING / ERROR */}
       {loading && (
         <div className="px-6 lg:px-8">
-          <div className="rounded-2xl border border-[#171717]/5 bg-white p-12 text-center shadow-sm">
+          <div className="rounded-2xl border border-[#171717]/5 dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-12 text-center shadow-sm">
             <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-[#C93742] border-t-transparent" />
-            <p className="mt-4 text-sm text-[#171717]/40">Memuat data dari server...</p>
+            <p className="mt-4 text-sm text-[#171717]/40 dark:text-white/40">Memuat data dari server...</p>
           </div>
         </div>
       )}
 
       {error && (
         <div className="px-6 lg:px-8">
-          <div className="rounded-2xl border border-[#FFE5E7] bg-[#FFF0F1] p-6 text-center">
+          <div className="rounded-2xl border border-[#FFE5E7] bg-[#FFF0F1] dark:bg-white/[0.04] p-6 text-center">
             <p className="text-sm font-semibold text-[#C93742]">{error}</p>
           </div>
         </div>
@@ -261,6 +264,7 @@ export default function Monitoring() {
             label="Harga Stabil"
             value={String(stableCount)}
             description="komoditas"
+            variant="warning"
           />
 
         </div>
@@ -272,23 +276,23 @@ export default function Monitoring() {
           PRICE TREND
       ================================================= */}
 
-      <section className="mx-6 mt-6 rounded-2xl border border-[#171717]/5 bg-white shadow-sm lg:mx-8">
+      <section className="mx-6 mt-6 rounded-2xl border border-[#171717]/5 dark:border-white/10 bg-white dark:bg-[#1E1E1E] shadow-sm lg:mx-8">
 
-        <div className="border-b border-[#171717]/5 p-6">
+        <div className="border-b border-[#171717]/5 dark:border-white/10 p-6">
 
           <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-start">
 
             <div>
 
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#171717]/30">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">
                 Price trend
               </p>
 
-              <h2 className="mt-1 text-xl font-bold text-[#171717]">
+              <h2 className="mt-1 text-xl font-bold text-[#171717] dark:text-white">
                 Tren harga bahan pokok
               </h2>
 
-              <p className="mt-1 text-sm text-[#171717]/40">
+              <p className="mt-1 text-sm text-[#171717]/40 dark:text-white/40">
                 Pergerakan harga rata-rata dalam periode
                 terakhir.
               </p>
@@ -298,7 +302,7 @@ export default function Monitoring() {
 
             {/* PERIOD */}
 
-            <div className="flex rounded-xl bg-[#FAF7F7] p-1">
+            <div className="flex rounded-xl bg-[#FAF7F7] dark:bg-[#121212] p-1">
 
               {["7 Hari", "30 Hari", "3 Bulan", "6 Bulan"].map(
                 (item) => (
@@ -308,8 +312,8 @@ export default function Monitoring() {
                     onClick={() => setPeriod(item)}
                     className={`rounded-lg px-3 py-2 text-[11px] font-semibold transition ${
                       period === item
-                        ? "bg-white text-[#C93742] shadow-sm"
-                        : "text-[#171717]/35 hover:text-[#171717]/60"
+                        ? "bg-white dark:bg-[#1E1E1E] text-[#C93742] shadow-sm"
+                        : "text-[#171717]/35 dark:text-white/35 hover:text-[#171717]/60 dark:hover:text-white/60"
                     }`}
                   >
                     {item}
@@ -331,7 +335,7 @@ export default function Monitoring() {
 
           {chartTren.length === 0 ? (
 
-            <div className="flex h-[280px] items-center justify-center text-sm text-[#171717]/40">
+            <div className="flex h-[280px] items-center justify-center text-sm text-[#171717]/40 dark:text-white/40">
               Memuat grafik tren...
             </div>
 
@@ -358,7 +362,7 @@ export default function Monitoring() {
                   <XAxis
                     dataKey="tanggal"
                     tickFormatter={(v: string) => v.slice(5)}
-                    tick={{ fontSize: 10, fill: "#17171766" }}
+                    tick={{ fontSize: 10, fill: chartTheme.tickColor }}
                     axisLine={false}
                     tickLine={false}
                     minTickGap={40}
@@ -366,7 +370,7 @@ export default function Monitoring() {
 
                   <YAxis
                     tickFormatter={(v: number) => `Rp${Math.round(v / 1000)}k`}
-                    tick={{ fontSize: 10, fill: "#17171766" }}
+                    tick={{ fontSize: 10, fill: chartTheme.tickColor }}
                     axisLine={false}
                     tickLine={false}
                     width={60}
@@ -380,9 +384,12 @@ export default function Monitoring() {
                     labelFormatter={(label) => `Tanggal ${label}`}
                     contentStyle={{
                       borderRadius: 12,
-                      border: "1px solid #17171710",
+                      border: chartTheme.tooltip.border,
+                      background: chartTheme.tooltip.background,
+                      color: chartTheme.tooltip.color,
                       fontSize: 12,
                     }}
+                    labelStyle={{ color: chartTheme.tooltip.color }}
                   />
 
                   <Area
@@ -410,7 +417,7 @@ export default function Monitoring() {
           FILTER
       ================================================= */}
 
-      <section className="mx-6 mt-6 rounded-2xl border border-[#171717]/5 bg-white p-4 shadow-sm lg:mx-8">
+      <section className="mx-6 mt-6 rounded-2xl border border-[#171717]/5 dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-4 shadow-sm lg:mx-8">
 
         <div className="flex flex-col gap-3 lg:flex-row">
 
@@ -420,7 +427,7 @@ export default function Monitoring() {
 
             <Search
               size={17}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#171717]/30"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#171717]/30 dark:text-white/30"
             />
 
             <input
@@ -429,7 +436,7 @@ export default function Monitoring() {
                 setSearch(event.target.value)
               }
               placeholder="Cari nama komoditas..."
-              className="h-11 w-full rounded-xl border border-[#171717]/10 bg-[#FAF7F7] pl-11 pr-4 text-sm text-[#171717] outline-none transition placeholder:text-[#171717]/30 focus:border-[#C93742]/40 focus:ring-2 focus:ring-[#C93742]/10"
+              className="h-11 w-full rounded-xl border border-[#171717]/10 dark:border-white/10 bg-[#FAF7F7] dark:bg-[#121212] pl-11 pr-4 text-sm text-[#171717] dark:text-white outline-none transition placeholder:text-[#171717]/30 dark:placeholder:text-white/30 focus:border-[#C93742]/40 focus:ring-2 focus:ring-[#C93742]/10"
             />
 
           </div>
@@ -444,7 +451,7 @@ export default function Monitoring() {
               onChange={(event) =>
                 setCategory(event.target.value)
               }
-              className="h-11 w-full appearance-none rounded-xl border border-[#171717]/10 bg-[#FAF7F7] px-4 pr-10 text-sm text-[#171717]/60 outline-none transition focus:border-[#C93742]/40 lg:w-[200px]"
+              className="h-11 w-full appearance-none rounded-xl border border-[#171717]/10 dark:border-white/10 bg-[#FAF7F7] dark:bg-[#121212] px-4 pr-10 text-sm text-[#171717]/60 dark:text-white/60 outline-none transition focus:border-[#C93742]/40 lg:w-[200px]"
             >
 
               <option value="Semua Kategori">
@@ -462,7 +469,7 @@ export default function Monitoring() {
 
             <ChevronDown
               size={15}
-              className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#171717]/30"
+              className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#171717]/30 dark:text-white/30"
             />
 
           </div>
@@ -475,30 +482,30 @@ export default function Monitoring() {
           TABLE
       ================================================= */}
 
-      <section className="mx-6 mt-6 overflow-hidden rounded-2xl border border-[#171717]/5 bg-white shadow-sm lg:mx-8">
+      <section className="mx-6 mt-6 overflow-hidden rounded-2xl border border-[#171717]/5 dark:border-white/10 bg-white dark:bg-[#1E1E1E] shadow-sm lg:mx-8">
 
         {/* TABLE HEADER */}
 
-        <div className="flex flex-col justify-between gap-3 border-b border-[#171717]/5 p-6 sm:flex-row sm:items-center">
+        <div className="flex flex-col justify-between gap-3 border-b border-[#171717]/5 dark:border-white/10 p-6 sm:flex-row sm:items-center">
 
           <div>
 
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#171717]/30">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">
               Price monitoring
             </p>
 
-            <h2 className="mt-1 text-xl font-bold text-[#171717]">
+            <h2 className="mt-1 text-xl font-bold text-[#171717] dark:text-white">
               Daftar harga komoditas
             </h2>
 
           </div>
 
 
-          <p className="text-xs text-[#171717]/35">
+          <p className="text-xs text-[#171717]/35 dark:text-white/35">
 
             Menampilkan{" "}
 
-            <span className="font-semibold text-[#171717]/60">
+            <span className="font-semibold text-[#171717]/60 dark:text-white/60">
               {filteredCommodities.length}
             </span>
 
@@ -517,7 +524,7 @@ export default function Monitoring() {
 
             <thead>
 
-              <tr className="border-b border-[#171717]/5 text-left text-[10px] font-bold uppercase tracking-[0.12em] text-[#171717]/30">
+              <tr className="border-b border-[#171717]/5 dark:border-white/10 text-left text-[10px] font-bold uppercase tracking-[0.12em] text-[#171717]/30 dark:text-white/30">
 
                 <th className="px-6 py-4">
                   Komoditas
@@ -554,18 +561,18 @@ export default function Monitoring() {
 
                 <tr
                   key={item.name}
-                  className="group border-b border-[#171717]/[0.04] transition hover:bg-[#FAF7F7]"
+                  className="group border-b border-[#171717]/[0.04] dark:border-white/10 transition hover:bg-[#FAF7F7] dark:hover:bg-white/5"
                 >
 
                   {/* COMMODITY */}
 
                   <td className="px-6 py-4">
 
-                    <p className="text-sm font-bold text-[#171717]">
+                    <p className="text-sm font-bold text-[#171717] dark:text-white">
                       {item.name}
                     </p>
 
-                    <p className="mt-0.5 text-[11px] text-[#171717]/35">
+                    <p className="mt-0.5 text-[11px] text-[#171717]/35 dark:text-white/35">
                       Harga rata-rata
                     </p>
 
@@ -576,7 +583,7 @@ export default function Monitoring() {
 
                   <td className="px-4 py-4">
 
-                    <span className="rounded-lg bg-[#FAF7F7] px-2.5 py-1 text-[11px] font-medium text-[#171717]/50">
+                    <span className="rounded-lg bg-[#FAF7F7] dark:bg-[#121212] px-2.5 py-1 text-[11px] font-medium text-[#171717]/50 dark:text-white/50">
                       {item.category}
                     </span>
 
@@ -587,7 +594,7 @@ export default function Monitoring() {
 
                   <td className="px-4 py-4">
 
-                    <span className="text-sm font-bold text-[#171717]">
+                    <span className="text-sm font-bold text-[#171717] dark:text-white">
                       {formatRupiah(item.price)}
                     </span>
 
@@ -603,8 +610,8 @@ export default function Monitoring() {
                         item.change > 0
                           ? "text-[#C93742]"
                           : item.change < 0
-                            ? "text-emerald-600"
-                            : "text-[#171717]/40"
+                            ? "text-emerald-600 dark:text-emerald-400"
+                            : "text-[#171717]/40 dark:text-white/40"
                       }`}
                     >
 
@@ -638,7 +645,7 @@ export default function Monitoring() {
 
                     <Link
                       to={`/monitoring/${encodeURIComponent(item.name)}`}
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#171717]/25 transition hover:bg-[#FFF0F1] hover:text-[#C93742]"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#171717]/25 dark:text-white/25 transition hover:bg-[#FFF0F1] dark:hover:bg-white/10 hover:text-[#C93742]"
                     >
 
                       <ChevronRight size={16} />
@@ -663,11 +670,11 @@ export default function Monitoring() {
                     className="px-6 py-16 text-center"
                   >
 
-                    <p className="text-sm font-semibold text-[#171717]/50">
+                    <p className="text-sm font-semibold text-[#171717]/50 dark:text-white/50">
                       Komoditas tidak ditemukan
                     </p>
 
-                    <p className="mt-1 text-xs text-[#171717]/30">
+                    <p className="mt-1 text-xs text-[#171717]/30 dark:text-white/30">
                       Coba gunakan kata pencarian lain.
                     </p>
 
@@ -690,7 +697,7 @@ export default function Monitoring() {
           FOOTER
       ================================================= */}
 
-      <div className="mx-6 mb-8 mt-8 border-t border-[#171717]/5 pt-5 text-[11px] text-[#171717]/30 lg:mx-8">
+      <div className="mx-6 mb-8 mt-8 border-t border-[#171717]/5 dark:border-white/10 pt-5 text-[11px] text-[#171717]/30 dark:text-white/30 lg:mx-8">
 
         SIMONPEDIA Bapok Surabaya
 
@@ -718,26 +725,54 @@ function MetricCard({
   value: string
   description: string
   icon?: React.ReactNode
-  variant?: "danger" | "success"
+  variant?: "danger" | "success" | "warning"
 }) {
+
+  const isDanger = variant === "danger"
+  const isSuccess = variant === "success"
+  const isWarning = variant === "warning"
+
+  const accent = isDanger
+    ? "text-[#C93742]"
+    : isSuccess
+      ? "text-emerald-600 dark:text-emerald-400"
+      : isWarning
+        ? "text-amber-600 dark:text-amber-300"
+        : "text-[#171717] dark:text-white"
+
+  const badge = isDanger
+    ? "bg-[#C93742]/10 text-[#C93742]"
+    : isSuccess
+      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+      : isWarning
+        ? "bg-amber-500/10 text-amber-600 dark:text-amber-300"
+        : "bg-[#171717]/[0.05] text-[#171717]/60 dark:bg-white/10 dark:text-white/70"
+
+  const ring = isDanger
+    ? "border-[#C93742]/20"
+    : isSuccess
+      ? "border-emerald-500/20"
+      : isWarning
+        ? "border-amber-500/30"
+        : "border-[#171717]/[0.06] dark:border-white/10"
 
   return (
 
-    <div className="rounded-2xl border border-[#171717]/5 bg-white p-5 shadow-sm">
+    <div className={`rounded-2xl border bg-white dark:bg-[#1E1E1E] p-5 shadow-sm ${ring}`}>
 
       <div className="flex items-start justify-between gap-3">
 
         <div>
 
-          <p className="text-xs font-medium text-[#171717]/40">
+          <p className="text-xs font-semibold text-[#171717]/55 dark:text-white/55">
             {label}
           </p>
 
-          <p className="mt-3 text-2xl font-extrabold tracking-tight text-[#171717]">
+          <p className={`mt-3 text-3xl font-black tracking-[-0.04em] ${accent}`}>
             {value}
           </p>
 
-          <p className="mt-1 text-[11px] text-[#171717]/35">
+          <p className="mt-1 text-[11px] font-semibold text-[#171717]/45 dark:text-white/45">
             {description}
           </p>
 
@@ -747,11 +782,7 @@ function MetricCard({
         {icon && (
 
           <span
-            className={`flex h-9 w-9 items-center justify-center rounded-xl ${
-              variant === "danger"
-                ? "bg-[#FFF0F1] text-[#C93742]"
-                : "bg-emerald-50 text-emerald-600"
-            }`}
+            className={`flex h-8 w-8 items-center justify-center rounded-lg ${badge}`}
           >
             {icon}
           </span>
@@ -779,19 +810,19 @@ function StatusBadge({
   const styles: Record<string, string> = {
 
     Normal:
-      "bg-emerald-50 text-emerald-600",
+      "bg-emerald-50 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
 
     Stabil:
-      "bg-slate-100 text-slate-500",
+      "bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-white/50",
 
     Naik:
-      "bg-[#FFF0F1] text-[#C93742]",
+      "bg-[#FFF0F1] dark:bg-white/[0.04] text-[#C93742]",
 
     Turun:
-      "bg-emerald-50 text-emerald-600",
+      "bg-emerald-50 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
 
     Siaga:
-      "bg-amber-50 text-amber-600",
+      "bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-300",
 
     Waspada:
       "bg-[#FFE5E7] text-[#C93742]",
@@ -803,7 +834,7 @@ function StatusBadge({
     <span
       className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold ${
         styles[status] ??
-        "bg-slate-100 text-slate-500"
+        "bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-white/50"
       }`}
     >
       {status}

@@ -57,7 +57,7 @@ export default function Pasar() {
   })
 
   return (
-    <div className="min-h-screen bg-[#FAF7F7]">
+    <div className="min-h-screen bg-[#FAF7F7] dark:bg-[#121212]">
       <PageHeader breadcrumb="Data Pasar" title="Daftar Pasar" />
       <div className="px-6 py-10 lg:px-8 lg:py-12">
 
@@ -68,11 +68,11 @@ export default function Pasar() {
           Data Pasar
         </p>
 
-        <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-[#171717] lg:text-5xl">
+        <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-[#171717] dark:text-white lg:text-5xl">
           Daftar Pasar
         </h1>
 
-        <p className="mt-4 max-w-2xl text-base leading-7 text-[#171717]/50">
+        <p className="mt-4 max-w-2xl text-base leading-7 text-[#171717]/50 dark:text-white/50">
           Seluruh pasar amatan yang dipantau dalam sistem monitoring
           harga bahan pokok Kota Surabaya.
         </p>
@@ -82,15 +82,15 @@ export default function Pasar() {
       {/* LOADING */}
       {loading && (
         <div className="mt-10">
-          <div className="rounded-2xl border border-[#171717]/5 bg-white p-12 text-center shadow-sm">
+          <div className="rounded-2xl border border-[#171717]/5 dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-12 text-center shadow-sm">
             <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-[#C93742] border-t-transparent" />
-            <p className="mt-4 text-sm text-[#171717]/40">Memuat data pasar...</p>
+            <p className="mt-4 text-sm text-[#171717]/40 dark:text-white/40">Memuat data pasar...</p>
           </div>
         </div>
       )}
 
       {error && (
-        <div className="mt-10 rounded-2xl border border-[#FFE5E7] bg-[#FFF0F1] p-6 text-center">
+        <div className="mt-10 rounded-2xl border border-[#FFE5E7] bg-[#FFF0F1] dark:bg-white/[0.04] p-6 text-center">
           <p className="text-sm font-semibold text-[#C93742]">{error}</p>
         </div>
       )}
@@ -107,7 +107,7 @@ export default function Pasar() {
             className="text-[#C93742]"
           />
 
-          <span className="text-sm font-semibold text-[#171717]">
+          <span className="text-sm font-semibold text-[#171717] dark:text-white">
             Filter pasar
           </span>
 
@@ -121,7 +121,7 @@ export default function Pasar() {
 
             <Search
               size={17}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#171717]/35"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#171717]/35 dark:text-white/35"
             />
 
             <input
@@ -129,7 +129,7 @@ export default function Pasar() {
               placeholder="Cari nama pasar..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-11 w-full rounded-xl border border-[#171717]/10 bg-white pl-11 pr-4 text-sm text-[#171717] outline-none transition placeholder:text-[#171717]/35 focus:border-[#C93742]/40 focus:ring-2 focus:ring-[#C93742]/10 sm:w-[260px]"
+              className="h-11 w-full rounded-xl border border-[#171717]/10 dark:border-white/10 bg-white dark:bg-[#1E1E1E] pl-11 pr-4 text-sm text-[#171717] dark:text-white outline-none transition placeholder:text-[#171717]/35 dark:placeholder:text-white/35 focus:border-[#C93742]/40 focus:ring-2 focus:ring-[#C93742]/10 sm:w-[260px]"
             />
 
           </div>
@@ -141,7 +141,7 @@ export default function Pasar() {
             onChange={(e) =>
               setFilterKecamatan(e.target.value)
             }
-            className="h-11 rounded-xl border border-[#171717]/10 bg-white px-4 text-sm text-[#171717] outline-none transition focus:border-[#C93742]/40 focus:ring-2 focus:ring-[#C93742]/10"
+            className="h-11 rounded-xl border border-[#171717]/10 dark:border-white/10 bg-white dark:bg-[#1E1E1E] px-4 text-sm text-[#171717] dark:text-white outline-none transition focus:border-[#C93742]/40 focus:ring-2 focus:ring-[#C93742]/10"
           >
             {daftarKecamatan.map((kec) => (
               <option key={kec} value={kec}>
@@ -157,7 +157,7 @@ export default function Pasar() {
             onChange={(e) =>
               setFilterKelas(e.target.value)
             }
-            className="h-11 rounded-xl border border-[#171717]/10 bg-white px-4 text-sm text-[#171717] outline-none transition focus:border-[#C93742]/40 focus:ring-2 focus:ring-[#C93742]/10"
+            className="h-11 rounded-xl border border-[#171717]/10 dark:border-white/10 bg-white dark:bg-[#1E1E1E] px-4 text-sm text-[#171717] dark:text-white outline-none transition focus:border-[#C93742]/40 focus:ring-2 focus:ring-[#C93742]/10"
           >
             <option value="Semua">
               Semua Kelas
@@ -182,13 +182,13 @@ export default function Pasar() {
       <div className="mt-10 flex items-center justify-between">
 
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.12em] text-[#171717]/35">
+          <p className="text-xs font-medium uppercase tracking-[0.12em] text-[#171717]/35 dark:text-white/35">
             Daftar pasar
           </p>
 
-          <p className="mt-1 text-sm text-[#171717]/50">
+          <p className="mt-1 text-sm text-[#171717]/50 dark:text-white/50">
             Menampilkan{" "}
-            <span className="font-semibold text-[#171717]">
+            <span className="font-semibold text-[#171717] dark:text-white">
               {filteredPasar.length}
             </span>{" "}
             pasar
@@ -203,18 +203,18 @@ export default function Pasar() {
 
         {filteredPasar.length === 0 ? (
 
-          <div className="rounded-2xl border border-[#171717]/5 bg-white p-12 text-center shadow-sm">
+          <div className="rounded-2xl border border-[#171717]/5 dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-12 text-center shadow-sm">
 
             <Store
               size={28}
-              className="mx-auto text-[#171717]/20"
+              className="mx-auto text-[#171717]/20 dark:text-white/20"
             />
 
-            <p className="mt-4 text-sm font-medium text-[#171717]/60">
+            <p className="mt-4 text-sm font-medium text-[#171717]/60 dark:text-white/60">
               Tidak ada pasar ditemukan
             </p>
 
-            <p className="mt-1 text-xs text-[#171717]/35">
+            <p className="mt-1 text-xs text-[#171717]/35 dark:text-white/35">
               Coba ubah kata pencarian atau filter.
             </p>
 
@@ -228,7 +228,7 @@ export default function Pasar() {
 
               <div
                 key={pasar.id}
-                className="group rounded-2xl border border-[#171717]/5 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#C93742]/20 hover:shadow-md"
+                className="group rounded-2xl border border-[#171717]/5 dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#C93742]/20 hover:shadow-md"
               >
 
                 {/* ICON */}
@@ -240,7 +240,7 @@ export default function Pasar() {
 
                   </div>
 
-                  <span className="rounded-full bg-[#171717]/5 px-3 py-1 text-[11px] font-semibold text-[#171717]/55">
+                  <span className="rounded-full bg-[#171717]/5 px-3 py-1 text-[11px] font-semibold text-[#171717]/55 dark:text-white/55">
                     Kelas {pasar.kelas}
                   </span>
 
@@ -248,13 +248,13 @@ export default function Pasar() {
 
 
                 {/* NAME */}
-                <h3 className="mt-5 text-lg font-bold tracking-tight text-[#171717] transition group-hover:text-[#C93742]">
+                <h3 className="mt-5 text-lg font-bold tracking-tight text-[#171717] dark:text-white transition group-hover:text-[#C93742]">
                   {pasar.nama}
                 </h3>
 
 
                 {/* LOCATION */}
-                <div className="mt-2 flex items-center gap-1.5 text-sm text-[#171717]/45">
+                <div className="mt-2 flex items-center gap-1.5 text-sm text-[#171717]/45 dark:text-white/45">
 
                   <MapPin size={14} />
 
@@ -266,17 +266,17 @@ export default function Pasar() {
 
 
                 {/* WILAYAH */}
-                <div className="mt-2 text-xs text-[#171717]/30">
+                <div className="mt-2 text-xs text-[#171717]/30 dark:text-white/30">
                   {pasar.wilayah?.nama}
                 </div>
 
 
                 {/* STATUS */}
-                <div className="mt-5 flex items-center gap-2 border-t border-[#171717]/5 pt-4">
+                <div className="mt-5 flex items-center gap-2 border-t border-[#171717]/5 dark:border-white/10 pt-4">
 
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
 
-                  <span className="text-xs font-medium text-[#171717]/45">
+                  <span className="text-xs font-medium text-[#171717]/45 dark:text-white/45">
                     Aktif dipantau
                   </span>
 

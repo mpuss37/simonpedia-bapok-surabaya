@@ -7,6 +7,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts"
+import { useChartTheme } from "../../hooks/useChartTheme"
 
 const predictionData = [
   {
@@ -52,6 +53,8 @@ const predictionData = [
 ]
 
 export default function PredictionChart() {
+  const chartTheme = useChartTheme()
+
   return (
     <div className="h-[360px] w-full">
 
@@ -97,7 +100,7 @@ export default function PredictionChart() {
           <CartesianGrid
             strokeDasharray="3 3"
             vertical={false}
-            stroke="#F1E1E3"
+            stroke={chartTheme.gridColor}
           />
 
 
@@ -106,7 +109,7 @@ export default function PredictionChart() {
             axisLine={false}
             tickLine={false}
             tick={{
-              fill: "#6B6B6B",
+              fill: chartTheme.tickColor,
               fontSize: 12,
             }}
           />
@@ -116,7 +119,7 @@ export default function PredictionChart() {
             axisLine={false}
             tickLine={false}
             tick={{
-              fill: "#6B6B6B",
+              fill: chartTheme.tickColor,
               fontSize: 12,
             }}
             tickFormatter={(value) => `${value / 1000}K`}
@@ -129,6 +132,14 @@ export default function PredictionChart() {
                 ? `Rp${Number(value).toLocaleString("id-ID")}`
                 : "-"
             }
+            contentStyle={{
+              borderRadius: 12,
+              border: chartTheme.tooltip.border,
+              background: chartTheme.tooltip.background,
+              color: chartTheme.tooltip.color,
+              fontSize: 12,
+            }}
+            labelStyle={{ color: chartTheme.tooltip.color }}
           />
 
 

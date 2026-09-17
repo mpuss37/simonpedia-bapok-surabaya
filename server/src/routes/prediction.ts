@@ -398,7 +398,19 @@ router.get("/all", async (_req, res) => {
       perTgl.get(t)!.push(h.harga)
     }
 
-    const results: any[] = []
+    interface PredictionResult {
+      id: number
+      nama: string
+      kategori: string
+      satuan: string
+      hargaTerakhir: number
+      tren: string
+      trenPersen: number
+      prediksiHarga: number
+      perubahanPrediksi: number
+    }
+
+    const results: PredictionResult[] = []
 
     for (const k of komoditasList) {
       const perTgl = perKom.get(k.id)

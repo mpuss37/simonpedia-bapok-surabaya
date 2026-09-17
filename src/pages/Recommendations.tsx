@@ -157,12 +157,12 @@ export default function Recommendations() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] bg-[#FFF8F9]/90 px-6 backdrop-blur-xl lg:px-10">
+      <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] dark:border-white/10 bg-[#FFF8F9] dark:bg-[#121212]/90 px-6 backdrop-blur-xl lg:px-10">
         <div>
-          <p className="text-xs font-medium text-[#171717]/40">SIMONPEDIA / Analitik / Rekomendasi</p>
-          <h1 className="mt-0.5 text-lg font-bold tracking-tight text-[#171717]">Rekomendasi Tindakan</h1>
+          <p className="text-xs font-medium text-[#171717]/40 dark:text-white/40">SIMONPEDIA / Analitik / Rekomendasi</p>
+          <h1 className="mt-0.5 text-lg font-bold tracking-tight text-[#171717] dark:text-white">Rekomendasi Tindakan</h1>
         </div>
-        <div className="flex items-center gap-2 text-xs text-[#171717]/40">
+        <div className="flex items-center gap-2 text-xs text-[#171717]/40 dark:text-white/40">
           <span className="h-2 w-2 rounded-full bg-emerald-500" />
           Berdasarkan data terbaru
         </div>
@@ -173,30 +173,30 @@ export default function Recommendations() {
           <p className="mb-2 text-sm font-semibold text-[#C93742]">Decision support</p>
           <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
             <div>
-              <h2 className="text-3xl font-black tracking-[-0.04em] text-[#171717] lg:text-4xl">
+              <h2 className="text-3xl font-black tracking-[-0.04em] text-[#171717] dark:text-white lg:text-4xl">
                 Dari data menjadi<br />
                 <span className="text-[#C93742]">tindakan nyata.</span>
               </h2>
-              <p className="mt-3 max-w-xl text-sm leading-6 text-[#171717]/45">
+              <p className="mt-3 max-w-xl text-sm leading-6 text-[#171717]/45 dark:text-white/45">
                 Sistem memberikan rekomendasi berdasarkan perubahan harga, prediksi, tingkat risiko, dan kondisi pasar.
               </p>
             </div>
-            <div className="flex items-center gap-3 rounded-xl border border-[#171717]/[0.06] bg-white px-4 py-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FFF3F4] text-[#C93742]">
+            <div className="flex items-center gap-3 rounded-xl border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] px-4 py-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FFF3F4] dark:bg-white/[0.04] text-[#C93742]">
                 <ShieldAlert size={17} />
               </div>
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#171717]/30">Risiko aktif</p>
-                <p className="text-sm font-bold text-[#171717]">{rekomendasi.length} rekomendasi</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#171717]/30 dark:text-white/30">Risiko aktif</p>
+                <p className="text-sm font-bold text-[#171717] dark:text-white">{rekomendasi.length} rekomendasi</p>
               </div>
             </div>
           </div>
         </section>
 
         {loading ? (
-          <div className="rounded-[24px] border border-[#171717]/[0.06] bg-white p-12 text-center">
+          <div className="rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-12 text-center">
             <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-[#C93742] border-t-transparent" />
-            <p className="mt-4 text-sm text-[#171717]/40">Menganalisis data EWS...</p>
+            <p className="mt-4 text-sm text-[#171717]/40 dark:text-white/40">Menganalisis data EWS...</p>
           </div>
         ) : (
           <>
@@ -209,8 +209,8 @@ export default function Recommendations() {
 
         <section className="mt-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30">Action center</p>
-            <h3 className="mt-1 text-base font-bold text-[#171717]">Rekomendasi yang perlu ditindaklanjuti</h3>
+            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">Action center</p>
+            <h3 className="mt-1 text-base font-bold text-[#171717] dark:text-white">Rekomendasi yang perlu ditindaklanjuti</h3>
           </div>
           <div className="flex gap-2">
             {["Semua", "Tinggi", "Sedang"].map((item) => (
@@ -220,7 +220,7 @@ export default function Recommendations() {
                 className={`rounded-xl px-4 py-2 text-xs font-semibold transition ${
                   filter === item
                     ? "bg-[#C93742] text-white"
-                    : "border border-[#171717]/[0.06] bg-white text-[#171717]/45 hover:bg-[#FFF8F9]"
+                    : "border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] text-[#171717]/45 dark:text-white/60 hover:bg-[#FFF8F9] hover:text-[#171717] dark:hover:bg-white/10 dark:hover:text-white"
                 }`}
               >
                 {item}
@@ -231,20 +231,20 @@ export default function Recommendations() {
 
         <section className="mt-4 space-y-4">
           {filtered.length === 0 ? (
-            <div className="rounded-[24px] border border-[#171717]/[0.06] bg-white p-12 text-center">
+            <div className="rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-12 text-center">
               <CheckCircle2 size={40} className="mx-auto text-emerald-400" />
-              <p className="mt-4 text-sm font-bold text-[#171717]">Tidak ada rekomendasi aktif</p>
-              <p className="mt-1 text-xs text-[#171717]/40">Kondisi pasar saat ini stabil.</p>
+              <p className="mt-4 text-sm font-bold text-[#171717] dark:text-white">Tidak ada rekomendasi aktif</p>
+              <p className="mt-1 text-xs text-[#171717]/40 dark:text-white/40">Kondisi pasar saat ini stabil.</p>
             </div>
           ) : (
             filtered.map((rec) => <RecommendationCard key={rec.id} recommendation={rec} />)
           )}
         </section>
 
-        <section className="mt-6 rounded-[24px] border border-[#171717]/[0.06] bg-white p-5 lg:p-6">
+        <section className="mt-6 rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-5 lg:p-6">
           <div className="mb-5">
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30">Quick actions</p>
-            <h3 className="mt-1 text-base font-bold text-[#171717]">Akses cepat</h3>
+            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">Quick actions</p>
+            <h3 className="mt-1 text-base font-bold text-[#171717] dark:text-white">Akses cepat</h3>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {quickActions.map((action) => {
@@ -252,23 +252,23 @@ export default function Recommendations() {
               return (
                 <button
                   key={action.title}
-                  className="group rounded-2xl border border-[#171717]/[0.05] p-4 text-left transition hover:border-[#C93742]/20 hover:bg-[#FFF8F9]"
+                  className="group rounded-2xl border border-[#171717]/[0.05] dark:border-white/10 p-4 text-left transition hover:border-[#C93742]/20 hover:bg-[#FFF8F9] dark:hover:bg-white/5"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFF3F4] text-[#C93742]">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFF3F4] dark:bg-white/[0.04] text-[#C93742]">
                       <Icon size={18} />
                     </span>
-                    <ArrowRight size={15} className="text-[#171717]/20 transition group-hover:translate-x-1 group-hover:text-[#C93742]" />
+                    <ArrowRight size={15} className="text-[#171717]/20 dark:text-white/20 transition group-hover:translate-x-1 group-hover:text-[#C93742]" />
                   </div>
-                  <p className="mt-4 text-xs font-bold text-[#171717]">{action.title}</p>
-                  <p className="mt-1 text-[10px] leading-4 text-[#171717]/35">{action.description}</p>
+                  <p className="mt-4 text-xs font-bold text-[#171717] dark:text-white">{action.title}</p>
+                  <p className="mt-1 text-[10px] leading-4 text-[#171717]/35 dark:text-white/35">{action.description}</p>
                 </button>
               )
             })}
           </div>
         </section>
 
-        <section className="mt-6 rounded-[24px] border border-[#171717]/[0.06] bg-[#171717] p-6 text-white lg:p-8">
+        <section className="mt-6 rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-[#171717] p-6 text-white lg:p-8">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/35">Decision engine</p>
@@ -285,14 +285,14 @@ export default function Recommendations() {
           </div>
         </section>
 
-        <div className="mt-6 flex gap-3 rounded-2xl border border-[#171717]/[0.06] bg-white px-5 py-4">
-          <Info size={15} className="mt-0.5 shrink-0 text-[#171717]/30" />
-          <p className="text-[10px] leading-5 text-[#171717]/35">
+        <div className="mt-6 flex gap-3 rounded-2xl border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] px-5 py-4">
+          <Info size={15} className="mt-0.5 shrink-0 text-[#171717]/30 dark:text-white/30" />
+          <p className="text-[10px] leading-5 text-[#171717]/35 dark:text-white/35">
             Rekomendasi merupakan decision support dan bukan keputusan otomatis. Pengguna tetap perlu mempertimbangkan kondisi lapangan sebelum mengambil tindakan.
           </p>
         </div>
 
-        <div className="mt-8 border-t border-[#171717]/[0.06] pt-5 text-[11px] text-[#171717]/30">
+        <div className="mt-8 border-t border-[#171717]/[0.06] dark:border-white/10 pt-5 text-[11px] text-[#171717]/30 dark:text-white/30">
           SIMONPEDIA Bapok Surabaya
         </div>
           </>
@@ -305,18 +305,31 @@ export default function Recommendations() {
 function SummaryCard({ label, value, description, icon, danger = false, warning = false, success = false }: {
   label: string; value: string; description: string; icon: React.ReactNode; danger?: boolean; warning?: boolean; success?: boolean
 }) {
-  const bg = danger ? "bg-[#FFF3F4] border-[#C93742]/10 text-[#C93742]"
-    : warning ? "bg-amber-50 border-amber-200/40 text-amber-600"
-    : success ? "bg-emerald-50 border-emerald-200/40 text-emerald-600"
-    : "bg-white border-[#171717]/[0.06] text-[#171717]"
+  const accent = danger ? "text-[#C93742]"
+    : warning ? "text-amber-600 dark:text-amber-300"
+    : success ? "text-emerald-600 dark:text-emerald-400"
+    : "text-[#171717] dark:text-white"
+
+  const badge = danger ? "bg-[#C93742]/10 text-[#C93742]"
+    : warning ? "bg-amber-500/10 text-amber-600 dark:text-amber-300"
+    : success ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+    : "bg-[#171717]/[0.05] text-[#171717]/60 dark:bg-white/10 dark:text-white/70"
+
+  const ring = danger ? "border-[#C93742]/20"
+    : warning ? "border-amber-500/20"
+    : success ? "border-emerald-500/20"
+    : "border-[#171717]/[0.06] dark:border-white/10"
+
   return (
-    <div className={`rounded-[20px] border p-5 ${bg}`}>
+    <div className={`rounded-[20px] border bg-white p-5 dark:bg-[#1E1E1E] ${ring}`}>
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium opacity-60">{label}</p>
-        {icon}
+        <p className="text-xs font-semibold text-[#171717]/55 dark:text-white/55">{label}</p>
+        <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${badge}`}>
+          {icon}
+        </span>
       </div>
-      <p className="mt-3 text-2xl font-black tracking-[-0.04em]">{value}</p>
-      <p className="mt-1 text-[10px] opacity-45">{description}</p>
+      <p className={`mt-3 text-3xl font-black tracking-[-0.04em] ${accent}`}>{value}</p>
+      <p className="mt-1 text-[11px] font-semibold text-[#171717]/45 dark:text-white/45">{description}</p>
     </div>
   )
 }
@@ -326,47 +339,47 @@ function RecommendationCard({ recommendation: rec }: {
 }) {
   const high = rec.priority === "Tinggi"
   return (
-    <div className={`overflow-hidden rounded-[24px] border bg-white ${high ? "border-[#C93742]/15" : "border-[#171717]/[0.06]"}`}>
-      <div className="flex flex-col gap-4 border-b border-[#171717]/[0.05] p-5 lg:flex-row lg:items-center lg:justify-between lg:px-6">
+    <div className={`overflow-hidden rounded-[24px] border bg-white dark:bg-[#1E1E1E] ${high ? "border-[#C93742]/15" : "border-[#171717]/[0.06] dark:border-white/10"}`}>
+      <div className="flex flex-col gap-4 border-b border-[#171717]/[0.05] dark:border-white/10 p-5 lg:flex-row lg:items-center lg:justify-between lg:px-6">
         <div className="flex items-center gap-4">
-          <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${high ? "bg-[#FFF0F1] text-[#C93742]" : "bg-amber-50 text-amber-600"}`}>
+          <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${high ? "bg-[#FFF0F1] dark:bg-white/[0.04] text-[#C93742]" : "bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-300"}`}>
             {high ? <AlertTriangle size={20} /> : <Info size={20} />}
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className="text-sm font-bold text-[#171717]">{rec.commodity}</h3>
-              <span className={`rounded-full px-2 py-1 text-[9px] font-bold ${high ? "bg-[#FFF0F1] text-[#C93742]" : "bg-amber-50 text-amber-600"}`}>
+              <h3 className="text-sm font-bold text-[#171717] dark:text-white">{rec.commodity}</h3>
+              <span className={`rounded-full px-2 py-1 text-[9px] font-bold ${high ? "bg-[#FFF0F1] dark:bg-white/[0.04] text-[#C93742]" : "bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-300"}`}>
                 Prioritas {rec.priority}
               </span>
             </div>
-            <div className="mt-1 flex items-center gap-2 text-[10px] text-[#171717]/35">
+            <div className="mt-1 flex items-center gap-2 text-[10px] text-[#171717]/35 dark:text-white/35">
               <MapPin size={11} /> {rec.location}
             </div>
           </div>
         </div>
         <div className="flex items-center gap-5">
           <div className="text-right">
-            <p className="text-[10px] text-[#171717]/30">Harga</p>
-            <p className="mt-1 text-sm font-black text-[#171717]">{rec.price}</p>
+            <p className="text-[10px] text-[#171717]/30 dark:text-white/30">Harga</p>
+            <p className="mt-1 text-sm font-black text-[#171717] dark:text-white">{rec.price}</p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] text-[#171717]/30">Perubahan</p>
+            <p className="text-[10px] text-[#171717]/30 dark:text-white/30">Perubahan</p>
             <p className="mt-1 text-sm font-black text-[#C93742]">{rec.change}</p>
           </div>
         </div>
       </div>
       <div className="grid gap-5 p-5 lg:grid-cols-[1fr_300px] lg:p-6">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#171717]/30">Tindakan yang disarankan</p>
-          <p className="mt-2 text-sm font-semibold leading-6 text-[#171717]/75">{rec.action}</p>
-          <div className="mt-4 rounded-xl bg-[#FFF8F9] p-4">
-            <p className="text-[10px] font-bold text-[#171717]/40">Alasan</p>
-            <p className="mt-1 text-[11px] leading-5 text-[#171717]/45">{rec.reason}</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#171717]/30 dark:text-white/30">Tindakan yang disarankan</p>
+          <p className="mt-2 text-sm font-semibold leading-6 text-[#171717]/75 dark:text-white/75">{rec.action}</p>
+          <div className="mt-4 rounded-xl bg-[#FFF8F9] dark:bg-[#121212] p-4">
+            <p className="text-[10px] font-bold text-[#171717]/40 dark:text-white/40">Alasan</p>
+            <p className="mt-1 text-[11px] leading-5 text-[#171717]/45 dark:text-white/45">{rec.reason}</p>
           </div>
         </div>
-        <div className="rounded-2xl border border-[#171717]/[0.05] p-4">
+        <div className="rounded-2xl border border-[#171717]/[0.05] dark:border-white/10 p-4">
           <div className="flex items-center justify-between">
-            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#171717]/30">Action status</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#171717]/30 dark:text-white/30">Action status</p>
             <span className="flex items-center gap-1 text-[10px] font-semibold text-[#C93742]">
               <Clock3 size={11} /> {rec.deadline}
             </span>
@@ -376,7 +389,7 @@ function RecommendationCard({ recommendation: rec }: {
               Tandai ditangani <CheckCircle2 size={13} />
             </button>
           </div>
-          <button className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-[#171717]/[0.06] px-3 py-3 text-[10px] font-semibold text-[#171717]/50">
+          <button className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-[#171717]/[0.06] dark:border-white/10 px-3 py-3 text-[10px] font-semibold text-[#171717]/50 dark:text-white/50">
             Detail analisis <ArrowRight size={12} />
           </button>
         </div>

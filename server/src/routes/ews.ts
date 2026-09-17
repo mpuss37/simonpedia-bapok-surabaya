@@ -141,7 +141,7 @@ function hitungRisiko(persenPerubahan: number): "Normal" | "Siaga" | "Waspada" |
           perPasar.get(h.pasarId)!.push({ pasar: h.pasar, harga: h.harga })
         }
 
-        for (const [_, entries] of perPasar) {
+        for (const entries of perPasar.values()) {
           const latest = entries[0]
           if (latest) {
             alerts.push({

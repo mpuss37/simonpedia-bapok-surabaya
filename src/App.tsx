@@ -91,22 +91,6 @@ function App() {
           />
 
 
-          {/* Notifikasi */}
-
-          <Route
-            path="/notifikasi"
-            element={<div>Halaman Notifikasi</div>}
-          />
-
-
-          {/* Watchlist */}
-
-          <Route
-            path="/watchlist"
-            element={<div>Halaman Watchlist</div>}
-          />
-
-
           {/* Data */}
 
           <Route

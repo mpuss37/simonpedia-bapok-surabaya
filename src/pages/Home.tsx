@@ -20,7 +20,10 @@ import {
 } from "recharts"
 
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { getRingkasanHarga } from "../services/priceService"
+import ThemeToggle from "../components/ThemeToggle"
+import { useChartTheme } from "../hooks/useChartTheme"
 
 const API_URL = "http://localhost:3001/api"
 
@@ -55,12 +58,16 @@ interface ChartItem {
 
 export default function Home() {
 
+  const chartTheme = useChartTheme()
+
   const [komoditasList, setKomoditasList] = useState<KomoditasItem[]>([])
   const [chartData, setChartData] = useState<ChartItem[]>([])
   const [ewsSummary, setEwsSummary] = useState<EWSRingkasan | null>(null)
   const [ewsAnalisis, setEwsAnalisis] = useState<EWSAnalisis[]>([])
   const [lastUpdate, setLastUpdate] = useState<string | null>(null)
   const [chartKomoditas, setChartKomoditas] = useState<{ nama: string; change: number } | null>(null)
+  const [selectedChartId, setSelectedChartId] = useState<number | null>(null)
+  const [chartLoading, setChartLoading] = useState(false)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -97,23 +104,12 @@ export default function Home() {
         const topKomoditas = analisis
           .slice()
           .sort((a, b) => Math.abs(b.persenPerubahan) - Math.abs(a.persenPerubahan))[0]
-        const chartId = topKomoditas?.id
-
-        const chartRes = chartId
-          ? await fetch(`${API_URL}/ews/chart/${chartId}`)
-          : null
-        const chartRaw: ChartItem[] = chartRes ? await chartRes.json() : []
 
         setKomoditasList(komoditasItems)
-        setChartData(chartRaw)
         setEwsSummary(ewsRes.ringkasan)
         setEwsAnalisis(ewsRes.analisis || [])
         setLastUpdate(ewsRes.lastUpdate)
-        setChartKomoditas(
-          topKomoditas
-            ? { nama: topKomoditas.nama, change: topKomoditas.persenPerubahan }
-            : null
-        )
+        setSelectedChartId(topKomoditas?.id ?? null)
       } catch (err) {
         console.error("Gagal memuat dashboard:", err)
       } finally {
@@ -122,6 +118,38 @@ export default function Home() {
     }
     fetchDashboard()
   }, [])
+
+  // Muat ulang data chart tiap kali komoditas yang dipilih berubah
+  useEffect(() => {
+    if (selectedChartId == null) return
+
+    let active = true
+
+    async function fetchChart() {
+      setChartLoading(true)
+      try {
+        const res = await fetch(`${API_URL}/ews/chart/${selectedChartId}`)
+        const chartRaw: ChartItem[] = res.ok ? await res.json() : []
+        if (!active) return
+
+        const meta = ewsAnalisis.find((a) => a.id === selectedChartId)
+        setChartData(chartRaw)
+        setChartKomoditas(
+          meta ? { nama: meta.nama, change: meta.persenPerubahan } : null
+        )
+      } catch (err) {
+        console.error("Gagal memuat data chart:", err)
+        if (active) setChartData([])
+      } finally {
+        if (active) setChartLoading(false)
+      }
+    }
+
+    fetchChart()
+    return () => {
+      active = false
+    }
+  }, [selectedChartId, ewsAnalisis])
 
   const totalKomoditas = ewsSummary?.totalKomoditas || 0
   const naikCount = ewsAnalisis.filter(a => a.persenPerubahan > 0).length
@@ -139,17 +167,18 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* TOPBAR */}
-      <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] bg-[#FFF8F9]/90 px-6 backdrop-blur-xl lg:px-10">
+      <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] dark:border-white/10 bg-[#FFF8F9] dark:bg-[#121212]/90 px-6 backdrop-blur-xl lg:px-10 dark:border-white/10 dark:bg-[#121212]/90">
         <div>
-          <p className="text-xs font-medium text-[#171717]/40">SIMONPEDIA / Dashboard</p>
-          <h1 className="mt-0.5 text-lg font-bold text-[#171717]">Dashboard</h1>
+          <p className="text-xs font-medium text-[#171717]/40 dark:text-white/40 dark:text-white/40">SIMONPEDIA / Dashboard</p>
+          <h1 className="mt-0.5 text-lg font-bold text-[#171717] dark:text-white dark:text-white">Dashboard</h1>
         </div>
         <div className="flex items-center gap-3">
-          <div className="hidden items-center gap-2 text-xs text-[#171717]/40 sm:flex">
+          <div className="hidden items-center gap-2 text-xs text-[#171717]/40 dark:text-white/40 sm:flex dark:text-white/40">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
             Data survei terakhir: {lastUpdateText}
           </div>
-          <button className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#171717]/[0.06] bg-white text-[#171717]/60">
+          <ThemeToggle />
+          <button className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] text-[#171717]/60 dark:text-white/60 dark:border-white/10 dark:bg-white/5 dark:text-white/70">
             <Bell size={17} />
             <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#C93742]" />
           </button>
@@ -183,9 +212,9 @@ export default function Home() {
         </section>
 
         {loading ? (
-          <div className="mt-6 rounded-[24px] border border-[#171717]/[0.06] bg-white p-12 text-center">
+          <div className="mt-6 rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-12 text-center">
             <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-[#C93742] border-t-transparent" />
-            <p className="mt-4 text-sm text-[#171717]/40">Memuat data dashboard...</p>
+            <p className="mt-4 text-sm text-[#171717]/40 dark:text-white/40">Memuat data dashboard...</p>
           </div>
         ) : (
           <>
@@ -199,22 +228,47 @@ export default function Home() {
 
         {/* CHART + EWS */}
         <section className="mt-6 grid gap-5 xl:grid-cols-[1fr_340px]">
-          <div className="rounded-[24px] border border-[#171717]/[0.06] bg-white p-5 lg:p-6">
-            <div className="mb-6 flex items-start justify-between">
+          <div className="rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-5 lg:p-6">
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30">Market trend</p>
-                <h3 className="mt-1 text-base font-bold text-[#171717]">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">Market trend</p>
+                <h3 className="mt-1 text-base font-bold text-[#171717] dark:text-white">
                   {chartKomoditas ? `Tren harga ${chartKomoditas.nama}` : "Tren harga rata-rata"}
                 </h3>
               </div>
-              {chartKomoditas && (
-                <span className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-[10px] font-bold ${chartKomoditas.change >= 0 ? "bg-[#FFF3F4] text-[#C93742]" : "bg-[#EFFAF3] text-[#1C8C4A]"}`}>
-                  {chartKomoditas.change >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                  {" "}{chartKomoditas.change >= 0 ? "+" : ""}{chartKomoditas.change.toFixed(2)}%
-                </span>
-              )}
+              <div className="flex items-center gap-2">
+                {chartKomoditas && (
+                  <span className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-[10px] font-bold ${chartKomoditas.change >= 0 ? "bg-[#FFF3F4] dark:bg-white/[0.04] text-[#C93742]" : "bg-[#EFFAF3] dark:bg-emerald-500/15 text-[#1C8C4A] dark:text-emerald-400"}`}>
+                    {chartKomoditas.change >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                    {" "}{chartKomoditas.change >= 0 ? "+" : ""}{chartKomoditas.change.toFixed(2)}%
+                  </span>
+                )}
+                <select
+                  value={selectedChartId ?? ""}
+                  onChange={(e) => setSelectedChartId(e.target.value ? Number(e.target.value) : null)}
+                  className="max-w-[180px] rounded-xl border border-[#171717]/[0.08] dark:border-white/10 bg-white dark:bg-[#121212] px-3 py-2 text-xs font-semibold text-[#171717]/70 dark:text-white/70 outline-none transition focus:border-[#C93742]/40 focus:ring-2 focus:ring-[#C93742]/10"
+                  aria-label="Pilih komoditas untuk tren harga"
+                >
+                  {ewsAnalisis.length === 0 && <option value="">Tidak ada data</option>}
+                  {ewsAnalisis.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.nama}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="h-[310px]">
+            <div className="relative h-[310px]">
+              {chartLoading && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 dark:bg-[#1E1E1E]/60 backdrop-blur-[1px]">
+                  <div className="h-7 w-7 animate-spin rounded-full border-2 border-[#C93742] border-t-transparent" />
+                </div>
+              )}
+              {chartData.length === 0 && !chartLoading ? (
+                <div className="flex h-full items-center justify-center">
+                  <p className="text-sm text-[#171717]/40 dark:text-white/40">Belum ada data tren untuk komoditas ini.</p>
+                </div>
+              ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
                   <defs>
@@ -223,31 +277,34 @@ export default function Home() {
                       <stop offset="100%" stopColor="#C93742" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#171717" strokeOpacity={0.06} vertical={false} />
-                  <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: "#171717", opacity: 0.4 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
-                  <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: "#171717", opacity: 0.4 }} axisLine={false} tickLine={false} />
-                  <Tooltip formatter={(value) => typeof value === "number" ? [`Rp${value.toLocaleString("id-ID")}`, "Harga"] : ["-", "Harga"]} contentStyle={{ borderRadius: 12, border: "1px solid rgba(23,23,23,0.06)", fontSize: 11 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} vertical={false} />
+                  <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
+                  <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} />
+                  <Tooltip formatter={(value) => typeof value === "number" ? [`Rp${value.toLocaleString("id-ID")}`, "Harga"] : ["-", "Harga"]} contentStyle={{ borderRadius: 12, border: chartTheme.tooltip.border, background: chartTheme.tooltip.background, color: chartTheme.tooltip.color, fontSize: 11 }} labelStyle={{ color: chartTheme.tooltip.color }} />
                   <Area type="monotone" dataKey="harga" stroke="#C93742" strokeWidth={2.5} fill="url(#homeGradient)" />
                 </AreaChart>
               </ResponsiveContainer>
+              )}
             </div>
-            <div className="mt-4 flex items-center justify-between border-t border-[#171717]/[0.05] pt-4">
-              <p className="text-[10px] text-[#171717]/30">Cabe Merah Besar - Rata-rata seluruh pasar</p>
-              <button className="text-[10px] font-bold text-[#C93742]">Detail monitoring →</button>
+            <div className="mt-4 flex items-center justify-between border-t border-[#171717]/[0.05] dark:border-white/10 pt-4">
+              <p className="text-[10px] text-[#171717]/30 dark:text-white/30">
+                {chartKomoditas ? `${chartKomoditas.nama} - Rata-rata seluruh pasar` : "Rata-rata seluruh pasar"}
+              </p>
+              <Link to="/monitoring" className="text-[10px] font-bold text-[#C93742]">Detail monitoring →</Link>
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[#171717]/[0.06] bg-white p-5">
+          <div className="rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-5">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30">Early warning</p>
-                <h3 className="mt-1 text-base font-bold text-[#171717]">Kondisi risiko</h3>
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">Early warning</p>
+                <h3 className="mt-1 text-base font-bold text-[#171717] dark:text-white">Kondisi risiko</h3>
               </div>
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#FFF0F1] text-[#C93742]">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#FFF0F1] dark:bg-white/[0.04] text-[#C93742]">
                 <AlertTriangle size={17} />
               </span>
             </div>
-            <div className="mt-5 rounded-2xl bg-[#FFF3F4] p-5">
+            <div className="mt-5 rounded-2xl bg-[#FFF3F4] dark:bg-white/[0.04] p-5">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C93742] text-white">
                   <AlertTriangle size={18} />
@@ -256,18 +313,18 @@ export default function Home() {
                   <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#C93742]">
                     {waspadaCount > 0 ? "Waspada" : "Normal"}
                   </p>
-                  <p className="mt-1 text-sm font-bold text-[#171717]">
+                  <p className="mt-1 text-sm font-bold text-[#171717] dark:text-white">
                     {waspadaCount} komoditas
                   </p>
                 </div>
               </div>
-              <p className="mt-4 text-[11px] leading-5 text-[#171717]/45">
+              <p className="mt-4 text-[11px] leading-5 text-[#171717]/45 dark:text-white/45">
                 {waspadaCount > 0
                   ? "Terdapat komoditas dengan kenaikan harga yang melebihi batas normal."
                   : "Semua komoditas dalam kondisi normal."}
               </p>
             </div>
-            <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-[#171717]/[0.06] py-3 text-xs font-bold text-[#171717]/55">
+            <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-[#171717]/[0.06] dark:border-white/10 py-3 text-xs font-bold text-[#171717]/55 dark:text-white/55">
               Buka EWS
               <ArrowRight size={13} />
             </button>
@@ -275,41 +332,41 @@ export default function Home() {
         </section>
 
         {/* COMMODITY TABLE */}
-        <section className="mt-6 rounded-[24px] border border-[#171717]/[0.06] bg-white p-5 lg:p-6">
+        <section className="mt-6 rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-5 lg:p-6">
           <div className="mb-5 flex items-center justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30">Market overview</p>
-              <h3 className="mt-1 text-base font-bold text-[#171717]">Pergerakan komoditas</h3>
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">Market overview</p>
+              <h3 className="mt-1 text-base font-bold text-[#171717] dark:text-white">Pergerakan komoditas</h3>
             </div>
             <button className="text-xs font-bold text-[#C93742]">Lihat semua →</button>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[650px]">
               <thead>
-                <tr className="border-b border-[#171717]/[0.05]">
-                  <th className="pb-3 text-left text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">Komoditas</th>
-                  <th className="pb-3 text-left text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">Kategori</th>
-                  <th className="pb-3 text-right text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">Harga</th>
-                  <th className="pb-3 text-right text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">Perubahan</th>
+                <tr className="border-b border-[#171717]/[0.05] dark:border-white/10">
+                  <th className="pb-3 text-left text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Komoditas</th>
+                  <th className="pb-3 text-left text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Kategori</th>
+                  <th className="pb-3 text-right text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Harga</th>
+                  <th className="pb-3 text-right text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Perubahan</th>
                 </tr>
               </thead>
               <tbody>
                 {komoditasList.map((item) => (
-                  <tr key={item.nama} className="border-b border-[#171717]/[0.04] last:border-0">
+                  <tr key={item.nama} className="border-b border-[#171717]/[0.04] dark:border-white/10 last:border-0">
                     <td className="py-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FFF8F9] text-[#C93742]">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FFF8F9] dark:bg-[#121212] text-[#C93742]">
                           <Wallet size={14} />
                         </div>
-                        <span className="text-xs font-bold text-[#171717]">{item.nama}</span>
+                        <span className="text-xs font-bold text-[#171717] dark:text-white">{item.nama}</span>
                       </div>
                     </td>
-                    <td className="py-4 text-xs text-[#171717]/40">{item.kategori}</td>
-                    <td className="py-4 text-right text-xs font-bold text-[#171717]">
+                    <td className="py-4 text-xs text-[#171717]/40 dark:text-white/40">{item.kategori}</td>
+                    <td className="py-4 text-right text-xs font-bold text-[#171717] dark:text-white">
                       Rp{item.harga.toLocaleString("id-ID")}
                     </td>
                     <td className="py-4 text-right">
-                      <span className={`inline-flex items-center gap-1 text-xs font-bold ${item.type === "up" ? "text-[#C93742]" : "text-emerald-600"}`}>
+                      <span className={`inline-flex items-center gap-1 text-xs font-bold ${item.type === "up" ? "text-[#C93742]" : "text-emerald-600 dark:text-emerald-400"}`}>
                         {item.type === "up" ? <ArrowUpRight size={13} /> : <ArrowDownRight size={13} />}
                         {Math.abs(item.change)}%
                       </span>
@@ -322,7 +379,7 @@ export default function Home() {
         </section>
 
         {/* FOOTER */}
-        <div className="mt-8 border-t border-[#171717]/[0.06] pt-5 text-[11px] text-[#171717]/30">
+        <div className="mt-8 border-t border-[#171717]/[0.06] dark:border-white/10 pt-5 text-[11px] text-[#171717]/30 dark:text-white/30">
           SIMONPEDIA Bapok Surabaya
         </div>
           </>
@@ -336,19 +393,31 @@ export default function Home() {
 function Metric({ label, value, description, icon, danger = false, success = false, warning = false }: {
   label: string; value: string; description: string; icon: React.ReactNode; danger?: boolean; success?: boolean; warning?: boolean
 }) {
-  const style = danger ? "bg-[#FFF3F4] border-[#C93742]/10 text-[#C93742]"
-    : success ? "bg-emerald-50 border-emerald-200/40 text-emerald-600"
-    : warning ? "bg-amber-50 border-amber-200/40 text-amber-600"
-    : "bg-white border-[#171717]/[0.06] text-[#171717]"
+  const accent = danger ? "text-[#C93742]"
+    : success ? "text-emerald-600 dark:text-emerald-400"
+    : warning ? "text-amber-600 dark:text-amber-300"
+    : "text-[#171717] dark:text-white"
+
+  const badge = danger ? "bg-[#C93742]/10 text-[#C93742]"
+    : success ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+    : warning ? "bg-amber-500/10 text-amber-600 dark:text-amber-300"
+    : "bg-[#171717]/[0.05] text-[#171717]/60 dark:bg-white/10 dark:text-white/70"
+
+  const ring = danger ? "border-[#C93742]/20"
+    : success ? "border-emerald-500/20"
+    : warning ? "border-amber-500/20"
+    : "border-[#171717]/[0.06] dark:border-white/10"
 
   return (
-    <div className={`rounded-[20px] border p-5 ${style}`}>
+    <div className={`rounded-[20px] border bg-white p-5 dark:bg-[#1E1E1E] ${ring}`}>
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium opacity-60">{label}</p>
-        {icon}
+        <p className="text-xs font-semibold text-[#171717]/55 dark:text-white/55">{label}</p>
+        <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${badge}`}>
+          {icon}
+        </span>
       </div>
-      <p className="mt-3 text-2xl font-black tracking-[-0.04em]">{value}</p>
-      <p className="mt-1 text-[10px] opacity-45">{description}</p>
+      <p className={`mt-3 text-3xl font-black tracking-[-0.04em] ${accent}`}>{value}</p>
+      <p className="mt-1 text-[11px] font-semibold text-[#171717]/45 dark:text-white/45">{description}</p>
     </div>
   )
 }

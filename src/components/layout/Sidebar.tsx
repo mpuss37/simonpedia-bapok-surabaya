@@ -8,8 +8,6 @@ import {
   Brain,
   ShieldAlert,
   Lightbulb,
-  Bell,
-  Star,
   Download,
   Settings,
 } from "lucide-react"
@@ -75,36 +73,21 @@ const menuGroups = [
       },
     ],
   },
-  {
-    title: "PERSONAL",
-    items: [
-      {
-        label: "Notifikasi",
-        path: "/notifikasi",
-        icon: Bell,
-      },
-      {
-        label: "Watchlist",
-        path: "/watchlist",
-        icon: Star,
-      },
-    ],
-  },
 ]
 
 export default function Sidebar() {
   return (
-    <aside className="fixed left-0 top-0 z-50 hidden h-screen w-[250px] flex-col border-r border-[#171717]/[0.07] bg-white lg:flex">
+    <aside className="fixed left-0 top-0 z-50 hidden h-screen w-[250px] flex-col border-r border-[#171717]/[0.07] bg-white lg:flex dark:border-white/10 dark:bg-[#1A1A1A]">
 
       {/* LOGO */}
-      <div className="border-b border-[#171717]/[0.06] px-7 pb-5 pt-7">
+      <div className="border-b border-[#171717]/[0.06] px-7 pb-5 pt-7 dark:border-white/10">
 
         <NavLink to="/" className="block">
           <h1 className="text-[21px] font-black tracking-[-0.04em] text-[#C93742]">
             SIMONPEDIA
           </h1>
 
-          <p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-[#171717]/45">
+          <p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-[#171717]/45 dark:text-white/45">
             Bapok Surabaya
           </p>
         </NavLink>
@@ -119,7 +102,7 @@ export default function Sidebar() {
         {menuGroups.map((group) => (
           <div key={group.title} className="mb-6">
 
-            <p className="mb-2.5 px-3 text-[9px] font-bold tracking-[0.16em] text-[#171717]/40">
+            <p className="mb-2.5 px-3 text-[9px] font-bold tracking-[0.16em] text-[#171717]/40 dark:text-white/40">
               {group.title}
             </p>
 
@@ -137,7 +120,7 @@ export default function Sidebar() {
                       `group relative flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ${
                         isActive
                           ? "bg-[#C93742] text-white shadow-[0_6px_18px_rgba(201,55,66,0.25)]"
-                          : "text-[#171717]/70 hover:bg-[#171717]/[0.035] hover:text-[#171717]"
+                          : "text-[#171717]/70 hover:bg-[#171717]/[0.035] hover:text-[#171717] dark:text-white/70 dark:hover:bg-white/[0.06] dark:hover:text-white"
                       }`
                     }
                   >
@@ -151,7 +134,7 @@ export default function Sidebar() {
                           size={17}
                           strokeWidth={2}
                           className={`shrink-0 transition-colors ${
-                            isActive ? "text-white" : "text-[#171717]/40 group-hover:text-[#C93742]"
+                            isActive ? "text-white" : "text-[#171717]/40 group-hover:text-[#C93742] dark:text-white/40"
                           }`}
                         />
 
@@ -172,7 +155,7 @@ export default function Sidebar() {
 
       {/* BOTTOM */}
 
-      <div className="border-t border-[#171717]/[0.06] p-4">
+      <div className="border-t border-[#171717]/[0.06] p-4 dark:border-white/10">
 
         <NavLink
           to="/data"
@@ -180,7 +163,7 @@ export default function Sidebar() {
             `mb-1 flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ${
               isActive
                 ? "bg-[#C93742] text-white shadow-[0_6px_18px_rgba(201,55,66,0.25)]"
-                : "text-[#171717]/65 hover:bg-[#171717]/[0.035] hover:text-[#171717]"
+                : "text-[#171717]/65 hover:bg-[#171717]/[0.035] hover:text-[#171717] dark:text-white/65 dark:hover:bg-white/[0.06] dark:hover:text-white"
             }`
           }
         >
@@ -188,7 +171,7 @@ export default function Sidebar() {
             <>
               <Download
                 size={17}
-                className={isActive ? "text-white" : "text-[#171717]/40"}
+                className={isActive ? "text-white" : "text-[#171717]/40 dark:text-white/40"}
               />
               <span>Data & Export</span>
             </>
@@ -202,7 +185,7 @@ export default function Sidebar() {
             `flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ${
               isActive
                 ? "bg-[#C93742] text-white shadow-[0_6px_18px_rgba(201,55,66,0.25)]"
-                : "text-[#171717]/65 hover:bg-[#171717]/[0.035] hover:text-[#171717]"
+                : "text-[#171717]/65 hover:bg-[#171717]/[0.035] hover:text-[#171717] dark:text-white/65 dark:hover:bg-white/[0.06] dark:hover:text-white"
             }`
           }
         >
@@ -210,7 +193,7 @@ export default function Sidebar() {
             <>
               <Settings
                 size={17}
-                className={isActive ? "text-white" : "text-[#171717]/40"}
+                className={isActive ? "text-white" : "text-[#171717]/40 dark:text-white/40"}
               />
               <span>Pengaturan</span>
             </>

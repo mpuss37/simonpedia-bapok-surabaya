@@ -7,6 +7,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts"
+import { useChartTheme } from "../../hooks/useChartTheme"
 
 const priceData = [
   { date: "1 Agu", price: 54000 },
@@ -19,6 +20,8 @@ const priceData = [
 ]
 
 export default function PriceTrendChart() {
+  const chartTheme = useChartTheme()
+
   return (
     <div className="h-[360px] w-full">
       <ResponsiveContainer width="100%" height="100%">
@@ -34,7 +37,7 @@ export default function PriceTrendChart() {
           <CartesianGrid
             strokeDasharray="3 3"
             vertical={false}
-            stroke="#F1E1E3"
+            stroke={chartTheme.gridColor}
           />
 
           <XAxis
@@ -42,7 +45,7 @@ export default function PriceTrendChart() {
             axisLine={false}
             tickLine={false}
             tick={{
-              fill: "#6B6B6B",
+              fill: chartTheme.tickColor,
               fontSize: 12,
             }}
           />
@@ -51,7 +54,7 @@ export default function PriceTrendChart() {
             axisLine={false}
             tickLine={false}
             tick={{
-              fill: "#6B6B6B",
+              fill: chartTheme.tickColor,
               fontSize: 12,
             }}
             tickFormatter={(value) => `${value / 1000}K`}
@@ -61,6 +64,14 @@ export default function PriceTrendChart() {
             formatter={(value) =>
               `Rp${Number(value).toLocaleString("id-ID")}`
             }
+            contentStyle={{
+              borderRadius: 12,
+              border: chartTheme.tooltip.border,
+              background: chartTheme.tooltip.background,
+              color: chartTheme.tooltip.color,
+              fontSize: 12,
+            }}
+            labelStyle={{ color: chartTheme.tooltip.color }}
           />
 
           <Line

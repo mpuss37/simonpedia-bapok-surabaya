@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { TrendingUp, TrendingDown, Minus, Target, BarChart3 } from "lucide-react"
+import { useChartTheme } from "../hooks/useChartTheme"
 import {
   Area,
   CartesianGrid,
@@ -64,6 +65,7 @@ function formatRupiah(value: number) {
 }
 
 export default function Prediksi() {
+  const chartTheme = useChartTheme()
   const [prediksiList, setPrediksiList] = useState<PrediksiItem[]>([])
   const [selectedId, setSelectedId] = useState<number | null>(null)
   const [detail, setDetail] = useState<DetailPrediksi | null>(null)
@@ -120,31 +122,31 @@ export default function Prediksi() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] bg-[#FFF8F9]/90 px-6 backdrop-blur-xl lg:px-10">
+      <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] dark:border-white/10 bg-[#FFF8F9] dark:bg-[#121212]/90 px-6 backdrop-blur-xl lg:px-10">
         <div>
-          <p className="text-xs font-medium text-[#171717]/40">SIMONPEDIA / Prediksi</p>
-          <h1 className="mt-0.5 text-lg font-bold text-[#171717]">Prediksi Harga</h1>
+          <p className="text-xs font-medium text-[#171717]/40 dark:text-white/40">SIMONPEDIA / Prediksi</p>
+          <h1 className="mt-0.5 text-lg font-bold text-[#171717] dark:text-white">Prediksi Harga</h1>
         </div>
       </header>
 
       <main className="px-6 py-8 lg:px-10 lg:py-10">
         <section className="mb-7">
           <p className="mb-2 text-sm font-semibold text-[#C93742]">Price Prediction</p>
-          <h2 className="text-3xl font-black tracking-[-0.04em] text-[#171717] lg:text-4xl">
+          <h2 className="text-3xl font-black tracking-[-0.04em] text-[#171717] dark:text-white lg:text-4xl">
             Prediksi harga
             <br />
             <span className="text-[#C93742]">7 hari ke depan.</span>
           </h2>
-          <p className="mt-3 max-w-xl text-sm leading-6 text-[#171717]/45">
+          <p className="mt-3 max-w-xl text-sm leading-6 text-[#171717]/45 dark:text-white/45">
             Menggunakan Linear Regression, Moving Average, dan Exponential Smoothing
             untuk memprediksi tren harga bahan pokok.
           </p>
         </section>
 
         {loading ? (
-          <div className="rounded-[24px] border border-[#171717]/[0.06] bg-white p-12 text-center">
+          <div className="rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-12 text-center">
             <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-[#C93742] border-t-transparent" />
-            <p className="mt-4 text-sm text-[#171717]/40">Menghitung prediksi semua komoditas...</p>
+            <p className="mt-4 text-sm text-[#171717]/40 dark:text-white/40">Menghitung prediksi semua komoditas...</p>
           </div>
         ) : (
           <>
@@ -157,7 +159,7 @@ export default function Prediksi() {
               className={`rounded-full px-4 py-2 text-xs font-bold transition ${
                 filterKategori === k
                   ? "bg-[#C93742] text-white"
-                  : "border border-[#171717]/[0.08] bg-white text-[#171717]/50 hover:bg-[#FFF8F9]"
+                  : "border border-[#171717]/[0.08] dark:border-white/10 bg-white dark:bg-[#1E1E1E] text-[#171717]/50 dark:text-white/60 hover:bg-[#FFF8F9] hover:text-[#171717] dark:hover:bg-white/10 dark:hover:text-white"
               }`}
             >
               {k}
@@ -166,10 +168,10 @@ export default function Prediksi() {
         </section>
 
         {/* TABEL PREDIKSI */}
-        <section className="rounded-[24px] border border-[#171717]/[0.06] bg-white p-5 lg:p-6">
+        <section className="rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-5 lg:p-6">
           <div className="mb-5">
-            <h3 className="text-base font-bold text-[#171717]">Daftar Prediksi</h3>
-            <p className="mt-1 text-xs text-[#171717]/40">
+            <h3 className="text-base font-bold text-[#171717] dark:text-white">Daftar Prediksi</h3>
+            <p className="mt-1 text-xs text-[#171717]/40 dark:text-white/40">
               Klik komoditas untuk melihat detail prediksi
             </p>
           </div>
@@ -177,13 +179,13 @@ export default function Prediksi() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[750px]">
               <thead>
-                <tr className="border-b border-[#171717]/[0.05]">
-                  <th className="pb-3 text-left text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">Komoditas</th>
-                  <th className="pb-3 text-left text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">Kategori</th>
-                  <th className="pb-3 text-right text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">Harga Akhir</th>
-                  <th className="pb-3 text-right text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">Prediksi</th>
-                  <th className="pb-3 text-right text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">Perubahan</th>
-                  <th className="pb-3 text-center text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">Tren</th>
+                <tr className="border-b border-[#171717]/[0.05] dark:border-white/10">
+                  <th className="pb-3 text-left text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Komoditas</th>
+                  <th className="pb-3 text-left text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Kategori</th>
+                  <th className="pb-3 text-right text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Harga Akhir</th>
+                  <th className="pb-3 text-right text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Prediksi</th>
+                  <th className="pb-3 text-right text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Perubahan</th>
+                  <th className="pb-3 text-center text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Tren</th>
                 </tr>
               </thead>
               <tbody>
@@ -191,17 +193,17 @@ export default function Prediksi() {
                   <tr
                     key={item.id}
                     onClick={() => setSelectedId(item.id)}
-                    className={`cursor-pointer border-b border-[#171717]/[0.04] last:border-0 transition ${
-                      selectedId === item.id ? "bg-[#FFF8F9]" : "hover:bg-[#FFF8F9]/50"
+                    className={`cursor-pointer border-b border-[#171717]/[0.04] dark:border-white/10 last:border-0 transition ${
+                      selectedId === item.id ? "bg-[#FFF8F9] dark:bg-white/10" : "hover:bg-[#FFF8F9] dark:hover:bg-white/5"
                     }`}
                   >
-                    <td className="py-4 text-xs font-bold text-[#171717]">{item.nama}</td>
-                    <td className="py-4 text-xs text-[#171717]/40">{item.kategori}</td>
-                    <td className="py-4 text-right text-xs font-bold text-[#171717]">{formatRupiah(item.hargaTerakhir)}</td>
+                    <td className="py-4 text-xs font-bold text-[#171717] dark:text-white">{item.nama}</td>
+                    <td className="py-4 text-xs text-[#171717]/40 dark:text-white/40">{item.kategori}</td>
+                    <td className="py-4 text-right text-xs font-bold text-[#171717] dark:text-white">{formatRupiah(item.hargaTerakhir)}</td>
                     <td className="py-4 text-right text-xs font-bold text-[#C93742]">{formatRupiah(item.prediksiHarga)}</td>
                     <td className="py-4 text-right">
                       <span className={`inline-flex items-center gap-1 text-xs font-bold ${
-                        item.perubahanPrediksi > 0 ? "text-[#C93742]" : item.perubahanPrediksi < 0 ? "text-emerald-600" : "text-[#171717]/40"
+                        item.perubahanPrediksi > 0 ? "text-[#C93742]" : item.perubahanPrediksi < 0 ? "text-emerald-600 dark:text-emerald-400" : "text-[#171717]/40 dark:text-white/40"
                       }`}>
                         {item.perubahanPrediksi > 0 ? <TrendingUp size={13} /> : item.perubahanPrediksi < 0 ? <TrendingDown size={13} /> : <Minus size={13} />}
                         {item.perubahanPrediksi >= 0 ? "+" : ""}{item.perubahanPrediksi}%
@@ -219,7 +221,7 @@ export default function Prediksi() {
 
         {/* DETAIL PANEL */}
         {selectedId && (
-          <section className="mt-6 rounded-[24px] border border-[#171717]/[0.06] bg-white p-5 lg:p-6">
+          <section className="mt-6 rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-5 lg:p-6">
             {detailLoading ? (
               <div className="flex items-center justify-center py-12">
                 <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#C93742] border-t-transparent" />
@@ -228,36 +230,36 @@ export default function Prediksi() {
               <>
                 <div className="mb-6 flex items-start justify-between">
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30">Detail prediksi</p>
-                    <h3 className="mt-1 text-lg font-bold text-[#171717]">{detail.komoditas.nama}</h3>
-                    <p className="text-xs text-[#171717]/40">{detail.komoditas.kategori} • {detail.komoditas.satuan}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">Detail prediksi</p>
+                    <h3 className="mt-1 text-lg font-bold text-[#171717] dark:text-white">{detail.komoditas.nama}</h3>
+                    <p className="text-xs text-[#171717]/40 dark:text-white/40">{detail.komoditas.kategori} • {detail.komoditas.satuan}</p>
                   </div>
                   <TrendBadge tren={detail.analisis.tren} large />
                 </div>
 
                 {/* RINGKASAN */}
                 <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-                  <div className="rounded-xl bg-[#FFF8F9] p-4">
-                    <p className="text-[10px] text-[#171717]/35">Harga terakhir</p>
-                    <p className="mt-1 text-sm font-bold text-[#171717]">{formatRupiah(detail.dataHistoris[detail.dataHistoris.length - 1]?.harga || 0)}</p>
+                  <div className="rounded-xl bg-[#FFF8F9] dark:bg-[#121212] p-4">
+                    <p className="text-[10px] text-[#171717]/35 dark:text-white/35">Harga terakhir</p>
+                    <p className="mt-1 text-sm font-bold text-[#171717] dark:text-white">{formatRupiah(detail.dataHistoris[detail.dataHistoris.length - 1]?.harga || 0)}</p>
                   </div>
-                  <div className="rounded-xl bg-[#FFF3F4] p-4">
-                    <p className="text-[10px] text-[#171717]/35">Prediksi 7 hari</p>
+                  <div className="rounded-xl bg-[#FFF3F4] dark:bg-white/[0.04] p-4">
+                    <p className="text-[10px] text-[#171717]/35 dark:text-white/35">Prediksi 7 hari</p>
                     <p className="mt-1 text-sm font-bold text-[#C93742]">{formatRupiah(detail.prediksiRingkasan.prediksiHarga)}</p>
                   </div>
-                  <div className="rounded-xl bg-[#FFF8F9] p-4">
-                    <p className="text-[10px] text-[#171717]/35">Range prediksi</p>
-                    <p className="mt-1 text-sm font-bold text-[#171717]">
+                  <div className="rounded-xl bg-[#FFF8F9] dark:bg-[#121212] p-4">
+                    <p className="text-[10px] text-[#171717]/35 dark:text-white/35">Range prediksi</p>
+                    <p className="mt-1 text-sm font-bold text-[#171717] dark:text-white">
                       {formatRupiah(detail.prediksiRingkasan.prediksiRendah)} - {formatRupiah(detail.prediksiRingkasan.prediksiTinggi)}
                     </p>
                   </div>
-                  <div className="rounded-xl bg-[#FFF8F9] p-4">
-                    <p className="text-[10px] text-[#171717]/35">Akurasi terukur (backtest)</p>
-                    <p className="mt-1 text-sm font-bold text-[#171717]">
+                  <div className="rounded-xl bg-[#FFF8F9] dark:bg-[#121212] p-4">
+                    <p className="text-[10px] text-[#171717]/35 dark:text-white/35">Akurasi terukur (backtest)</p>
+                    <p className="mt-1 text-sm font-bold text-[#171717] dark:text-white">
                       {detail.backtest ? `${detail.backtest.akurasiBlend}%` : "-"}
                     </p>
                     {detail.backtest && (
-                      <p className="mt-0.5 text-[9px] text-[#171717]/30">
+                      <p className="mt-0.5 text-[9px] text-[#171717]/30 dark:text-white/30">
                         rata-rata meleset {detail.backtest.mapeBlend}% dari harga aktual
                       </p>
                     )}
@@ -265,15 +267,15 @@ export default function Prediksi() {
                 </div>
 
                 {/* CHART KOMPOSIT */}
-                <div className="mb-6 rounded-2xl border border-[#171717]/[0.05] p-5">
-                  <p className="mb-4 text-xs font-bold text-[#171717]">Grafik historis + prediksi 7 hari</p>
+                <div className="mb-6 rounded-2xl border border-[#171717]/[0.05] dark:border-white/10 p-5">
+                  <p className="mb-4 text-xs font-bold text-[#171717] dark:text-white">Grafik historis + prediksi 7 hari</p>
                   <div className="h-[300px]">
                     <ResponsiveContainer width="100%" height="100%">
                       <ComposedChart data={chartCombined} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#171717" strokeOpacity={0.06} vertical={false} />
-                        <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: "#171717", opacity: 0.4 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
-                        <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: "#171717", opacity: 0.4 }} axisLine={false} tickLine={false} />
-                        <Tooltip formatter={(value) => typeof value === "number" ? [`Rp${value.toLocaleString("id-ID")}`, "Harga"] : ["-", "Harga"]} contentStyle={{ borderRadius: 12, border: "1px solid rgba(23,23,23,0.06)", fontSize: 11 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} vertical={false} />
+                  <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
+                  <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} />
+                  <Tooltip formatter={(value) => typeof value === "number" ? [`Rp${value.toLocaleString("id-ID")}`, "Harga"] : ["-", "Harga"]} contentStyle={{ borderRadius: 12, border: chartTheme.tooltip.border, background: chartTheme.tooltip.background, color: chartTheme.tooltip.color, fontSize: 11 }} labelStyle={{ color: chartTheme.tooltip.color }} />
                         <Legend />
                         <Area type="monotone" dataKey="harga" name="Historis" stroke="#171717" strokeWidth={2} fill="#171717" fillOpacity={0.05} />
                         <Line type="monotone" dataKey="harga" name="Prediksi" stroke="#C93742" strokeWidth={2.5} strokeDasharray="6 3" dot={false} />
@@ -284,45 +286,45 @@ export default function Prediksi() {
 
                 {/* BACKTEST */}
                 {detail.backtest && (
-                  <div className="mb-6 rounded-2xl border border-[#171717]/[0.05] p-5">
+                  <div className="mb-6 rounded-2xl border border-[#171717]/[0.05] dark:border-white/10 p-5">
                     <div className="mb-1 flex items-center justify-between">
-                      <p className="text-xs font-bold text-[#171717]">Uji Akurasi (Backtest)</p>
-                      <span className="rounded-full bg-[#FFF8F9] px-2.5 py-1 text-[9px] font-semibold text-[#171717]/40">
+                      <p className="text-xs font-bold text-[#171717] dark:text-white">Uji Akurasi (Backtest)</p>
+                      <span className="rounded-full bg-[#FFF8F9] dark:bg-[#121212] px-2.5 py-1 text-[9px] font-semibold text-[#171717]/40 dark:text-white/40">
                         latih {detail.backtest.trainSize} hari → uji {detail.backtest.testSize} hari terakhir
                       </span>
                     </div>
-                    <p className="mb-4 text-[10px] leading-4 text-[#171717]/40">
+                    <p className="mb-4 text-[10px] leading-4 text-[#171717]/40 dark:text-white/40">
                       Model dilatih pada data lama, lalu "menebak" hari-hari terakhir yang sudah
                       diketahui harga aktualnya. MAPE = rata-rata persentase meleset — makin kecil makin baik.
                     </p>
                     <div className="overflow-x-auto">
                       <table className="w-full min-w-[480px]">
                         <thead>
-                          <tr className="border-b border-[#171717]/[0.05]">
-                            <th className="pb-2 text-left text-[9px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">Metode</th>
-                            <th className="pb-2 text-right text-[9px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">MAPE (%)</th>
-                            <th className="pb-2 text-right text-[9px] font-bold uppercase tracking-[0.1em] text-[#171717]/30">RMSE (Rp)</th>
+                          <tr className="border-b border-[#171717]/[0.05] dark:border-white/10">
+                            <th className="pb-2 text-left text-[9px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Metode</th>
+                            <th className="pb-2 text-right text-[9px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">MAPE (%)</th>
+                            <th className="pb-2 text-right text-[9px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">RMSE (Rp)</th>
                           </tr>
                         </thead>
                         <tbody>
                           {detail.backtest.hasil.map(h => (
                             <tr
                               key={h.metode}
-                              className={`border-b border-[#171717]/[0.03] last:border-0 ${
-                                h.metode.startsWith("Blend") ? "bg-[#FFF3F4]" : ""
+                              className={`border-b border-[#171717]/[0.03] dark:border-white/10 last:border-0 ${
+                                h.metode.startsWith("Blend") ? "bg-[#FFF3F4] dark:bg-white/[0.04]" : ""
                               }`}
                             >
-                              <td className="py-2.5 text-xs font-semibold text-[#171717]">{h.metode}</td>
+                              <td className="py-2.5 text-xs font-semibold text-[#171717] dark:text-white">{h.metode}</td>
                               <td className="py-2.5 text-right text-xs font-bold text-[#C93742]">{h.mape}</td>
-                              <td className="py-2.5 text-right text-xs text-[#171717]/50">{h.rmse.toLocaleString("id-ID")}</td>
+                              <td className="py-2.5 text-right text-xs text-[#171717]/50 dark:text-white/50">{h.rmse.toLocaleString("id-ID")}</td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     </div>
-                    <div className="mt-4 rounded-xl bg-[#FFF8F9] p-3">
-                      <p className="text-[10px] leading-5 text-[#171717]/45">
-                        <span className="font-bold text-[#171717]">Metode terbaik:</span> {detail.backtest.terbaik}{" "}
+                    <div className="mt-4 rounded-xl bg-[#FFF8F9] dark:bg-[#121212] p-3">
+                      <p className="text-[10px] leading-5 text-[#171717]/45 dark:text-white/45">
+                        <span className="font-bold text-[#171717] dark:text-white">Metode terbaik:</span> {detail.backtest.terbaik}{" "}
                         (meleset {detail.backtest.mapeTerbaik}%).{" "}
                         {(detail.backtest.hasil.find(h => h.metode === "Naive (besok = hari ini)")?.mape ?? Infinity) < detail.backtest.mapeBlend
                           ? "Peringatan: prediksi sistem masih kalah dari baseline naif — anggap prediksi ini indikatif, bukan presisi."
@@ -331,33 +333,33 @@ export default function Prediksi() {
                     </div>
                   </div>
                 )}
-                <div className="rounded-2xl border border-[#171717]/[0.05] p-5">
-                  <p className="mb-4 text-xs font-bold text-[#171717]">Metode Prediksi</p>
+                <div className="rounded-2xl border border-[#171717]/[0.05] dark:border-white/10 p-5">
+                  <p className="mb-4 text-xs font-bold text-[#171717] dark:text-white">Metode Prediksi</p>
                   <div className="grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-xl bg-[#FFF8F9] p-4">
+                    <div className="rounded-xl bg-[#FFF8F9] dark:bg-[#121212] p-4">
                       <div className="flex items-center gap-2">
                         <Target size={14} className="text-[#C93742]" />
-                        <p className="text-[10px] font-bold text-[#171717]">Linear Regression</p>
+                        <p className="text-[10px] font-bold text-[#171717] dark:text-white">Linear Regression</p>
                       </div>
-                      <p className="mt-2 text-xs text-[#171717]/40">
+                      <p className="mt-2 text-xs text-[#171717]/40 dark:text-white/40">
                         Tren: {detail.analisis.tren} ({detail.analisis.trenPersen >= 0 ? "+" : ""}{detail.analisis.trenPersen}%/hari)
                       </p>
                     </div>
-                    <div className="rounded-xl bg-[#FFF8F9] p-4">
+                    <div className="rounded-xl bg-[#FFF8F9] dark:bg-[#121212] p-4">
                       <div className="flex items-center gap-2">
                         <BarChart3 size={14} className="text-[#C93742]" />
-                        <p className="text-[10px] font-bold text-[#171717]">Moving Average (7 hari)</p>
+                        <p className="text-[10px] font-bold text-[#171717] dark:text-white">Moving Average (7 hari)</p>
                       </div>
-                      <p className="mt-2 text-xs text-[#171717]/40">
+                      <p className="mt-2 text-xs text-[#171717]/40 dark:text-white/40">
                         MA: {formatRupiah(Math.round(detail.analisis.movingAverage))}
                       </p>
                     </div>
-                    <div className="rounded-xl bg-[#FFF8F9] p-4">
+                    <div className="rounded-xl bg-[#FFF8F9] dark:bg-[#121212] p-4">
                       <div className="flex items-center gap-2">
                         <BarChart3 size={14} className="text-[#C93742]" />
-                        <p className="text-[10px] font-bold text-[#171717]">Exp. Smoothing (α=0.3)</p>
+                        <p className="text-[10px] font-bold text-[#171717] dark:text-white">Exp. Smoothing (α=0.3)</p>
                       </div>
-                      <p className="mt-2 text-xs text-[#171717]/40">
+                      <p className="mt-2 text-xs text-[#171717]/40 dark:text-white/40">
                         ES: {formatRupiah(Math.round(detail.analisis.exponentialSmoothing))}
                       </p>
                     </div>
@@ -365,12 +367,12 @@ export default function Prediksi() {
                 </div>
               </>
             ) : (
-              <p className="text-center text-sm text-[#171717]/40">Gagal memuat detail</p>
+              <p className="text-center text-sm text-[#171717]/40 dark:text-white/40">Gagal memuat detail</p>
             )}
           </section>
         )}
 
-        <div className="mt-8 border-t border-[#171717]/[0.06] pt-5 text-[11px] text-[#171717]/30">
+        <div className="mt-8 border-t border-[#171717]/[0.06] dark:border-white/10 pt-5 text-[11px] text-[#171717]/30 dark:text-white/30">
           SIMONPEDIA Bapok Surabaya
         </div>
           </>
@@ -382,9 +384,9 @@ export default function Prediksi() {
 
 function TrendBadge({ tren, large = false }: { tren: string; large?: boolean }) {
   const config: Record<string, { icon: typeof TrendingUp; bg: string; text: string; label: string }> = {
-    naik: { icon: TrendingUp, bg: "bg-[#FFF3F4]", text: "text-[#C93742]", label: "Naik" },
-    turun: { icon: TrendingDown, bg: "bg-emerald-50", text: "text-emerald-600", label: "Turun" },
-    stabil: { icon: Minus, bg: "bg-[#FFF8F9]", text: "text-[#171717]/50", label: "Stabil" },
+    naik: { icon: TrendingUp, bg: "bg-[#FFF3F4] dark:bg-white/[0.04]", text: "text-[#C93742]", label: "Naik" },
+    turun: { icon: TrendingDown, bg: "bg-emerald-50 dark:bg-emerald-500/15", text: "text-emerald-600 dark:text-emerald-400", label: "Turun" },
+    stabil: { icon: Minus, bg: "bg-[#FFF8F9] dark:bg-[#121212]", text: "text-[#171717]/50 dark:text-white/50", label: "Stabil" },
   }
   const c = config[tren] || config.stabil
   return (

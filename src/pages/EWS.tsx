@@ -21,6 +21,7 @@ import {
 } from "recharts"
 
 import { useEffect, useState } from "react"
+import { useChartTheme } from "../hooks/useChartTheme"
 
 
 interface KomoditasAnalisis {
@@ -73,6 +74,8 @@ function formatRupiah(value: number) {
 
 
 export default function EWS() {
+
+  const chartTheme = useChartTheme()
 
   const [selectedCommodity, setSelectedCommodity] = useState("")
   const [ewsData, setEwsData] = useState<EWSResponse | null>(null)
@@ -129,18 +132,18 @@ export default function EWS() {
     <div className="min-h-screen">
 
       {/* TOPBAR */}
-      <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] bg-[#FFF8F9]/90 px-6 backdrop-blur-xl lg:px-10">
+      <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] dark:border-white/10 bg-[#FFF8F9] dark:bg-[#121212]/90 px-6 backdrop-blur-xl lg:px-10">
 
         <div>
-          <p className="text-xs font-medium text-[#171717]/40">
+          <p className="text-xs font-medium text-[#171717]/40 dark:text-white/40">
             SIMONPEDIA / Sistem / EWS
           </p>
-          <h1 className="mt-0.5 text-lg font-bold tracking-tight text-[#171717]">
+          <h1 className="mt-0.5 text-lg font-bold tracking-tight text-[#171717] dark:text-white">
             Early Warning System
           </h1>
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-[#171717]/40">
+        <div className="flex items-center gap-2 text-xs text-[#171717]/40 dark:text-white/40">
           <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
           Monitoring aktif
         </div>
@@ -157,22 +160,22 @@ export default function EWS() {
           </p>
           <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
             <div>
-              <h2 className="text-3xl font-black tracking-[-0.04em] text-[#171717] lg:text-4xl">
+              <h2 className="text-3xl font-black tracking-[-0.04em] text-[#171717] dark:text-white lg:text-4xl">
                 Deteksi risiko harga
                 <br />
                 <span className="text-[#C93742]">sebelum menjadi krisis.</span>
               </h2>
-              <p className="mt-3 max-w-xl text-sm leading-6 text-[#171717]/45">
+              <p className="mt-3 max-w-xl text-sm leading-6 text-[#171717]/45 dark:text-white/45">
                 Sistem memantau perubahan harga bahan pokok
                 dan memberikan peringatan ketika kondisi pasar
                 menunjukkan potensi risiko.
               </p>
             </div>
-            <div className="flex items-center gap-2 rounded-xl border border-emerald-200/50 bg-emerald-50 px-4 py-3">
-              <CheckCircle2 size={16} className="text-emerald-600" />
+            <div className="flex items-center gap-2 rounded-xl border border-emerald-200/50 bg-emerald-50 dark:bg-emerald-500/15 px-4 py-3">
+              <CheckCircle2 size={16} className="text-emerald-600 dark:text-emerald-400" />
               <div>
-                <p className="text-[10px] font-bold text-emerald-700">SISTEM AKTIF</p>
-                <p className="text-[10px] text-emerald-600/70">Monitoring berjalan normal</p>
+                <p className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400">SISTEM AKTIF</p>
+                <p className="text-[10px] text-emerald-600 dark:text-emerald-400/70">Monitoring berjalan normal</p>
               </div>
             </div>
           </div>
@@ -180,9 +183,9 @@ export default function EWS() {
 
         {/* LOADING */}
         {loading && (
-          <div className="rounded-[24px] border border-[#171717]/[0.06] bg-white p-12 text-center">
+          <div className="rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-12 text-center">
             <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-[#C93742] border-t-transparent" />
-            <p className="mt-4 text-sm text-[#171717]/40">Menganalisis data komoditas...</p>
+            <p className="mt-4 text-sm text-[#171717]/40 dark:text-white/40">Menganalisis data komoditas...</p>
           </div>
         )}
 
@@ -198,7 +201,7 @@ export default function EWS() {
 
         {/* ALERT BANNER */}
         {ewsData.ringkasan.waspada + ewsData.ringkasan.kritis > 0 && (
-        <section className="mt-6 overflow-hidden rounded-[24px] border border-[#C93742]/10 bg-[#FFF3F4]">
+        <section className="mt-6 overflow-hidden rounded-[24px] border border-[#C93742]/10 bg-[#FFF3F4] dark:bg-white/[0.04]">
           <div className="flex flex-col gap-5 p-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-start gap-4">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#C93742] text-white">
@@ -208,10 +211,10 @@ export default function EWS() {
                 <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#C93742]">
                   Alert aktif
                 </p>
-                <h3 className="mt-1 text-base font-bold text-[#171717]">
+                <h3 className="mt-1 text-base font-bold text-[#171717] dark:text-white">
                   Terdapat {ewsData.ringkasan.waspada + ewsData.ringkasan.kritis} kondisi yang perlu diperhatikan
                 </h3>
-                <p className="mt-1 max-w-2xl text-xs leading-5 text-[#171717]/45">
+                <p className="mt-1 max-w-2xl text-xs leading-5 text-[#171717]/45 dark:text-white/45">
                   {ewsData.alerts.length > 0
                     ? `${ewsData.alerts[0].komoditas} mengalami kenaikan harga signifikan pada beberapa pasar di Surabaya.`
                     : "Tidak ada alert aktif saat ini."}
@@ -230,20 +233,20 @@ export default function EWS() {
         <section className="mt-6 grid gap-5 xl:grid-cols-[1fr_340px]">
 
           {/* CHART */}
-          <div className="rounded-[24px] border border-[#171717]/[0.06] bg-white p-5 lg:p-6">
+          <div className="rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-5 lg:p-6">
             <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">
                   Price anomaly
                 </p>
-                <h3 className="mt-1 text-base font-bold text-[#171717]">
+                <h3 className="mt-1 text-base font-bold text-[#171717] dark:text-white">
                   Perubahan harga
                 </h3>
               </div>
               <select
                 value={selectedCommodity}
                 onChange={(event) => setSelectedCommodity(event.target.value)}
-                className="h-10 rounded-xl border border-[#171717]/[0.07] bg-[#FFF8F9] px-3 text-xs font-semibold text-[#171717]/60 outline-none"
+                className="h-10 rounded-xl border border-[#171717]/[0.07] dark:border-white/10 bg-[#FFF8F9] dark:bg-[#121212] px-3 text-xs font-semibold text-[#171717]/60 dark:text-white/60 outline-none"
               >
                 {komoditasUntukChart.map((k) => (
                   <option key={k.id} value={k.id}>
@@ -267,10 +270,10 @@ export default function EWS() {
                       <stop offset="100%" stopColor="#C93742" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#171717" strokeOpacity={0.06} vertical={false} />
-                  <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: "#171717", opacity: 0.4 }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
-                  <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: "#171717", opacity: 0.4 }} axisLine={false} tickLine={false} />
-                  <Tooltip formatter={(value) => typeof value === "number" ? [`Rp${value.toLocaleString("id-ID")}`, "Harga"] : ["-", "Harga"]} contentStyle={{ borderRadius: 12, border: "1px solid rgba(23,23,23,0.06)", fontSize: 11 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} vertical={false} />
+                  <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
+                  <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} />
+                  <Tooltip formatter={(value) => typeof value === "number" ? [`Rp${value.toLocaleString("id-ID")}`, "Harga"] : ["-", "Harga"]} contentStyle={{ borderRadius: 12, border: chartTheme.tooltip.border, background: chartTheme.tooltip.background, color: chartTheme.tooltip.color, fontSize: 11 }} labelStyle={{ color: chartTheme.tooltip.color }} />
                   <Area type="monotone" dataKey="harga" stroke="#C93742" strokeWidth={2.5} fill="url(#ewsGradient)" />
                 </AreaChart>
               </ResponsiveContainer>
@@ -283,19 +286,19 @@ export default function EWS() {
               const change = ((last - first) / first * 100).toFixed(1)
               const isUp = last >= first
               return (
-              <div className="mt-4 flex items-center justify-between rounded-xl bg-[#FFF8F9] p-4">
+              <div className="mt-4 flex items-center justify-between rounded-xl bg-[#FFF8F9] dark:bg-[#121212] p-4">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FFF0F1] text-[#C93742]">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FFF0F1] dark:bg-white/[0.04] text-[#C93742]">
                     {isUp ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
                   </span>
                   <div>
-                    <p className="text-[10px] text-[#171717]/35">Perubahan periode</p>
-                    <p className={`text-sm font-bold ${isUp ? "text-[#C93742]" : "text-emerald-600"}`}>
+                    <p className="text-[10px] text-[#171717]/35 dark:text-white/35">Perubahan periode</p>
+                    <p className={`text-sm font-bold ${isUp ? "text-[#C93742]" : "text-emerald-600 dark:text-emerald-400"}`}>
                       {isUp ? "+" : ""}{change}%
                     </p>
                   </div>
                 </div>
-                <p className="max-w-[220px] text-right text-[10px] leading-4 text-[#171717]/35">
+                <p className="max-w-[220px] text-right text-[10px] leading-4 text-[#171717]/35 dark:text-white/35">
                   {Math.abs(Number(change)) > 10 ? "Melebihi threshold normal dan perlu dipantau." : "Masih dalam batas normal."}
                 </p>
               </div>
@@ -305,13 +308,13 @@ export default function EWS() {
           </div>
 
           {/* ALERT LIST */}
-          <aside className="rounded-[24px] border border-[#171717]/[0.06] bg-white p-5">
+          <aside className="rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-5">
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">
                   Live alerts
                 </p>
-                <h3 className="mt-1 text-base font-bold text-[#171717]">
+                <h3 className="mt-1 text-base font-bold text-[#171717] dark:text-white">
                   Alert terbaru
                 </h3>
               </div>
@@ -320,28 +323,28 @@ export default function EWS() {
 
             <div className="space-y-2">
               {alertsToShow.length === 0 ? (
-                <div className="rounded-2xl border border-[#171717]/[0.05] p-4 text-center">
+                <div className="rounded-2xl border border-[#171717]/[0.05] dark:border-white/10 p-4 text-center">
                   <CheckCircle2 size={24} className="mx-auto text-emerald-500" />
-                  <p className="mt-2 text-xs text-[#171717]/40">Tidak ada alert aktif</p>
+                  <p className="mt-2 text-xs text-[#171717]/40 dark:text-white/40">Tidak ada alert aktif</p>
                 </div>
               ) : (
               alertsToShow.map((alert) => (
-                <div key={alert.id} className="rounded-2xl border border-[#171717]/[0.05] p-4">
+                <div key={alert.id} className="rounded-2xl border border-[#171717]/[0.05] dark:border-white/10 p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs font-bold text-[#171717]">{alert.komoditas}</p>
-                      <p className="mt-1 text-[10px] text-[#171717]/35">{alert.pasar}</p>
+                      <p className="text-xs font-bold text-[#171717] dark:text-white">{alert.komoditas}</p>
+                      <p className="mt-1 text-[10px] text-[#171717]/35 dark:text-white/35">{alert.pasar}</p>
                     </div>
                     <StatusBadge status={alert.levelRisiko} />
                   </div>
                   <div className="mt-4 flex items-end justify-between">
                     <div>
-                      <p className="text-[10px] text-[#171717]/30">Perubahan harga</p>
+                      <p className="text-[10px] text-[#171717]/30 dark:text-white/30">Perubahan harga</p>
                       <p className="mt-1 text-sm font-black text-[#C93742]">
                         {alert.persenPerubahan >= 0 ? "+" : ""}{alert.persenPerubahan.toFixed(1)}%
                       </p>
                     </div>
-                    <div className="flex items-center gap-1 text-[10px] text-[#171717]/30">
+                    <div className="flex items-center gap-1 text-[10px] text-[#171717]/30 dark:text-white/30">
                       <Clock3 size={11} />
                       {alert.tanggal}
                     </div>
@@ -355,13 +358,13 @@ export default function EWS() {
         </section>
 
         {/* COMMODITY STATUS */}
-        <section className="mt-6 rounded-[24px] border border-[#171717]/[0.06] bg-white p-5 lg:p-6">
+        <section className="mt-6 rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-5 lg:p-6">
           <div className="mb-5 flex items-center justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30">
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">
                 Commodity risk
               </p>
-              <h3 className="mt-1 text-base font-bold text-[#171717]">
+              <h3 className="mt-1 text-base font-bold text-[#171717] dark:text-white">
                 Status komoditas
               </h3>
             </div>
@@ -369,19 +372,19 @@ export default function EWS() {
 
           <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-4">
             {topKomoditas.map((kom) => (
-              <div key={kom.id} className="rounded-2xl border border-[#171717]/[0.05] p-4">
+              <div key={kom.id} className="rounded-2xl border border-[#171717]/[0.05] dark:border-white/10 p-4">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-xs font-bold text-[#171717]">{kom.nama}</p>
-                    <p className="mt-1 text-[10px] text-[#171717]/30">Harga rata-rata</p>
+                    <p className="text-xs font-bold text-[#171717] dark:text-white">{kom.nama}</p>
+                    <p className="mt-1 text-[10px] text-[#171717]/30 dark:text-white/30">Harga rata-rata</p>
                   </div>
                   <StatusBadge status={kom.levelRisiko} />
                 </div>
                 <div className="mt-5 flex items-end justify-between">
-                  <p className="text-lg font-black tracking-[-0.03em] text-[#171717]">
+                  <p className="text-lg font-black tracking-[-0.03em] text-[#171717] dark:text-white">
                     {formatRupiah(kom.hargaRataRata)}
                   </p>
-                  <p className={`text-xs font-bold ${kom.persenPerubahan >= 0 ? "text-[#C93742]" : "text-emerald-600"}`}>
+                  <p className={`text-xs font-bold ${kom.persenPerubahan >= 0 ? "text-[#C93742]" : "text-emerald-600 dark:text-emerald-400"}`}>
                     {kom.persenPerubahan >= 0 ? "+" : ""}{kom.persenPerubahan.toFixed(1)}%
                   </p>
                 </div>
@@ -393,12 +396,12 @@ export default function EWS() {
         {/* RISK FACTORS */}
         <section className="mt-6 grid gap-5 lg:grid-cols-2">
 
-          <div className="rounded-[24px] border border-[#171717]/[0.06] bg-white p-6">
+          <div className="rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-6">
             <div className="mb-5">
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30">
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">
                 Risk summary
               </p>
-              <h3 className="mt-1 text-base font-bold text-[#171717]">
+              <h3 className="mt-1 text-base font-bold text-[#171717] dark:text-white">
                 Ringkasan risiko
               </h3>
             </div>
@@ -410,16 +413,16 @@ export default function EWS() {
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[#171717]/[0.06] bg-white p-6">
+          <div className="rounded-[24px] border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-6">
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFF3F4] text-[#C93742]">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFF3F4] dark:bg-white/[0.04] text-[#C93742]">
                 <Info size={18} />
               </span>
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#171717]/30 dark:text-white/30">
                   Recommended action
                 </p>
-                <h3 className="mt-1 text-base font-bold text-[#171717]">
+                <h3 className="mt-1 text-base font-bold text-[#171717] dark:text-white">
                   Tindakan yang disarankan
                 </h3>
               </div>
@@ -443,7 +446,7 @@ export default function EWS() {
 
         </section>
 
-        <div className="mt-8 border-t border-[#171717]/[0.06] pt-5 text-[11px] text-[#171717]/30">
+        <div className="mt-8 border-t border-[#171717]/[0.06] dark:border-white/10 pt-5 text-[11px] text-[#171717]/30 dark:text-white/30">
           SIMONPEDIA Bapok Surabaya
         </div>
           </>
@@ -458,32 +461,59 @@ export default function EWS() {
 function StatusCard({ status, count, description, type }: {
   status: string; count: string; description: string; type: "normal" | "siaga" | "waspada" | "kritis"
 }) {
-  const styles = {
-    normal: "bg-emerald-50 border-emerald-200/40 text-emerald-600",
-    siaga: "bg-amber-50 border-amber-200/40 text-amber-600",
-    waspada: "bg-[#FFF0F1] border-[#C93742]/10 text-[#C93742]",
-    kritis: "bg-[#171717] border-[#171717] text-white",
-  }
+  const accent = {
+    normal: "text-emerald-600 dark:text-emerald-400",
+    siaga: "text-amber-600 dark:text-amber-300",
+    waspada: "text-[#C93742]",
+    kritis: "text-white",
+  }[type]
+
+  const badge = {
+    normal: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+    siaga: "bg-amber-500/10 text-amber-600 dark:text-amber-300",
+    waspada: "bg-[#C93742]/10 text-[#C93742]",
+    kritis: "bg-white/15 text-white",
+  }[type]
+
+  const ring = {
+    normal: "border-emerald-500/20",
+    siaga: "border-amber-500/20",
+    waspada: "border-[#C93742]/20",
+    kritis: "border-[#171717]",
+  }[type]
+
+  const surface = type === "kritis" ? "bg-[#171717]" : "bg-white dark:bg-[#1E1E1E]"
+
+  const label = type === "kritis"
+    ? "text-white/60"
+    : "text-[#171717]/55 dark:text-white/55"
+
+  const desc = type === "kritis"
+    ? "text-white/45"
+    : "text-[#171717]/45 dark:text-white/45"
+
   return (
-    <div className={`rounded-[20px] border p-5 ${styles[type]}`}>
+    <div className={`rounded-[20px] border p-5 ${surface} ${ring}`}>
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold opacity-70">{status}</p>
-        {type === "normal" && <CheckCircle2 size={16} />}
-        {type === "siaga" && <Info size={16} />}
-        {type === "waspada" && <AlertTriangle size={16} />}
-        {type === "kritis" && <ShieldAlert size={16} />}
+        <p className={`text-xs font-semibold ${label}`}>{status}</p>
+        <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${badge}`}>
+          {type === "normal" && <CheckCircle2 size={16} />}
+          {type === "siaga" && <Info size={16} />}
+          {type === "waspada" && <AlertTriangle size={16} />}
+          {type === "kritis" && <ShieldAlert size={16} />}
+        </span>
       </div>
-      <p className="mt-3 text-2xl font-black">{count}</p>
-      <p className="mt-1 text-[10px] opacity-50">{description}</p>
+      <p className={`mt-3 text-3xl font-black tracking-[-0.04em] ${accent}`}>{count}</p>
+      <p className={`mt-1 text-[11px] font-semibold ${desc}`}>{description}</p>
     </div>
   )
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const style = status === "Waspada" ? "bg-[#FFF0F1] text-[#C93742]"
-    : status === "Siaga" ? "bg-amber-50 text-amber-600"
+  const style = status === "Waspada" ? "bg-[#FFF0F1] dark:bg-white/[0.04] text-[#C93742]"
+    : status === "Siaga" ? "bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-300"
     : status === "Kritis" ? "bg-[#171717] text-white"
-    : "bg-emerald-50 text-emerald-600"
+    : "bg-emerald-50 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
   return <span className={`rounded-full px-2 py-1 text-[9px] font-bold ${style}`}>{status}</span>
 }
 
@@ -494,10 +524,10 @@ function RiskFactor({ title, value, level, width, danger = false, warning = fals
     <div>
       <div className="mb-2 flex items-center justify-between">
         <div>
-          <p className="text-xs font-semibold text-[#171717]/65">{title}</p>
-          <p className="mt-0.5 text-[10px] text-[#171717]/30">Level risiko: {level}</p>
+          <p className="text-xs font-semibold text-[#171717]/65 dark:text-white/65">{title}</p>
+          <p className="mt-0.5 text-[10px] text-[#171717]/30 dark:text-white/30">Level risiko: {level}</p>
         </div>
-        <span className={`text-xs font-bold ${danger ? "text-[#C93742]" : warning ? "text-amber-600" : "text-emerald-600"}`}>
+        <span className={`text-xs font-bold ${danger ? "text-[#C93742]" : warning ? "text-amber-600 dark:text-amber-300" : "text-emerald-600 dark:text-emerald-400"}`}>
           {value}
         </span>
       </div>
@@ -510,11 +540,11 @@ function RiskFactor({ title, value, level, width, danger = false, warning = fals
 
 function Recommendation({ number, text }: { number: string; text: string }) {
   return (
-    <div className="flex gap-3 rounded-xl bg-[#FFF8F9] p-3">
-      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-[9px] font-black text-[#C93742]">
+    <div className="flex gap-3 rounded-xl bg-[#FFF8F9] dark:bg-[#121212] p-3">
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white dark:bg-[#1E1E1E] text-[9px] font-black text-[#C93742]">
         {number}
       </span>
-      <p className="text-xs leading-5 text-[#171717]/55">{text}</p>
+      <p className="text-xs leading-5 text-[#171717]/55 dark:text-white/55">{text}</p>
     </div>
   )
 }

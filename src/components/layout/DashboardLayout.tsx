@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar"
 
 export default function DashboardLayout() {
   return (
-    <div className="min-h-screen bg-[#FAF7F7]">
+    <div className="min-h-screen bg-[#FAF7F7] dark:bg-[#121212]">
 
       {/* SIDEBAR */}
       <Sidebar />
