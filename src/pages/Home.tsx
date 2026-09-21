@@ -168,14 +168,14 @@ export default function Home() {
     <div className="min-h-screen">
       {/* TOPBAR */}
       <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] dark:border-white/10 bg-[#FFF8F9] dark:bg-[#121212]/90 px-6 backdrop-blur-xl lg:px-10 dark:border-white/10 dark:bg-[#121212]/90">
-        <div className="flex items-center gap-1">
+        <div className="flex min-w-0 items-center gap-1">
           <MobileMenuButton />
-          <div>
-            <p className="text-xs font-medium text-[#171717]/40 dark:text-white/40 dark:text-white/40">SIMONPEDIA / Dashboard</p>
-            <h1 className="mt-0.5 text-lg font-bold text-[#171717] dark:text-white dark:text-white">Dashboard</h1>
+          <div className="min-w-0">
+            <p className="truncate text-xs font-medium text-[#171717]/40 dark:text-white/40 dark:text-white/40">SIMONPEDIA / Dashboard</p>
+            <h1 className="mt-0.5 truncate text-lg font-bold text-[#171717] dark:text-white dark:text-white">Dashboard</h1>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-3">
           <div className="hidden items-center gap-2 text-xs text-[#171717]/40 dark:text-white/40 sm:flex dark:text-white/40">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
             Data survei terakhir: {lastUpdateText}
