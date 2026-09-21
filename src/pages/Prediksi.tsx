@@ -4,6 +4,7 @@ import { useChartTheme } from "../hooks/useChartTheme"
 import MobileMenuButton from "../components/layout/MobileMenuButton"
 import ChartTooltip from "../components/charts/ChartTooltip"
 import HetReferenceLine from "../components/charts/HetReferenceLine"
+import HetNote from "../components/charts/HetNote"
 import { withPrevious } from "../lib/chartData"
 import { getHet } from "../lib/het"
 import { API_URL } from "../services/api"
@@ -281,7 +282,8 @@ export default function Prediksi() {
                 {/* CHART KOMPOSIT */}
                 <div className="mb-6 rounded-2xl border border-[#171717]/[0.05] dark:border-white/10 p-5">
                   <p className="mb-4 text-xs font-bold text-[#171717] dark:text-white">Grafik historis + prediksi 7 hari</p>
-                  <div className="h-[300px]">
+                  <div className="relative h-[300px]">
+                    <HetNote hasHet={!!hetInfo} />
                     <ResponsiveContainer width="100%" height="100%">
                       <ComposedChart data={chartCombined} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} vertical={false} />

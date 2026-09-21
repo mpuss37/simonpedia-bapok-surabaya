@@ -26,6 +26,7 @@ import ThemeToggle from "../components/ThemeToggle"
 import MobileMenuButton from "../components/layout/MobileMenuButton"
 import ChartTooltip from "../components/charts/ChartTooltip"
 import HetReferenceLine from "../components/charts/HetReferenceLine"
+import HetNote from "../components/charts/HetNote"
 import { withPrevious } from "../lib/chartData"
 import { getHet } from "../lib/het"
 import { useChartTheme } from "../hooks/useChartTheme"
@@ -269,6 +270,7 @@ export default function Home() {
               </div>
             </div>
             <div className="relative h-[310px]">
+              <HetNote hasHet={!!hetInfo} />
               {chartLoading && (
                 <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 dark:bg-[#1E1E1E]/60 backdrop-blur-[1px]">
                   <div className="h-7 w-7 animate-spin rounded-full border-2 border-[#C93742] border-t-transparent" />

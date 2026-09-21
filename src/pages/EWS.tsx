@@ -25,6 +25,7 @@ import { useChartTheme } from "../hooks/useChartTheme"
 import MobileMenuButton from "../components/layout/MobileMenuButton"
 import ChartTooltip from "../components/charts/ChartTooltip"
 import HetReferenceLine from "../components/charts/HetReferenceLine"
+import HetNote from "../components/charts/HetNote"
 import { withPrevious } from "../lib/chartData"
 import { getHet } from "../lib/het"
 import { API_URL } from "../services/api"
@@ -268,7 +269,8 @@ export default function EWS() {
               </select>
             </div>
 
-            <div className="h-[320px]">
+            <div className="relative h-[320px]">
+              <HetNote hasHet={!!hetInfo} />
               {chartLoading ? (
                 <div className="flex h-full items-center justify-center">
                   <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#C93742] border-t-transparent" />

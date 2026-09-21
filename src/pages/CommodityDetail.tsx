@@ -23,6 +23,7 @@ import { getHarga, type Harga } from "../services/priceService"
 import PageHeader from "../components/layout/PageHeader"
 import ChartTooltip from "../components/charts/ChartTooltip"
 import HetReferenceLine from "../components/charts/HetReferenceLine"
+import HetNote from "../components/charts/HetNote"
 import { withPrevious } from "../lib/chartData"
 import { getHet } from "../lib/het"
 import { useChartTheme } from "../hooks/useChartTheme"
@@ -180,7 +181,8 @@ export default function CommodityDetail() {
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#C93742] border-t-transparent" />
             </div>
           ) : (
-          <div className="h-[280px]">
+          <div className="relative h-[280px]">
+            <HetNote hasHet={!!hetInfo} />
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
                 <defs>

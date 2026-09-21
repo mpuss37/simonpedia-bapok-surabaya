@@ -23,6 +23,7 @@ import { getRingkasanHarga, type RingkasanHarga } from "../services/priceService
 import PageHeader from "../components/layout/PageHeader"
 import ChartTooltip from "../components/charts/ChartTooltip"
 import HetReferenceLine from "../components/charts/HetReferenceLine"
+import HetNote from "../components/charts/HetNote"
 import { withPrevious } from "../lib/chartData"
 import { getHet } from "../lib/het"
 import { useChartTheme } from "../hooks/useChartTheme"
@@ -349,7 +350,8 @@ export default function Monitoring() {
 
           ) : (
 
-            <div className="h-[280px]">
+            <div className="relative h-[280px]">
+              <HetNote hasHet={!!hetInfo} />
 
               <ResponsiveContainer width="100%" height="100%">
 
