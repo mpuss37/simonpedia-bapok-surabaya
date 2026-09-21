@@ -23,9 +23,9 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { getRingkasanHarga } from "../services/priceService"
 import ThemeToggle from "../components/ThemeToggle"
+import MobileMenuButton from "../components/layout/MobileMenuButton"
 import { useChartTheme } from "../hooks/useChartTheme"
-
-const API_URL = "http://localhost:3001/api"
+import { API_URL } from "../services/api"
 
 interface EWSRingkasan {
   totalKomoditas: number
@@ -168,9 +168,12 @@ export default function Home() {
     <div className="min-h-screen">
       {/* TOPBAR */}
       <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] dark:border-white/10 bg-[#FFF8F9] dark:bg-[#121212]/90 px-6 backdrop-blur-xl lg:px-10 dark:border-white/10 dark:bg-[#121212]/90">
-        <div>
-          <p className="text-xs font-medium text-[#171717]/40 dark:text-white/40 dark:text-white/40">SIMONPEDIA / Dashboard</p>
-          <h1 className="mt-0.5 text-lg font-bold text-[#171717] dark:text-white dark:text-white">Dashboard</h1>
+        <div className="flex items-center gap-1">
+          <MobileMenuButton />
+          <div>
+            <p className="text-xs font-medium text-[#171717]/40 dark:text-white/40 dark:text-white/40">SIMONPEDIA / Dashboard</p>
+            <h1 className="mt-0.5 text-lg font-bold text-[#171717] dark:text-white dark:text-white">Dashboard</h1>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <div className="hidden items-center gap-2 text-xs text-[#171717]/40 dark:text-white/40 sm:flex dark:text-white/40">
@@ -198,13 +201,13 @@ export default function Home() {
               SIMONPEDIA membantu memantau pergerakan harga, membaca tren, mendeteksi risiko, dan memberikan rekomendasi tindakan berdasarkan kondisi pasar.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <button className="flex items-center gap-2 rounded-xl bg-[#C93742] px-5 py-3 text-xs font-bold text-white transition hover:bg-[#B52F39]">
+              <Link to="/monitoring" className="flex items-center gap-2 rounded-xl bg-[#C93742] px-5 py-3 text-xs font-bold text-white transition hover:bg-[#B52F39]">
                 Lihat monitoring
                 <ArrowRight size={14} />
-              </button>
-              <button className="rounded-xl border border-white/10 bg-white/[0.05] px-5 py-3 text-xs font-semibold text-white/70">
+              </Link>
+              <Link to="/ews" className="rounded-xl border border-white/10 bg-white/[0.05] px-5 py-3 text-xs font-semibold text-white/70 transition hover:bg-white/10">
                 Buka EWS
-              </button>
+              </Link>
             </div>
           </div>
           <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full border border-white/[0.05]" />
@@ -324,10 +327,10 @@ export default function Home() {
                   : "Semua komoditas dalam kondisi normal."}
               </p>
             </div>
-            <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-[#171717]/[0.06] dark:border-white/10 py-3 text-xs font-bold text-[#171717]/55 dark:text-white/55">
+            <Link to="/ews" className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-[#171717]/[0.06] dark:border-white/10 py-3 text-xs font-bold text-[#171717]/55 dark:text-white/55 transition hover:border-[#C93742]/30 hover:text-[#C93742]">
               Buka EWS
               <ArrowRight size={13} />
-            </button>
+            </Link>
           </div>
         </section>
 

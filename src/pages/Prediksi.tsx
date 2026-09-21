@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { TrendingUp, TrendingDown, Minus, Target, BarChart3 } from "lucide-react"
 import { useChartTheme } from "../hooks/useChartTheme"
+import MobileMenuButton from "../components/layout/MobileMenuButton"
+import { API_URL } from "../services/api"
 import {
   Area,
   CartesianGrid,
@@ -12,8 +14,6 @@ import {
   ComposedChart,
   Legend,
 } from "recharts"
-
-const API_URL = "http://localhost:3001/api"
 
 interface PrediksiItem {
   id: number
@@ -123,9 +123,12 @@ export default function Prediksi() {
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-[#171717]/[0.06] dark:border-white/10 bg-[#FFF8F9] dark:bg-[#121212]/90 px-6 backdrop-blur-xl lg:px-10">
-        <div>
-          <p className="text-xs font-medium text-[#171717]/40 dark:text-white/40">SIMONPEDIA / Prediksi</p>
-          <h1 className="mt-0.5 text-lg font-bold text-[#171717] dark:text-white">Prediksi Harga</h1>
+        <div className="flex items-center gap-1">
+          <MobileMenuButton />
+          <div>
+            <p className="text-xs font-medium text-[#171717]/40 dark:text-white/40">SIMONPEDIA / Prediksi</p>
+            <h1 className="mt-0.5 text-lg font-bold text-[#171717] dark:text-white">Prediksi Harga</h1>
+          </div>
         </div>
       </header>
 

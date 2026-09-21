@@ -10,7 +10,9 @@ import {
   Lightbulb,
   Download,
   Settings,
+  X,
 } from "lucide-react"
+import { useSidebar } from "../../context/sidebar-context"
 
 const menuGroups = [
   {
@@ -76,13 +78,19 @@ const menuGroups = [
 ]
 
 export default function Sidebar() {
+  const { open, close } = useSidebar()
+
   return (
-    <aside className="fixed left-0 top-0 z-50 hidden h-screen w-[250px] flex-col border-r border-[#171717]/[0.07] bg-white lg:flex dark:border-white/10 dark:bg-[#1A1A1A]">
+    <aside
+      className={`fixed left-0 top-0 z-50 flex h-screen w-[250px] flex-col border-r border-[#171717]/[0.07] bg-white transition-transform duration-300 ease-in-out dark:border-white/10 dark:bg-[#1A1A1A] ${
+        open ? "translate-x-0" : "-translate-x-full"
+      } lg:translate-x-0`}
+    >
 
       {/* LOGO */}
       <div className="border-b border-[#171717]/[0.06] px-7 pb-5 pt-7 dark:border-white/10">
 
-        <NavLink to="/" className="block">
+        <NavLink to="/" className="block" onClick={close}>
           <h1 className="text-[21px] font-black tracking-[-0.04em] text-[#C93742]">
             SIMONPEDIA
           </h1>
@@ -91,6 +99,16 @@ export default function Sidebar() {
             Bapok Surabaya
           </p>
         </NavLink>
+
+        {/* CLOSE (mobile) */}
+        <button
+          type="button"
+          aria-label="Tutup menu"
+          onClick={close}
+          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full text-[#171717]/50 transition hover:bg-[#171717]/[0.06] hover:text-[#171717] lg:hidden dark:text-white/50 dark:hover:bg-white/10 dark:hover:text-white"
+        >
+          <X size={18} />
+        </button>
 
       </div>
 
@@ -116,6 +134,7 @@ export default function Sidebar() {
                     key={item.path}
                     to={item.path}
                     end={item.path === "/"}
+                    onClick={close}
                     className={({ isActive }) =>
                       `group relative flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ${
                         isActive
@@ -159,6 +178,7 @@ export default function Sidebar() {
 
         <NavLink
           to="/data"
+          onClick={close}
           className={({ isActive }) =>
             `mb-1 flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ${
               isActive
@@ -181,6 +201,7 @@ export default function Sidebar() {
 
         <NavLink
           to="/settings"
+          onClick={close}
           className={({ isActive }) =>
             `flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ${
               isActive

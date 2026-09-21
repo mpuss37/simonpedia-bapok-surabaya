@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3001/api"
+import { API_URL } from "./api"
 
 export interface Komoditas {
   id: number

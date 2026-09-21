@@ -10,6 +10,7 @@ import {
 
 import React, { useEffect, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
+import { API_URL } from "../services/api"
 import {
   Area,
   AreaChart,
@@ -63,7 +64,7 @@ export default function Monitoring() {
           .sort((a, b) => Math.abs(b.persenPerubahan) - Math.abs(a.persenPerubahan))[0]
         if (top) {
           const chartRes = await fetch(
-            `http://localhost:3001/api/ews/chart/${top.id}`
+            `${API_URL}/ews/chart/${top.id}`
           )
           if (chartRes.ok) {
             const chartJson = await chartRes.json()
