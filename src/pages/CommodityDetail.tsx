@@ -22,7 +22,9 @@ import {
 import { getHarga, type Harga } from "../services/priceService"
 import PageHeader from "../components/layout/PageHeader"
 import ChartTooltip from "../components/charts/ChartTooltip"
+import HetReferenceLine from "../components/charts/HetReferenceLine"
 import { withPrevious } from "../lib/chartData"
+import { getHet } from "../lib/het"
 import { useChartTheme } from "../hooks/useChartTheme"
 
 function formatRupiah(value: number) {
@@ -93,6 +95,8 @@ export default function CommodityDetail() {
 
   const kategori = uniqueKomoditas?.kategori || "-"
   const satuan = uniqueKomoditas?.satuan || "-"
+
+  const hetInfo = getHet(commodityName)
 
   if (!loading && filteredHarga.length === 0) {
     return (
@@ -188,7 +192,8 @@ export default function CommodityDetail() {
                   <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} vertical={false} />
                   <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
                   <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} />
-                  <Tooltip content={<ChartTooltip valueLabel="Harga" labelFormatter={(v) => `Tanggal ${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
+                  <Tooltip content={<ChartTooltip valueLabel="Harga" labelFormatter={(v) => `Tanggal ${v}`} het={hetInfo?.harga} hetSatuan={hetInfo?.satuan} />} cursor={{ stroke: chartTheme.axisColor }} />
+                  <HetReferenceLine value={hetInfo?.harga} satuan={hetInfo?.satuan} />
                 <Area type="monotone" dataKey="harga" stroke="#C93742" strokeWidth={2.5} fill="url(#detailGradient)" />
               </AreaChart>
             </ResponsiveContainer>

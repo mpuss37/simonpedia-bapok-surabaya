@@ -3,7 +3,9 @@ import { TrendingUp, TrendingDown, Minus, Target, BarChart3 } from "lucide-react
 import { useChartTheme } from "../hooks/useChartTheme"
 import MobileMenuButton from "../components/layout/MobileMenuButton"
 import ChartTooltip from "../components/charts/ChartTooltip"
+import HetReferenceLine from "../components/charts/HetReferenceLine"
 import { withPrevious } from "../lib/chartData"
+import { getHet } from "../lib/het"
 import { API_URL } from "../services/api"
 import {
   Area,
@@ -124,6 +126,8 @@ export default function Prediksi() {
     ],
     "harga",
   )
+
+  const hetInfo = getHet(detail?.komoditas.nama)
 
   return (
     <div className="min-h-screen">
@@ -283,7 +287,8 @@ export default function Prediksi() {
                   <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} vertical={false} />
                   <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
                   <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} />
-                  <Tooltip content={<ChartTooltip valueLabel="Harga" labelFormatter={(v) => `Tanggal ${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
+                  <Tooltip content={<ChartTooltip valueLabel="Harga" labelFormatter={(v) => `Tanggal ${v}`} het={hetInfo?.harga} hetSatuan={hetInfo?.satuan} />} cursor={{ stroke: chartTheme.axisColor }} />
+                  <HetReferenceLine value={hetInfo?.harga} satuan={hetInfo?.satuan} />
                         <Legend />
                         <Area type="monotone" dataKey="harga" name="Historis" stroke="#171717" strokeWidth={2} fill="#171717" fillOpacity={0.05} />
                         <Line type="monotone" dataKey="harga" name="Prediksi" stroke="#C93742" strokeWidth={2.5} strokeDasharray="6 3" dot={false} />

@@ -17,14 +17,18 @@ export interface ChartTooltipProps {
   valueLabel?: string
   /** Format label sumbu X (mis. potong tanggal). */
   labelFormatter?: (label: string | number) => string
+  /** HET (Harga Eceran Tertinggi) per satuan, bila ada. */
+  het?: number | null
+  /** Satuan HET (mis. "kg", "liter"). */
+  hetSatuan?: string
 }
 
 /**
- * Tooltip grafik yang menampilkan harga + selisih (Rp & %) dibanding
- * titik data sebelumnya, sehingga besar kenaikan/penurunan langsung terlihat.
- *
- * `previous` dihitung dari payload chart bila tipe datanya menyertakan field
- * `previous`; jika tidak, tooltip hanya menampilkan harga titik pertama.
+ * Tooltip grafik menampilkan:
+ * - Harga aktual pada titik tersebut
+ * - HET (Harga Eceran Tertinggi) sebagai pembanding bila tersedia
+ * - Selisih harga vs HET (Rp & %) ditandai bila melampaui HET
+ * - Perubahan harga vs titik sebelumnya (Rp & %)
  */
 export default function ChartTooltip({
   active,
@@ -32,6 +36,8 @@ export default function ChartTooltip({
   label,
   valueLabel = "Harga",
   labelFormatter,
+  het,
+  hetSatuan = "kg",
 }: ChartTooltipProps) {
   const chartTheme = useChartTheme()
 
@@ -72,6 +78,21 @@ export default function ChartTooltip({
   const shownLabel =
     typeof label === "string" && labelFormatter ? labelFormatter(label) : label
 
+  // Perbandingan harga vs HET
+  const hasHet = het !== null && het !== undefined && Number.isFinite(het)
+  const overHet = hasHet ? current - Number(het) : 0
+  const overPercent =
+    hasHet && Number(het) !== 0 ? (overHet / Number(het)) * 100 : 0
+  const exceeds = hasHet && overHet > 0
+
+  const rowStyle = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 16,
+    marginTop: 4,
+  } as const
+
   return (
     <div
       style={{
@@ -81,7 +102,7 @@ export default function ChartTooltip({
         color: chartTheme.tooltip.color,
         fontSize: 12,
         padding: "10px 12px",
-        minWidth: 170,
+        minWidth: 190,
         boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
       }}
     >
@@ -113,43 +134,70 @@ export default function ChartTooltip({
         <span style={{ fontWeight: 700 }}>{formatRupiah(current)}</span>
       </div>
 
-      {hasPrev && (
-        <>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: 16,
-              marginTop: 4,
-            }}
-          >
-            <span style={{ opacity: 0.6 }}>Het (sebelumnya)</span>
-            <span style={{ fontWeight: 600, opacity: 0.85 }}>
-              {formatRupiah(Number(previousRaw))}
-            </span>
-          </div>
+      {hasHet && (
+        <div style={rowStyle}>
+          <span style={{ opacity: 0.6 }}>HET / {hetSatuan}</span>
+          <span style={{ fontWeight: 700 }}>{formatRupiah(Number(het))}</span>
+        </div>
+      )}
 
-          <div
+      {hasHet && (
+        <div
+          style={{
+            ...rowStyle,
+            borderTop: chartTheme.isDark
+              ? "1px solid rgba(255,255,255,0.08)"
+              : "1px solid rgba(23,23,23,0.06)",
+            marginTop: 6,
+            paddingTop: 6,
+          }}
+        >
+          <span style={{ opacity: 0.6 }}>vs HET</span>
+          <span
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: 16,
-              marginTop: 4,
+              fontWeight: 700,
+              whiteSpace: "nowrap",
+              color: exceeds
+                ? chartTheme.isDark
+                  ? "#F87171"
+                  : "#C93742"
+                : chartTheme.isDark
+                  ? "#34D399"
+                  : "#1C8C4A",
             }}
           >
-            <span style={{ opacity: 0.6 }}>Perubahan</span>
-            <span style={{ fontWeight: 700, color: deltaColor, whiteSpace: "nowrap" }}>
-              {arrow} {diff > 0 ? "+" : ""}
-              {formatRupiah(diff)}{" "}
-              <span style={{ opacity: 0.85 }}>
-                ({percent > 0 ? "+" : ""}
-                {formatNumber(percent)}%)
-              </span>
+            {exceeds ? "▲ " : overHet === 0 ? "= " : "▼ "}
+            {overHet > 0 ? "+" : ""}
+            {formatRupiah(overHet)}{" "}
+            <span style={{ opacity: 0.85 }}>
+              ({overPercent > 0 ? "+" : ""}
+              {formatNumber(overPercent)}%)
             </span>
-          </div>
-        </>
+          </span>
+        </div>
+      )}
+
+      {hasPrev && (
+        <div
+          style={{
+            ...rowStyle,
+            borderTop: chartTheme.isDark
+              ? "1px solid rgba(255,255,255,0.08)"
+              : "1px solid rgba(23,23,23,0.06)",
+            marginTop: 6,
+            paddingTop: 6,
+          }}
+        >
+          <span style={{ opacity: 0.6 }}>Perubahan</span>
+          <span style={{ fontWeight: 700, color: deltaColor, whiteSpace: "nowrap" }}>
+            {arrow} {diff > 0 ? "+" : ""}
+            {formatRupiah(diff)}{" "}
+            <span style={{ opacity: 0.85 }}>
+              ({percent > 0 ? "+" : ""}
+              {formatNumber(percent)}%)
+            </span>
+          </span>
+        </div>
       )}
     </div>
   )

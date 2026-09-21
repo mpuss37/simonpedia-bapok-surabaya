@@ -22,7 +22,9 @@ import {
 import { getRingkasanHarga, type RingkasanHarga } from "../services/priceService"
 import PageHeader from "../components/layout/PageHeader"
 import ChartTooltip from "../components/charts/ChartTooltip"
+import HetReferenceLine from "../components/charts/HetReferenceLine"
 import { withPrevious } from "../lib/chartData"
+import { getHet } from "../lib/het"
 import { useChartTheme } from "../hooks/useChartTheme"
 
 
@@ -51,6 +53,7 @@ export default function Monitoring() {
   const [lastUpdate, setLastUpdate] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [chartKomoditas, setChartKomoditas] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchData() {
@@ -65,6 +68,7 @@ export default function Monitoring() {
           .slice()
           .sort((a, b) => Math.abs(b.persenPerubahan) - Math.abs(a.persenPerubahan))[0]
         if (top) {
+          setChartKomoditas(top.nama)
           const chartRes = await fetch(
             `${API_URL}/ews/chart/${top.id}`
           )
@@ -151,6 +155,7 @@ export default function Monitoring() {
     return withPrevious(trenData.slice(-n), "harga")
   }, [trenData, period])
 
+  const hetInfo = getHet(chartKomoditas)
 
   return (
 
@@ -384,10 +389,14 @@ export default function Monitoring() {
                       <ChartTooltip
                         valueLabel="Harga"
                         labelFormatter={(v) => `Tanggal ${v}`}
+                        het={hetInfo?.harga}
+                        hetSatuan={hetInfo?.satuan}
                       />
                     }
                     cursor={{ stroke: chartTheme.axisColor }}
                   />
+
+                  <HetReferenceLine value={hetInfo?.harga} satuan={hetInfo?.satuan} />
 
                   <Area
                     type="monotone"

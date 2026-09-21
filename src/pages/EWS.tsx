@@ -24,7 +24,9 @@ import { useEffect, useState } from "react"
 import { useChartTheme } from "../hooks/useChartTheme"
 import MobileMenuButton from "../components/layout/MobileMenuButton"
 import ChartTooltip from "../components/charts/ChartTooltip"
+import HetReferenceLine from "../components/charts/HetReferenceLine"
 import { withPrevious } from "../lib/chartData"
+import { getHet } from "../lib/het"
 import { API_URL } from "../services/api"
 
 
@@ -128,6 +130,10 @@ export default function EWS() {
   const alertsToShow = ewsData?.alerts.slice(0, 5) || []
   const topKomoditas = ewsData?.analisis.slice(0, 8) || []
   const komoditasUntukChart = ewsData?.analisis || []
+
+  const hetInfo = getHet(
+    komoditasUntukChart.find((k) => String(k.id) === selectedCommodity)?.nama
+  )
 
 
   return (
@@ -279,7 +285,8 @@ export default function EWS() {
                   <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} vertical={false} />
                   <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
                   <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} />
-                  <Tooltip content={<ChartTooltip valueLabel="Harga" labelFormatter={(v) => `Tanggal ${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
+                  <Tooltip content={<ChartTooltip valueLabel="Harga" labelFormatter={(v) => `Tanggal ${v}`} het={hetInfo?.harga} hetSatuan={hetInfo?.satuan} />} cursor={{ stroke: chartTheme.axisColor }} />
+                  <HetReferenceLine value={hetInfo?.harga} satuan={hetInfo?.satuan} />
                   <Area type="monotone" dataKey="harga" stroke="#C93742" strokeWidth={2.5} fill="url(#ewsGradient)" />
                 </AreaChart>
               </ResponsiveContainer>
