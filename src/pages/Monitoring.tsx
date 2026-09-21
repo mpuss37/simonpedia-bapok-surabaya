@@ -385,14 +385,15 @@ export default function Monitoring() {
                   />
 
                   <Tooltip
-                    content={
+                    content={(props) => (
                       <ChartTooltip
+                        {...props}
                         valueLabel="Harga"
                         labelFormatter={(v) => `Tanggal ${v}`}
                         het={hetInfo?.harga}
                         hetSatuan={hetInfo?.satuan}
                       />
-                    }
+                    )}
                     cursor={{ stroke: chartTheme.axisColor }}
                   />
 

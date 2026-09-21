@@ -129,7 +129,7 @@ export default function PredictionChart() {
           />
 
 
-          <Tooltip content={<ChartTooltip valueLabel="Prediksi" labelFormatter={(v) => `${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
+          <Tooltip content={(props) => <ChartTooltip {...props} valueLabel="Prediksi" labelFormatter={(v) => `${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
 
 
           <Area

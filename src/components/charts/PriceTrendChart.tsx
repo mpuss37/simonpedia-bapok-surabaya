@@ -64,7 +64,7 @@ export default function PriceTrendChart() {
             tickFormatter={(value) => `${value / 1000}K`}
           />
 
-          <Tooltip content={<ChartTooltip valueLabel="Harga" labelFormatter={(v) => `${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
+          <Tooltip content={(props) => <ChartTooltip {...props} valueLabel="Harga" labelFormatter={(v) => `${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
 
           <Line
             type="monotone"

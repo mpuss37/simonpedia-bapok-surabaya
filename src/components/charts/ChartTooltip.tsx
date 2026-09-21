@@ -10,7 +10,10 @@ export interface ChartTooltipProps {
   /** Diisi otomatis oleh Recharts. */
   active?: boolean
   /** Diisi otomatis oleh Recharts. */
-  payload?: Array<{ value?: number | string; payload?: Record<string, unknown> }>
+  payload?: ReadonlyArray<{
+    value?: unknown
+    payload?: Record<string, unknown>
+  }>
   /** Diisi otomatis oleh Recharts (nilai sumbu X). */
   label?: string | number
   /** Nama nilai yang ditampilkan (default "Harga"). */
