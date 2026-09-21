@@ -21,6 +21,8 @@ import {
 
 import { getHarga, type Harga } from "../services/priceService"
 import PageHeader from "../components/layout/PageHeader"
+import ChartTooltip from "../components/charts/ChartTooltip"
+import { withPrevious } from "../lib/chartData"
 import { useChartTheme } from "../hooks/useChartTheme"
 
 function formatRupiah(value: number) {
@@ -75,12 +77,15 @@ export default function CommodityDetail() {
     dailyPrices.set(key, existing)
   }
 
-  const chartData = Array.from(dailyPrices.entries())
-    .sort()
-    .map(([tanggal, prices]) => ({
-      tanggal,
-      harga: Math.round(prices.reduce((a, b) => a + b, 0) / prices.length),
-    }))
+  const chartData = withPrevious(
+    Array.from(dailyPrices.entries())
+      .sort()
+      .map(([tanggal, prices]) => ({
+        tanggal,
+        harga: Math.round(prices.reduce((a, b) => a + b, 0) / prices.length),
+      })),
+    "harga",
+  )
 
   const firstPrice = chartData.length > 0 ? chartData[0].harga : latestPrice
   const lastPrice = chartData.length > 0 ? chartData[chartData.length - 1].harga : latestPrice
@@ -183,7 +188,7 @@ export default function CommodityDetail() {
                   <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} vertical={false} />
                   <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
                   <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} />
-                  <Tooltip formatter={(value) => typeof value === "number" ? [`Rp${value.toLocaleString("id-ID")}`, "Harga"] : ["-", "Harga"]} contentStyle={{ borderRadius: 12, border: chartTheme.tooltip.border, background: chartTheme.tooltip.background, color: chartTheme.tooltip.color, fontSize: 11 }} labelStyle={{ color: chartTheme.tooltip.color }} />
+                  <Tooltip content={<ChartTooltip valueLabel="Harga" labelFormatter={(v) => `Tanggal ${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
                 <Area type="monotone" dataKey="harga" stroke="#C93742" strokeWidth={2.5} fill="url(#detailGradient)" />
               </AreaChart>
             </ResponsiveContainer>

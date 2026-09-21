@@ -24,6 +24,8 @@ import { Link } from "react-router-dom"
 import { getRingkasanHarga } from "../services/priceService"
 import ThemeToggle from "../components/ThemeToggle"
 import MobileMenuButton from "../components/layout/MobileMenuButton"
+import ChartTooltip from "../components/charts/ChartTooltip"
+import { withPrevious } from "../lib/chartData"
 import { useChartTheme } from "../hooks/useChartTheme"
 import { API_URL } from "../services/api"
 
@@ -54,6 +56,7 @@ interface KomoditasItem {
 interface ChartItem {
   tanggal: string
   harga: number
+  previous?: number | null
 }
 
 export default function Home() {
@@ -133,7 +136,7 @@ export default function Home() {
         if (!active) return
 
         const meta = ewsAnalisis.find((a) => a.id === selectedChartId)
-        setChartData(chartRaw)
+        setChartData(withPrevious(chartRaw, "harga"))
         setChartKomoditas(
           meta ? { nama: meta.nama, change: meta.persenPerubahan } : null
         )
@@ -283,7 +286,7 @@ export default function Home() {
                   <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} vertical={false} />
                   <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
                   <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} />
-                  <Tooltip formatter={(value) => typeof value === "number" ? [`Rp${value.toLocaleString("id-ID")}`, "Harga"] : ["-", "Harga"]} contentStyle={{ borderRadius: 12, border: chartTheme.tooltip.border, background: chartTheme.tooltip.background, color: chartTheme.tooltip.color, fontSize: 11 }} labelStyle={{ color: chartTheme.tooltip.color }} />
+                  <Tooltip content={<ChartTooltip valueLabel="Harga" labelFormatter={(v) => `Tanggal ${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
                   <Area type="monotone" dataKey="harga" stroke="#C93742" strokeWidth={2.5} fill="url(#homeGradient)" />
                 </AreaChart>
               </ResponsiveContainer>

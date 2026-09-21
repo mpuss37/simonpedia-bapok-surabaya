@@ -23,6 +23,8 @@ import {
 import { useEffect, useState } from "react"
 import { useChartTheme } from "../hooks/useChartTheme"
 import MobileMenuButton from "../components/layout/MobileMenuButton"
+import ChartTooltip from "../components/charts/ChartTooltip"
+import { withPrevious } from "../lib/chartData"
 import { API_URL } from "../services/api"
 
 
@@ -65,6 +67,7 @@ interface EWSResponse {
 interface ChartData {
   tanggal: string
   harga: number
+  previous?: number | null
 }
 
 
@@ -112,7 +115,7 @@ export default function EWS() {
       try {
         const res = await fetch(`${API_URL}/ews/chart/${selectedCommodity}`)
         const data = await res.json()
-        setChartData(data)
+        setChartData(withPrevious(data, "harga"))
       } catch (err) {
         console.error("Gagal memuat data chart:", err)
       } finally {
@@ -276,7 +279,7 @@ export default function EWS() {
                   <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} vertical={false} />
                   <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
                   <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} />
-                  <Tooltip formatter={(value) => typeof value === "number" ? [`Rp${value.toLocaleString("id-ID")}`, "Harga"] : ["-", "Harga"]} contentStyle={{ borderRadius: 12, border: chartTheme.tooltip.border, background: chartTheme.tooltip.background, color: chartTheme.tooltip.color, fontSize: 11 }} labelStyle={{ color: chartTheme.tooltip.color }} />
+                  <Tooltip content={<ChartTooltip valueLabel="Harga" labelFormatter={(v) => `Tanggal ${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
                   <Area type="monotone" dataKey="harga" stroke="#C93742" strokeWidth={2.5} fill="url(#ewsGradient)" />
                 </AreaChart>
               </ResponsiveContainer>

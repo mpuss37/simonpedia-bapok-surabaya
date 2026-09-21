@@ -21,6 +21,8 @@ import {
 } from "recharts"
 import { getRingkasanHarga, type RingkasanHarga } from "../services/priceService"
 import PageHeader from "../components/layout/PageHeader"
+import ChartTooltip from "../components/charts/ChartTooltip"
+import { withPrevious } from "../lib/chartData"
 import { useChartTheme } from "../hooks/useChartTheme"
 
 
@@ -146,7 +148,7 @@ export default function Monitoring() {
       "6 Bulan": 180,
     }
     const n = hariMap[period] ?? 30
-    return trenData.slice(-n)
+    return withPrevious(trenData.slice(-n), "harga")
   }, [trenData, period])
 
 
@@ -378,19 +380,13 @@ export default function Monitoring() {
                   />
 
                   <Tooltip
-                    formatter={(value) => [
-                      `Rp${Number(value).toLocaleString("id-ID")}`,
-                      "Harga",
-                    ]}
-                    labelFormatter={(label) => `Tanggal ${label}`}
-                    contentStyle={{
-                      borderRadius: 12,
-                      border: chartTheme.tooltip.border,
-                      background: chartTheme.tooltip.background,
-                      color: chartTheme.tooltip.color,
-                      fontSize: 12,
-                    }}
-                    labelStyle={{ color: chartTheme.tooltip.color }}
+                    content={
+                      <ChartTooltip
+                        valueLabel="Harga"
+                        labelFormatter={(v) => `Tanggal ${v}`}
+                      />
+                    }
+                    cursor={{ stroke: chartTheme.axisColor }}
                   />
 
                   <Area

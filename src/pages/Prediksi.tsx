@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { TrendingUp, TrendingDown, Minus, Target, BarChart3 } from "lucide-react"
 import { useChartTheme } from "../hooks/useChartTheme"
 import MobileMenuButton from "../components/layout/MobileMenuButton"
+import ChartTooltip from "../components/charts/ChartTooltip"
+import { withPrevious } from "../lib/chartData"
 import { API_URL } from "../services/api"
 import {
   Area,
@@ -115,10 +117,13 @@ export default function Prediksi() {
 
   const chartHistoris = detail?.dataHistoris || []
   const chartPrediksi = detail?.prediksi7Hari || []
-  const chartCombined = [
-    ...chartHistoris.map(d => ({ ...d, type: "historis" })),
-    ...chartPrediksi.map(d => ({ ...d, type: "prediksi" })),
-  ]
+  const chartCombined = withPrevious(
+    [
+      ...chartHistoris.map(d => ({ ...d, type: "historis" })),
+      ...chartPrediksi.map(d => ({ ...d, type: "prediksi" })),
+    ],
+    "harga",
+  )
 
   return (
     <div className="min-h-screen">
@@ -278,7 +283,7 @@ export default function Prediksi() {
                   <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.gridColor} vertical={false} />
                   <XAxis dataKey="tanggal" tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} tickFormatter={(v) => v.slice(5)} />
                   <YAxis tickFormatter={(value) => `Rp${value / 1000}k`} tick={{ fontSize: 10, fill: chartTheme.tickColor }} axisLine={false} tickLine={false} />
-                  <Tooltip formatter={(value) => typeof value === "number" ? [`Rp${value.toLocaleString("id-ID")}`, "Harga"] : ["-", "Harga"]} contentStyle={{ borderRadius: 12, border: chartTheme.tooltip.border, background: chartTheme.tooltip.background, color: chartTheme.tooltip.color, fontSize: 11 }} labelStyle={{ color: chartTheme.tooltip.color }} />
+                  <Tooltip content={<ChartTooltip valueLabel="Harga" labelFormatter={(v) => `Tanggal ${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
                         <Legend />
                         <Area type="monotone" dataKey="harga" name="Historis" stroke="#171717" strokeWidth={2} fill="#171717" fillOpacity={0.05} />
                         <Line type="monotone" dataKey="harga" name="Prediksi" stroke="#C93742" strokeWidth={2.5} strokeDasharray="6 3" dot={false} />

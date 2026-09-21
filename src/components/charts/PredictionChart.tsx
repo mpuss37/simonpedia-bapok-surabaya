@@ -8,13 +8,16 @@ import {
   ResponsiveContainer,
 } from "recharts"
 import { useChartTheme } from "../../hooks/useChartTheme"
+import ChartTooltip from "./ChartTooltip"
+import { withPrevious } from "../../lib/chartData"
 
-const predictionData = [
-  {
-    day: "Hari ini",
-    actual: 68000,
-    prediction: 68000,
-  },
+const predictionData = withPrevious(
+  [
+    {
+      day: "Hari ini",
+      actual: 68000,
+      prediction: 68000,
+    },
   {
     day: "Hari 1",
     actual: null,
@@ -50,7 +53,7 @@ const predictionData = [
     actual: null,
     prediction: 75000,
   },
-]
+], "prediction")
 
 export default function PredictionChart() {
   const chartTheme = useChartTheme()
@@ -126,21 +129,7 @@ export default function PredictionChart() {
           />
 
 
-          <Tooltip
-            formatter={(value) =>
-              value
-                ? `Rp${Number(value).toLocaleString("id-ID")}`
-                : "-"
-            }
-            contentStyle={{
-              borderRadius: 12,
-              border: chartTheme.tooltip.border,
-              background: chartTheme.tooltip.background,
-              color: chartTheme.tooltip.color,
-              fontSize: 12,
-            }}
-            labelStyle={{ color: chartTheme.tooltip.color }}
-          />
+          <Tooltip content={<ChartTooltip valueLabel="Prediksi" labelFormatter={(v) => `${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
 
 
           <Area

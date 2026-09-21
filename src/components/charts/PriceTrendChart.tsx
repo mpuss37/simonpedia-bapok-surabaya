@@ -8,8 +8,10 @@ import {
   ResponsiveContainer,
 } from "recharts"
 import { useChartTheme } from "../../hooks/useChartTheme"
+import ChartTooltip from "./ChartTooltip"
+import { withPrevious } from "../../lib/chartData"
 
-const priceData = [
+const priceDataRaw = [
   { date: "1 Agu", price: 54000 },
   { date: "2 Agu", price: 55000 },
   { date: "3 Agu", price: 56500 },
@@ -18,6 +20,8 @@ const priceData = [
   { date: "6 Agu", price: 65000 },
   { date: "7 Agu", price: 68000 },
 ]
+
+const priceData = withPrevious(priceDataRaw, "price")
 
 export default function PriceTrendChart() {
   const chartTheme = useChartTheme()
@@ -60,19 +64,7 @@ export default function PriceTrendChart() {
             tickFormatter={(value) => `${value / 1000}K`}
           />
 
-          <Tooltip
-            formatter={(value) =>
-              `Rp${Number(value).toLocaleString("id-ID")}`
-            }
-            contentStyle={{
-              borderRadius: 12,
-              border: chartTheme.tooltip.border,
-              background: chartTheme.tooltip.background,
-              color: chartTheme.tooltip.color,
-              fontSize: 12,
-            }}
-            labelStyle={{ color: chartTheme.tooltip.color }}
-          />
+          <Tooltip content={<ChartTooltip valueLabel="Harga" labelFormatter={(v) => `${v}`} />} cursor={{ stroke: chartTheme.axisColor }} />
 
           <Line
             type="monotone"
