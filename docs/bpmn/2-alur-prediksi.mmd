@@ -1,0 +1,21 @@
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#FFF3F4','primaryTextColor':'#171717','primaryBorderColor':'#C93742','lineColor':'#C93742','fontSize':'16px','fontFamily':'Arial'}}}%%
+flowchart TD
+    A([Mulai]) --> B[Ambil data historis<br/>harga komoditas]
+    B --> C[Terapkan 3 metode analisis]
+    C --> C1[Linear Regression]
+    C --> C2[Moving Average]
+    C --> C3[Exponential Smoothing]
+    C1 --> D[Prediksi 7 hari ke depan<br/>blend tren dan harga terakhir]
+    C2 --> D
+    C3 --> D
+    D --> E[Backtest dan hitung MAPE<br/>uji akurasi]
+    E --> F[Pilih metode akurasi terbaik<br/>susun hasil prediksi]
+    F --> G[Tampilkan grafik<br/>historis dan prediksi 7 hari]
+    G --> H([Selesai])
+
+    style A fill:#C93742,color:#fff,stroke:#C93742
+    style H fill:#C93742,color:#fff,stroke:#C93742
+    style C1 fill:#E3F2FD,stroke:#2563EB
+    style C2 fill:#E3F2FD,stroke:#2563EB
+    style C3 fill:#E3F2FD,stroke:#2563EB
+    style E fill:#FFF8E1,stroke:#F59E0B

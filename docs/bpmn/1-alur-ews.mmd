@@ -1,0 +1,24 @@
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#FFF3F4','primaryTextColor':'#171717','primaryBorderColor':'#C93742','lineColor':'#C93742','fontSize':'16px','fontFamily':'Arial'}}}%%
+flowchart TD
+    A([Mulai]) --> B[Ambil data harga<br/>2 survei terakhir]
+    B --> C[Hitung rata-rata harga<br/>dan persen perubahan<br/>per komoditas]
+    C --> D{Klasifikasi risiko<br/>berdasarkan persen perubahan}
+    D -->|"0 persen"| E[Normal]
+    D -->|"kurang dari 10 persen"| F[Siaga]
+    D -->|"10 sampai 20 persen"| G[Waspada]
+    D -->|"20 persen atau lebih"| H[Kritis]
+    E --> I[Tidak ada alert]
+    F --> J[Buat alert per pasar]
+    G --> J
+    H --> J
+    I --> K[Agregasi ringkasan<br/>Normal, Siaga, Waspada, Kritis]
+    J --> K
+    K --> L[Tampilkan dashboard EWS<br/>dan grafik anomali harga]
+    L --> M([Selesai])
+
+    style A fill:#C93742,color:#fff,stroke:#C93742
+    style M fill:#C93742,color:#fff,stroke:#C93742
+    style E fill:#E8F5E9,stroke:#1C8C4A
+    style F fill:#FFF8E1,stroke:#F59E0B
+    style G fill:#FFF0E0,stroke:#EA580C
+    style H fill:#FFE4E6,stroke:#C93742

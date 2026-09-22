@@ -1,0 +1,30 @@
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#FFF3F4','primaryTextColor':'#171717','primaryBorderColor':'#C93742','lineColor':'#C93742','fontSize':'16px','fontFamily':'Arial'}}}%%
+flowchart TD
+    A([Mulai]) --> B[Buka aplikasi SIMONPEDIA<br/>via browser]
+    B --> C[Lihat Dashboard<br/>ringkasan harga + tren]
+
+    C --> D{Pilih menu navigasi}
+
+    D -->|Monitoring| E[Lihat daftar harga<br/>per komoditas]
+    D -->|Pasar| F[Lihat daftar & detail pasar]
+    D -->|Peta| G[Lihat sebaran pasar<br/>pada peta Surabaya]
+    D -->|Early Warning| H[Lihat status risiko<br/>+ alert harga]
+    D -->|Rekomendasi| I[Lihat tindakan<br/>yang disarankan]
+    D -->|Prediksi| J[Lihat prediksi harga<br/>7 hari ke depan]
+
+    E --> K[Pilih komoditas<br/>/ lihat grafik]
+    F --> K
+    G --> K
+    H --> L[Analisis tingkat risiko]
+    I --> L
+    J --> L
+
+    K --> M[Lihat detail grafik<br/>+ informasi HET]
+    M --> N[Ambil keputusan / tindakan]
+    L --> N
+    N --> O([Selesai])
+
+    style A fill:#C93742,color:#fff,stroke:#C93742
+    style O fill:#C93742,color:#fff,stroke:#C93742
+    style C fill:#FFF3F4,stroke:#C93742
+    style N fill:#E8F5E9,stroke:#1C8C4A
