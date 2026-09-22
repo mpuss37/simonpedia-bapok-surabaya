@@ -1,145 +1,167 @@
 ================================================================================
-PROMPT UNTUK GAMMA AI — DOKUMEN BPMN SIMONPEDIA BAPOK SURABAYA
+PROMPT UNTUK GAMMA AI — BPMN SIMONPEDIA BAPOK SURABAYA
 ================================================================================
+
 Cara pakai:
-1. Buka https://gamma.app → Create new → pilih "Paste in text" / "Generate".
-2. Salin SELURUH isi di bawah garis ini.
-3. Tempel ke kolom prompt Gamma, lalu pilih jumlah kartu/slide yang sesuai
-   (disarankan: 10–12 slide), tema warna MERAH (#C93742) + PUTIH.
-4. Generate, lalu periksa hasilnya.
-================================================================================
+1. Buka https://gamma.app, pilih Create new, lalu "Paste in text".
+2. Salin isi mulai dari baris "Bikin deck..." sampai slide terakhir di bawah.
+3. Set jumlah kartu 10–12, tema warna merah (#C93742) dengan latar putih.
+4. Generate, lalu rapikan sendiri bagian yang masih terasa kaku.
+
+--------------------------------------------------------------------------------
+INSTRUKSI GAYA (PENTING — BACA DULU)
+--------------------------------------------------------------------------------
+Tolong tulis dengan gaya manusia, bukan gaya "AI". Artinya:
+
+- Pakai kalimat wajar seperti orang ngobrol santai tapi tetap sopan dan rapi.
+  Hindari kalimat yang terdengar seperti brosur atau press release.
+- JANGAN pakai frasa klise khas AI, contoh yang harus dihindari:
+  "Pada era digital yang berkembang pesat...",
+  "Tidak hanya berfungsi sebagai..., tetapi juga...",
+  "solusi inovatif", "memanfaatkan teknologi canggih",
+  "hal ini bertujuan untuk", "dapat disimpulkan bahwa".
+- Jangan tambah bumbu berlebihan. Kalau cukup dua kata, jangan jadi satu kalimat.
+- Hindari struktur yang terlalu simetris dan berulang di tiap slide.
+  Boleh sesekali satu kalimat panjang, sesekali poin pendek.
+- Ganti kata serapan yang aneh dengan istilah yang biasa dipakai sehari-hari
+  (misal "menggunakan" bukan "memanfaatkan", "memantau" bukan "melakukan
+  pemantauan terhadap").
+- Tulis seolah kamu menjelaskan ke rekan kerja yang belum tahu aplikasinya,
+  bukan sedang menulis laporan yang harus terdengar mewah.
+- Boleh pakai istilah teknis (EWS, MAPE, backtest) karena memang perlu,
+  tapi begitu muncul, jelaskan singkat dengan bahasa biasa.
+
+Isi/struktur slide tetap seperti di bawah. Yang diubah hanya cara menulisnya
+agar terasa lebih alami.
+
+--------------------------------------------------------------------------------
+ISI SLIDE
+--------------------------------------------------------------------------------
+Bikin deck buat memperkenalkan pemodelan proses bisnis (BPMN) aplikasi
+SIMONPEDIA Bapok Surabaya. Ini aplikasi yang dipakai memantau harga bahan pokok
+di Surabaya. Deck ini disusun Tim EWS.
+
+Gaya visual: aksen merah #C93742, latar terang, diagram alur di setiap proses,
+ikon-ikon sederhana (grafik, peta, tanda peringatan, panah). Jangan sertakan
+tanggal di slide.
 
 
-Buatkan presentasi profesional (Bahasa Indonesia formal) tentang dokumen
-"Business Process Model and Notation (BPMN) — SIMONPEDIA Bapok Surabaya",
-sebuah sistem pemantauan harga bahan pokok di Kota Surabaya.
-
-Gaya presentasi:
-- Bahasa Indonesia formal, cocok untuk laporan instansi pemerintah.
-- Tema warna: merah (#C93742) sebagai warna aksen utama, latar putih/terang.
-- Sertakan diagram alur (flowchart) pada tiap alur proses.
-- Gunakan ikon sederhana yang relevan (grafik, peta, peringatan, panah).
-- Setiap slide ringkas: judul singkat + poin-poin penting.
-
-Struktur dan isi slide:
-
-
---- SLIDE 1 — COVER ---
-Judul: Business Process Model and Notation (BPMN)
-Subjudul: SIMONPEDIA Bapok Surabaya — Sistem Pemantauan Harga Bahan Pokok Kota Surabaya
+SLIDE 1 — COVER
+Judul: BPMN SIMONPEDIA Bapok Surabaya
+Subjudul: Pemodelan alur kerja pemantauan harga bahan pokok Kota Surabaya
 Disusun oleh: Tim EWS
-(Setiap slide tidak perlu menyebut tanggal.)
 
 
---- SLIDE 2 — PENDAHULUAN ---
-Judul: Pendahuluan
-Poin:
-- Dokumen ini menyajikan pemodelan proses bisnis (BPMN) aplikasi SIMONPEDIA
-  Bapok Surabaya, yaitu sistem pemantauan harga bahan pokok di Kota Surabaya.
-- Pemodelan difokuskan pada tiga alur proses utama:
-  1. Alur Early Warning System (EWS) — deteksi anomali dan klasifikasi risiko harga.
-  2. Alur Prediksi Harga — peramalan harga beberapa hari ke depan.
-  3. Alur Pengguna Memakai Aplikasi — interaksi pengguna dengan aplikasi.
-- Setiap alur disajikan dalam bentuk diagram alur beserta penjelasan langkahnya,
-  berdasarkan logika sistem yang sebenarnya.
+SLIDE 2 — KENAPA DOKUMEN INI DIBUAT
+Judul: Latar Belakang
+Isi:
+- SIMONPEDIA adalah aplikasi untuk memantau harga bahan pokok di Kota Surabaya.
+- Supaya cara kerjanya mudah dipahami, alur prosesnya digambar dalam notasi BPMN.
+- Ada tiga alur yang dibahas di dokumen ini:
+  1. Alur Early Warning System (EWS), yang mencari keanehan harga dan
+     menentukan tingkat risikonya.
+  2. Alur prediksi harga, yang memperkirakan harga beberapa hari ke depan.
+  3. Alur pengguna saat memakai aplikasi, dari buka sampai ambil keputusan.
+- Semua diagram dibuat mengikuti logika sistem yang sebenarnya, bukan gambaran
+  ideal yang tidak sesuai kode.
 
 
---- SLIDE 3 — ALUR EWS (DIAGRAM) ---
-Judul: Alur Early Warning System (EWS)
-Sertakan diagram alur vertikal dengan langkah berikut:
-Mulai → Ambil data harga 2 survei terakhir → Hitung rata-rata harga dan persen
-perubahan per komoditas → Klasifikasi risiko berdasarkan persen perubahan →
-Cabang: "0 persen" = Normal, "kurang dari 10 persen" = Siaga,
-"10 sampai 20 persen" = Waspada, "20 persen atau lebih" = Kritis →
-(Normal: tidak ada alert / lainnya: buat alert per pasar) → Agregasi ringkasan
-risiko → Tampilkan dashboard EWS dan grafik anomali harga → Selesai.
+SLIDE 3 — ALUR EWS (DIAGRAM)
+Judul: Alur Kerja Early Warning System
+Sertakan diagram alur vertikal dengan urutan:
+Mulai, ambil data harga dari dua survei terakhir, hitung rata-rata harga dan
+persen perubahan tiap komoditas, lalu tentukan tingkat risiko. Cabangnya:
+"0 persen" masuk Normal, "di bawah 10 persen" masuk Siaga, "10 sampai 20 persen"
+masuk Waspada, "20 persen ke atas" masuk Kritis. Kalau Normal, tidak ada alert;
+kalau bukan, sistem membuat alert per pasar. Terakhir, ringkasan digabung dan
+ditampilkan di dashboard bersama grafik anomali. Selesai.
 
 
---- SLIDE 4 — ALUR EWS (PENJELASAN) ---
-Judul: Alur EWS — Penjelasan Langkah
-Poin:
-1. Sistem mengambil data survei harga dari dua tanggal survei terakhir.
-2. Data dikelompokkan per komoditas, lalu dihitung harga rata-rata tiap komoditas.
-3. Sistem menghitung persentase perubahan harga antara periode terakhir dan sebelumnya.
-4. Persentase perubahan dipakai untuk mengklasifikasikan tingkat risiko.
-5. Jika tingkat risiko bukan Normal, sistem membuat alert per pasar.
-6. Sistem menyusun ringkasan jumlah komoditas per tingkat risiko dan menampilkannya di dashboard.
+SLIDE 4 — ALUR EWS (PENJELASAN)
+Judul: Alur EWS, Langkah demi Langkah
+Isi:
+1. Sistem menarik data harga dari dua tanggal survei terakhir.
+2. Data dikelompokkan per komoditas, lalu dihitung harga rata-ratanya.
+3. Dari situ dihitung berapa persen harga berubah dibanding periode sebelumnya.
+4. Angka persen itu yang dipakai untuk menetapkan tingkat risiko.
+5. Kalau risikonya bukan Normal, sistem bikin alert untuk tiap pasar.
+6. Hasilnya diringkas jadi jumlah komoditas per tingkat risiko, lalu muncul di dashboard.
 
 
---- SLIDE 5 — KRITERIA TINGKAT RISIKO EWS ---
-Judul: Kriteria Tingkat Risiko EWS
-Sajikan sebagai tabel:
-- Normal  | Harga stabil (0%)         | Harga tidak berubah signifikan.
-- Siaga   | Perubahan kurang dari 10% | Perlu pemantauan.
-- Waspada | Perubahan 10%–20%         | Perlu perhatian.
-- Kritis  | Perubahan 20% atau lebih  | Perlu tindakan segera.
-Catatan: Klasifikasi dihitung dari nilai absolut persentase perubahan, sehingga
-kenaikan maupun penurunan harga yang besar akan meningkatkan tingkat risiko.
+SLIDE 5 — KRITERIA TINGKAT RISIKO
+Judul: Cara Menentukan Tingkat Risiko
+Bikin tabel:
+- Normal  | Harga stabil (0%)         | Harga tidak berubah berarti.
+- Siaga   | Perubahan di bawah 10%    | Masih aman, tapi perlu dipantau.
+- Waspada | Perubahan 10%–20%         | Sudah perlu diperhatikan.
+- Kritis  | Perubahan 20% ke atas     | Perlu penanganan cepat.
+Tambahkan catatan: yang dihitung adalah besaran perubahannya (nilai absolut),
+jadi harga yang naik atau turun tajam sama-sama menaikkan tingkat risiko.
 
 
---- SLIDE 6 — ALUR PREDIKSI HARGA (DIAGRAM) ---
-Judul: Alur Prediksi Harga
-Sertakan diagram alur vertikal dengan langkah berikut:
-Mulai → Ambil data historis harga komoditas → Terapkan 3 metode analisis
-(Linear Regression, Moving Average, Exponential Smoothing) → Prediksi 7 hari
-ke depan (blend tren dan harga terakhir) → Backtest dan hitung MAPE (uji akurasi)
-→ Pilih metode akurasi terbaik dan susun hasil prediksi → Tampilkan grafik
-historis dan prediksi 7 hari → Selesai.
+SLIDE 6 — ALUR PREDIKSI (DIAGRAM)
+Judul: Alur Kerja Prediksi Harga
+Sertakan diagram alur vertikal dengan urutan:
+Mulai, ambil data historis harga sebuah komoditas, lalu jalankan tiga metode
+(Linear Regression, Moving Average, Exponential Smoothing). Hasilnya dipakai
+untuk memprediksi 7 hari ke depan dengan menggabungkan tren dan harga terakhir.
+Setelah itu diuji akurasinya lewat backtest dan dihitung MAPE-nya. Metode paling
+akurat dipakai untuk menyusun prediksi akhir, lalu ditampilkan dalam grafik
+historis dan prediksi 7 hari. Selesai.
 
 
---- SLIDE 7 — ALUR PREDIKSI (PENJELASAN) ---
-Judul: Alur Prediksi — Penjelasan Langkah
-Poin:
-1. Sistem mengambil data historis harga suatu komoditas.
-2. Data disusun menjadi deret harga yang berurutan berdasarkan tanggal.
-3. Deret harga dianalisis menggunakan beberapa metode: Linear Regression,
-   Moving Average, dan Exponential Smoothing.
-4. Sistem menghasilkan prediksi 7 hari ke depan dengan menggabungkan (blend)
-   nilai tren dan harga terakhir.
-5. Hasil prediksi diuji akurasinya melalui backtest terhadap data yang sudah terjadi.
-6. Sistem menghitung MAPE (tingkat kesalahan rata-rata) untuk menilai akurasi.
-7. Hasil prediksi dan data historis disajikan dalam grafik pada halaman Prediksi.
+SLIDE 7 — ALUR PREDIKSI (PENJELASAN)
+Judul: Alur Prediksi, Langkah demi Langkah
+Isi:
+1. Sistem mengambil data harga komoditas dari waktu ke waktu.
+2. Data itu diurutkan berdasarkan tanggal.
+3. Tiga metode dipakai bersamaan: Linear Regression, Moving Average, dan
+   Exponential Smoothing.
+4. Hasil ketiganya digabung untuk memperkirakan harga 7 hari ke depan.
+5. Prediksi diuji dulu ke data yang sudah terjadi (backtest) untuk tahu
+   seberapa akurat.
+6. Tingkat kesalahannya diukur dengan MAPE.
+7. Hasil akhirnya ditampilkan sebagai grafik di halaman Prediksi.
 
 
---- SLIDE 8 — ALUR PENGGUNA (DIAGRAM) ---
+SLIDE 8 — ALUR PENGGUNA (DIAGRAM)
 Judul: Alur Pengguna Memakai Aplikasi
-Sertakan diagram alur vertikal dengan langkah berikut:
-Mulai → Buka aplikasi SIMONPEDIA via browser → Lihat Dashboard (ringkasan harga
-dan tren) → Pilih menu navigasi → Cabang menu: Monitoring (daftar harga per
-komoditas), Pasar (daftar & detail pasar), Peta (sebaran pasar pada peta Surabaya),
-Early Warning (status risiko dan alert harga), Rekomendasi (tindakan yang
-disarankan), Prediksi (prediksi harga 7 hari ke depan) → Pilih komoditas / lihat
-grafik → Analisis tingkat risiko → Lihat detail grafik dan informasi HET →
-Ambil keputusan/tindakan → Selesai.
+Sertakan diagram alur vertikal dengan urutan:
+Mulai, pengguna buka aplikasi lewat browser, lalu masuk ke Dashboard yang berisi
+ringkasan harga dan tren. Dari situ ada enam pilihan menu: Monitoring (harga per
+komoditas), Pasar (daftar dan detail pasar), Peta (sebaran pasar di Surabaya),
+Early Warning (status risiko dan alert), Rekomendasi (tindakan yang disarankan),
+dan Prediksi (perkiraan harga 7 hari). Setelah memilih komoditas dan melihat
+grafik beserta informasi HET, pengguna mengambil keputusan. Selesai.
 
 
---- SLIDE 9 — ALUR PENGGUNA (PENJELASAN) ---
-Judul: Alur Pengguna — Penjelasan Langkah
-Poin:
-1. Pengguna membuka aplikasi SIMONPEDIA melalui peramban (browser).
-2. Pengguna melihat Dashboard yang memuat ringkasan harga dan tren.
-3. Pengguna memilih menu navigasi: Monitoring, Pasar, Peta, Early Warning,
-   Rekomendasi, atau Prediksi.
-4. Pengguna melihat data, grafik, dan informasi HET (Harga Eceran Tertinggi)
+SLIDE 9 — ALUR PENGGUNA (PENJELASAN)
+Judul: Alur Pengguna, Langkah demi Langkah
+Isi:
+1. Pengguna membuka aplikasi SIMONPEDIA di browser.
+2. Yang pertama terlihat adalah Dashboard berisi ringkasan harga dan tren.
+3. Pengguna memilih menu: Monitoring, Pasar, Peta, Early Warning, Rekomendasi,
+   atau Prediksi.
+4. Di dalamnya tersedia data, grafik, dan informasi HET (Harga Eceran Tertinggi)
    sebagai pembanding.
-5. Pengguna menganalisis tingkat risiko dan mengambil keputusan/tindakan.
+5. Dari informasi itu, pengguna menilai tingkat risiko dan menentukan tindakan.
 
 
---- SLIDE 10 — PENUTUP ---
+SLIDE 10 — PENUTUP
 Judul: Penutup
-Poin:
-- Ketiga alur proses memberi gambaran menyeluruh cara kerja aplikasi SIMONPEDIA
-  Bapok Surabaya: dari pengumpulan dan pengolahan data harga, deteksi risiko,
-  peramalan harga, hingga penyajian informasi kepada pengguna.
-- Pemodelan ini menjadi acuan untuk pengembangan, evaluasi, dan dokumentasi
-  sistem pada tahap selanjutnya.
+Isi:
+- Tiga alur tadi sudah menggambarkan cara kerja SIMONPEDIA Bapok Surabaya:
+  mulai dari mengolah data harga, mendeteksi risiko, memperkirakan harga,
+  sampai menyajikannya ke pengguna.
+- Pemodelan ini bisa dipakai sebagai acuan waktu mengembangkan, mengevaluasi,
+  atau mendokumentasikan sistem di tahap berikutnya.
 
 
 ================================================================================
-CATATAN TEKNIS DIAGRAM (bila Gamma AI perlu teks Mermaid mentah)
+DIAGRAM (teks Mermaid, kalau Gamma perlu versi mentah)
 ================================================================================
 
---- DIAGRAM 1: ALUR EWS (Mermaid) ---
+--- ALUR EWS ---
 flowchart TD
     A([Mulai]) --> B[Ambil data harga 2 survei terakhir]
     B --> C[Hitung rata-rata harga dan persen perubahan per komoditas]
@@ -157,7 +179,7 @@ flowchart TD
     K --> L[Tampilkan dashboard EWS dan grafik anomali harga]
     L --> M([Selesai])
 
---- DIAGRAM 2: ALUR PREDIKSI (Mermaid) ---
+--- ALUR PREDIKSI ---
 flowchart TD
     A([Mulai]) --> B[Ambil data historis harga komoditas]
     B --> C[Terapkan 3 metode analisis]
@@ -172,7 +194,7 @@ flowchart TD
     F --> G[Tampilkan grafik historis dan prediksi 7 hari]
     G --> H([Selesai])
 
---- DIAGRAM 3: ALUR PENGGUNA (Mermaid) ---
+--- ALUR PENGGUNA ---
 flowchart TD
     A([Mulai]) --> B[Buka aplikasi SIMONPEDIA via browser]
     B --> C[Lihat Dashboard, ringkasan harga dan tren]
