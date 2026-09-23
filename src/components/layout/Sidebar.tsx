@@ -4,12 +4,10 @@ import {
   BarChart3,
   Store,
   Map,
-  TrendingUp,
   Brain,
   ShieldAlert,
   Lightbulb,
   Download,
-  Settings,
   X,
 } from "lucide-react"
 import { useSidebar } from "../../context/sidebar-context"
@@ -48,11 +46,7 @@ const menuGroups = [
   {
     title: "ANALYTICS",
     items: [
-      {
-        label: "Analisis",
-        path: "/analisis",
-        icon: TrendingUp,
-      },
+      // Menu "Analisis" disembunyikan sementara — halamannya belum siap.
       {
         label: "Prediksi",
         path: "/prediksi",
@@ -194,29 +188,6 @@ export default function Sidebar() {
                 className={isActive ? "text-white" : "text-[#171717]/40 dark:text-white/40"}
               />
               <span>Data & Export</span>
-            </>
-          )}
-        </NavLink>
-
-
-        <NavLink
-          to="/settings"
-          onClick={close}
-          className={({ isActive }) =>
-            `flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ${
-              isActive
-                ? "bg-[#C93742] text-white shadow-[0_6px_18px_rgba(201,55,66,0.25)]"
-                : "text-[#171717]/65 hover:bg-[#171717]/[0.035] hover:text-[#171717] dark:text-white/65 dark:hover:bg-white/[0.06] dark:hover:text-white"
-            }`
-          }
-        >
-          {({ isActive }) => (
-            <>
-              <Settings
-                size={17}
-                className={isActive ? "text-white" : "text-[#171717]/40 dark:text-white/40"}
-              />
-              <span>Pengaturan</span>
             </>
           )}
         </NavLink>

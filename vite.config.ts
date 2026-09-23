@@ -4,12 +4,16 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+
   server: {
-    // Expose ke jaringan lokal (LAN) supaya bisa diakses dari HP.
+    // Expose ke jaringan lokal (LAN) dan ngrok
     host: true,
     port: 5173,
-    // Teruskan request /api ke backend Express (port 3001).
-    // Dengan ini HP cukup akses satu alamat (IP laptop:5173) saja.
+
+    // Izinkan domain ngrok (wildcard agar tidak perlu ganti tiap restart ngrok)
+    allowedHosts: ['.ngrok-free.app'],
+
+    // Teruskan request /api ke backend Express
     proxy: {
       '/api': {
         target: 'http://localhost:3001',

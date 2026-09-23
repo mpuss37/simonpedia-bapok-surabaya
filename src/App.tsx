@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import DashboardLayout from "./components/layout/DashboardLayout"
 
 import CommodityDetail from "./pages/CommodityDetail"
+import DataExport from "./pages/DataExport"
 import EWS from "./pages/EWS"
 import Home from "./pages/Home"
 import MapPage from "./pages/MapPage"
@@ -95,7 +96,7 @@ function App() {
 
           <Route
             path="/data"
-            element={<div>Halaman Data & Export</div>}
+            element={<DataExport />}
           />
 
 
