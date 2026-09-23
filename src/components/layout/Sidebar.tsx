@@ -52,11 +52,6 @@ const menuGroups = [
         path: "/prediksi",
         icon: Brain,
       },
-    ],
-  },
-  {
-    title: "ALERT & ACTION",
-    items: [
       {
         label: "Early Warning",
         path: "/ews",
