@@ -9,7 +9,6 @@ import {
   ArrowLeft,
   Menu,
   X,
-  ShieldCheck,
   LogOut,
 } from "lucide-react"
 import { sudahMasuk, hapusToken } from "../../services/admin"
@@ -56,9 +55,6 @@ export default function AdminLayout() {
         {/* LOGO */}
         <div className="border-b border-white/10 px-7 pb-5 pt-7">
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#C93742] text-white">
-              <ShieldCheck size={16} />
-            </span>
             <h1 className="text-[18px] font-black tracking-[-0.04em] text-white">
               SIMONPEDIA
             </h1>
