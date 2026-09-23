@@ -1,0 +1,34 @@
+# ============================================
+# Analisis Deret Waktu Harga Bapok - Surabaya
+# Daftar paket Python yang dibutuhkan
+# ============================================
+# Catatan: environment kamu SUDAH punya semua paket ini.
+# File ini untuk dokumentasi & reproduksi di komputer lain.
+#
+# Cara install (opsional, hanya jika ada paket yang belum ada):
+#   python -m pip install -r requirements.txt
+
+# --- Inti: olah data ---
+pandas>=2.0
+numpy>=1.24
+
+# --- Visualisasi ---
+matplotlib>=3.7
+seaborn>=0.13
+
+# --- Model deret waktu ---
+statsmodels>=0.14        # ARIMA, Exponential Smoothing, ADF, ACF/PACF, dekomposisi
+
+# --- Evaluasi & utilitas ---
+scikit-learn>=1.3        # metrik MAE, RMSE, MAPE
+
+# --- Baca/tulis Excel ---
+openpyxl>=3.1
+
+# --- Notebook & kernel ---
+jupyter>=1.0
+ipykernel>=6.0
+
+# --- OPSIONAL (belum terpasang, tidak wajib) ---
+# pmdarima               # auto_arima (cari order ARIMA otomatis).
+#                        # Kalau tidak ada, notebook tetap jalan pakai grid order kecil.

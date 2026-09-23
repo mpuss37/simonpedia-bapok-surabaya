@@ -1,0 +1,683 @@
+komoditas,tanggal,kategori,harga_rata,fluktuasi,kode_ews,het_hapk,sumber_het,is_dummy,harga_diimputasi,basis_ews,status_ews
+Cabe Merah Kriting,2024-01-01,C A B E,50714.28571,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-02,C A B E,51714.28571,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-03,C A B E,51714.28571,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-04,C A B E,50285.71429,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-05,C A B E,49285.71429,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-06,C A B E,50714.28571,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-07,C A B E,51000.0,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-08,C A B E,54571.42857,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-09,C A B E,53142.85714,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-10,C A B E,54571.42857,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-11,C A B E,54571.42857,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-12,C A B E,54571.42857,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-13,C A B E,54571.42857,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-14,C A B E,54285.71429,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-15,C A B E,53571.42857,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-16,C A B E,54571.42857,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-17,C A B E,53142.85714,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-18,C A B E,50000.0,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-19,C A B E,50000.0,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-20,C A B E,49285.71429,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-21,C A B E,49285.71429,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-22,C A B E,55714.28571,-285.7142857,K10,55000.0,regulasi,False,False,HET,Waspada
+Cabe Merah Kriting,2024-01-23,C A B E,55285.71429,-285.7142857,K10,55000.0,regulasi,False,False,HET,Waspada
+Cabe Merah Kriting,2024-01-24,C A B E,57000.0,-285.7142857,K10,55000.0,regulasi,False,False,HET,Waspada
+Cabe Merah Kriting,2024-01-25,C A B E,56000.0,-285.7142857,K10,55000.0,regulasi,False,False,HET,Waspada
+Cabe Merah Kriting,2024-01-26,C A B E,54285.71429,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-27,C A B E,51428.57143,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-28,C A B E,51428.57143,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-29,C A B E,52428.57143,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-30,C A B E,50428.57143,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kriting,2024-01-31,C A B E,50428.57143,-285.7142857,K10,55000.0,regulasi,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-01,C A B E,64285.71429,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Intervensi
+Cabe Merah Kecil-Rawit,2024-01-02,C A B E,62571.42857,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Intervensi
+Cabe Merah Kecil-Rawit,2024-01-03,C A B E,62428.57143,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Intervensi
+Cabe Merah Kecil-Rawit,2024-01-04,C A B E,54285.71429,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-05,C A B E,52571.42857,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-06,C A B E,51428.57143,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-07,C A B E,51142.85714,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-08,C A B E,46571.42857,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-09,C A B E,44428.57143,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-10,C A B E,41428.57143,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-11,C A B E,37428.57143,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-12,C A B E,35285.71429,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-13,C A B E,37142.85714,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-14,C A B E,36714.28571,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-15,C A B E,37857.14286,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-16,C A B E,31714.28571,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-17,C A B E,32000.0,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-18,C A B E,30000.0,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-19,C A B E,30857.14286,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-20,C A B E,31857.14286,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-21,C A B E,32428.57143,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-22,C A B E,32000.0,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-23,C A B E,30428.57143,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-24,C A B E,29714.28571,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-25,C A B E,29428.57143,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-26,C A B E,31428.57143,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-27,C A B E,31428.57143,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-28,C A B E,30714.28571,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-29,C A B E,31000.0,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-30,C A B E,30000.0,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Cabe Merah Kecil-Rawit,2024-01-31,C A B E,30428.57143,-33857.14286,K11,57000.0,cakbapok,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-01,DAGING,31000.0,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-02,DAGING,30857.14286,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-03,DAGING,30714.28571,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-04,DAGING,30714.28571,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-05,DAGING,30714.28571,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-06,DAGING,30857.14286,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-07,DAGING,30857.14286,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-08,DAGING,30714.28571,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-09,DAGING,30428.57143,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-10,DAGING,30428.57143,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-11,DAGING,30428.57143,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-12,DAGING,30714.28571,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-13,DAGING,30857.14286,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-14,DAGING,30857.14286,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-15,DAGING,31428.57143,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-16,DAGING,31142.85714,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-17,DAGING,32000.0,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-18,DAGING,32142.85714,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-19,DAGING,32142.85714,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-20,DAGING,32142.85714,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-21,DAGING,32142.85714,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-22,DAGING,32142.85714,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-23,DAGING,32000.0,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-24,DAGING,31571.42857,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-25,DAGING,31571.42857,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-26,DAGING,31571.42857,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-27,DAGING,31571.42857,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-28,DAGING,31571.42857,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-29,DAGING,31714.28571,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-30,DAGING,31857.14286,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Ayam Broiler,2024-01-31,DAGING,31714.28571,714.2857143,K14,36750.0,data,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-01,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-02,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-03,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-04,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-05,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-06,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-07,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-08,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-09,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-10,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-11,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-12,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-13,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-14,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-15,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-16,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-17,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-18,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-19,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-20,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-21,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-22,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-23,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-24,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-25,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-26,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-27,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-28,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-29,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-30,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Atas,2024-01-31,DAGING,120000.0,0.0,K16,140000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-01,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-02,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-03,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-04,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-05,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-06,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-07,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-08,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-09,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-10,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-11,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-12,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-13,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-14,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-15,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-16,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-17,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-18,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-19,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-20,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-21,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-22,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-23,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-24,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-25,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-26,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-27,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-28,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-29,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-30,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Daging Sapi Grade Bawah,2024-01-31,DAGING,100000.0,0.0,K17,130000.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-01,BAWANG,29857.14286,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-02,BAWANG,29857.14286,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-03,BAWANG,30142.85714,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-04,BAWANG,30857.14286,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-05,BAWANG,30428.57143,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-06,BAWANG,30428.57143,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-07,BAWANG,30428.57143,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-08,BAWANG,30142.85714,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-09,BAWANG,30000.0,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-10,BAWANG,29857.14286,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-11,BAWANG,29571.42857,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-12,BAWANG,29142.85714,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-13,BAWANG,29142.85714,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-14,BAWANG,29142.85714,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-15,BAWANG,29000.0,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-16,BAWANG,28857.14286,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-17,BAWANG,27714.28571,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-18,BAWANG,28000.0,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-19,BAWANG,28000.0,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-20,BAWANG,28142.85714,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-21,BAWANG,28142.85714,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-22,BAWANG,28000.0,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-23,BAWANG,28000.0,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-24,BAWANG,27285.71429,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-25,BAWANG,28000.0,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-26,BAWANG,27428.57143,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-27,BAWANG,27142.85714,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-28,BAWANG,26428.57143,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-29,BAWANG,26428.57143,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-30,BAWANG,25142.85714,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Bawang Merah (Kualitas Lokal),2024-01-31,BAWANG,25142.85714,-4714.285714,K2,41500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-01,GULA,16357.14286,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-02,GULA,16357.14286,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-03,GULA,16214.28571,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-04,GULA,16214.28571,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-05,GULA,16214.28571,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-06,GULA,16214.28571,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-07,GULA,16214.28571,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-08,GULA,16214.28571,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-09,GULA,16071.42857,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-10,GULA,16071.42857,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-11,GULA,16071.42857,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-12,GULA,16000.0,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-13,GULA,16000.0,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-14,GULA,16000.0,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-15,GULA,16000.0,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-16,GULA,16000.0,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-17,GULA,16142.85714,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-18,GULA,16142.85714,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-19,GULA,16142.85714,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-20,GULA,16214.28571,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-21,GULA,16214.28571,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-22,GULA,16357.14286,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-23,GULA,16357.14286,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-24,GULA,16285.71429,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-25,GULA,16357.14286,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-26,GULA,16357.14286,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-27,GULA,16357.14286,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-28,GULA,16357.14286,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-29,GULA,16285.71429,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-30,GULA,16285.71429,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Gula Pasir Lokal Curah,2024-01-31,GULA,16285.71429,-71.42857143,K24,17500.0,cakbapok,False,False,HET,Aman
+Ikan Bandeng Segar (Uk. Sedang),2024-01-01,I K A N,37857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-02,I K A N,37857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-03,I K A N,37857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-04,I K A N,37857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-05,I K A N,37857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-06,I K A N,37857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-07,I K A N,37857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-08,I K A N,37857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-09,I K A N,37857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-10,I K A N,37857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-11,I K A N,37857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-12,I K A N,37142.85714,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-13,I K A N,37142.85714,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-14,I K A N,37142.85714,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-15,I K A N,37142.85714,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-16,I K A N,37142.85714,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-17,I K A N,37142.85714,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-18,I K A N,37142.85714,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-19,I K A N,37142.85714,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-20,I K A N,37142.85714,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-21,I K A N,37142.85714,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-22,I K A N,37142.85714,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-23,I K A N,36857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-24,I K A N,35857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-25,I K A N,36857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-26,I K A N,36857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-27,I K A N,36857.14286,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-28,I K A N,36571.42857,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-29,I K A N,36571.42857,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-30,I K A N,36571.42857,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Bandeng Segar (Uk. Sedang),2024-01-31,I K A N,36571.42857,-1285.714286,K26,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-01,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-02,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-03,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-04,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-05,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-06,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-07,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-08,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-09,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-10,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-11,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-12,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-13,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-14,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-15,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-16,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-17,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-18,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-19,I K A N,25250.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-20,I K A N,25000.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-21,I K A N,25000.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-22,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-23,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-24,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-25,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-26,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-27,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-28,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-29,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-30,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Lele Segar (Ukuran Sedang),2024-01-31,I K A N,24750.0,0.0,K28,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-01,I K A N,29285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-02,I K A N,29285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-03,I K A N,29285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-04,I K A N,29285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-05,I K A N,29714.28571,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-06,I K A N,29571.42857,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-07,I K A N,29571.42857,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-08,I K A N,29571.42857,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-09,I K A N,29571.42857,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-10,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-11,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-12,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-13,I K A N,30571.42857,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-14,I K A N,30571.42857,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-15,I K A N,30571.42857,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-16,I K A N,30571.42857,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-17,I K A N,30571.42857,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-18,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-19,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-20,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-21,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-22,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-23,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-24,I K A N,31000.0,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-25,I K A N,30571.42857,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-26,I K A N,30571.42857,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-27,I K A N,30571.42857,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-28,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-29,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-30,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Ikan Mujair Segar (Uk. Sedang),2024-01-31,I K A N,30285.71429,1000.0,K29,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-01,BAWANG,36571.42857,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-02,BAWANG,37000.0,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-03,BAWANG,37000.0,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-04,BAWANG,37142.85714,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-05,BAWANG,37000.0,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-06,BAWANG,36857.14286,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-07,BAWANG,37000.0,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-08,BAWANG,37000.0,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-09,BAWANG,37142.85714,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-10,BAWANG,37142.85714,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-11,BAWANG,36857.14286,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-12,BAWANG,36857.14286,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-13,BAWANG,36857.14286,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-14,BAWANG,36857.14286,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-15,BAWANG,36857.14286,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-16,BAWANG,36857.14286,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-17,BAWANG,36428.57143,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-18,BAWANG,36428.57143,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-19,BAWANG,36428.57143,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-20,BAWANG,36285.71429,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-21,BAWANG,36285.71429,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-22,BAWANG,36428.57143,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-23,BAWANG,36285.71429,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-24,BAWANG,36714.28571,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-25,BAWANG,36285.71429,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-26,BAWANG,36285.71429,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-27,BAWANG,36285.71429,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-28,BAWANG,36285.71429,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-29,BAWANG,36285.71429,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-30,BAWANG,36142.85714,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Kating),2024-01-31,BAWANG,36142.85714,-428.5714286,K3,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-01,I K A N,35000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-02,I K A N,36000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-03,I K A N,36000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-04,I K A N,36000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-05,I K A N,35400.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-06,I K A N,35000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-07,I K A N,35000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-08,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-09,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-10,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-11,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-12,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-13,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-14,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-15,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-16,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-17,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-18,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-19,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-20,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-21,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-22,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-23,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-24,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-25,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-26,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-27,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-28,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-29,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-30,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Ikan Tongkol Segar (Uk. Sedang),2024-01-31,I K A N,34000.0,-1000.0,K30,,tidak_ada,False,False,fluktuasi,
+Minyak Goreng Curah (Bening),2024-01-01,GULA,15214.28571,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-02,GULA,15214.28571,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-03,GULA,15214.28571,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-04,GULA,15214.28571,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-05,GULA,15285.71429,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-06,GULA,15285.71429,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-07,GULA,15285.71429,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-08,GULA,15285.71429,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-09,GULA,15285.71429,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-10,GULA,15214.28571,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-11,GULA,15214.28571,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-12,GULA,15214.28571,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-13,GULA,15214.28571,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-14,GULA,15214.28571,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-15,GULA,15214.28571,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-16,GULA,15214.28571,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-17,GULA,15357.14286,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-18,GULA,15357.14286,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-19,GULA,15357.14286,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-20,GULA,15357.14286,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-21,GULA,15071.42857,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-22,GULA,15071.42857,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-23,GULA,15071.42857,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-24,GULA,15071.42857,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-25,GULA,15071.42857,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-26,GULA,15071.42857,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-27,GULA,15071.42857,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-28,GULA,15071.42857,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-29,GULA,15142.85714,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-30,GULA,15142.85714,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak Goreng Curah (Bening),2024-01-31,GULA,15142.85714,-71.42857143,K34,15500.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-01,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-02,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-03,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-04,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-05,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-06,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-07,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-08,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-09,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-10,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-11,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-12,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-13,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-14,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-15,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-16,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-17,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-18,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-19,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-20,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-21,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-22,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-23,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-24,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-25,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-26,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-27,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-28,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-29,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-30,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Minyak KITA,2024-01-31,GULA,14000.0,0.0,K36,14000.0,cakbapok,False,False,HET,Aman
+Bawang Putih (Jenis Sinco),2024-01-01,BAWANG,33142.85714,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-02,BAWANG,33428.57143,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-03,BAWANG,33428.57143,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-04,BAWANG,33428.57143,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-05,BAWANG,33428.57143,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-06,BAWANG,33285.71429,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-07,BAWANG,33285.71429,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-08,BAWANG,33285.71429,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-09,BAWANG,33285.71429,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-10,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-11,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-12,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-13,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-14,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-15,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-16,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-17,BAWANG,33142.85714,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-18,BAWANG,33142.85714,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-19,BAWANG,33142.85714,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-20,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-21,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-22,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-23,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-24,BAWANG,33142.85714,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-25,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-26,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-27,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-28,BAWANG,33000.0,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-29,BAWANG,33142.85714,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-30,BAWANG,32857.14286,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Bawang Putih (Jenis Sinco),2024-01-31,BAWANG,32857.14286,-285.7142857,K4,,tidak_ada,False,False,fluktuasi,
+Telur Ayam Horn,2024-01-01,TELUR,25642.85714,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-02,TELUR,25642.85714,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-03,TELUR,25714.28571,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-04,TELUR,25857.14286,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-05,TELUR,25500.0,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-06,TELUR,25642.85714,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-07,TELUR,25500.0,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-08,TELUR,25428.57143,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-09,TELUR,25285.71429,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-10,TELUR,25142.85714,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-11,TELUR,25142.85714,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-12,TELUR,25142.85714,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-13,TELUR,25000.0,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-14,TELUR,25000.0,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-15,TELUR,25000.0,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-16,TELUR,25000.0,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-17,TELUR,25000.0,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-18,TELUR,25571.42857,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-19,TELUR,25714.28571,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-20,TELUR,26000.0,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-21,TELUR,26000.0,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-22,TELUR,26285.71429,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-23,TELUR,26285.71429,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-24,TELUR,26285.71429,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-25,TELUR,26285.71429,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-26,TELUR,26142.85714,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-27,TELUR,26285.71429,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-28,TELUR,26285.71429,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-29,TELUR,26285.71429,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-30,TELUR,26142.85714,357.1428571,K42,27000.0,data,False,False,HET,Aman
+Telur Ayam Horn,2024-01-31,TELUR,26000.0,357.1428571,K42,27000.0,data,False,False,HET,Aman
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-01,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-02,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-03,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-04,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-05,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-06,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-07,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-08,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-09,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-10,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-11,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-12,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-13,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-14,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-15,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-16,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-17,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-18,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-19,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-20,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-21,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-22,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-23,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-24,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-25,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-26,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-27,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-28,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-29,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-30,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+"Tepung Terigu ""Segitiga Biru"" Curah",2024-01-31,TEPUNG TERIGU,10500.0,0.0,K43,,tidak_ada,False,False,fluktuasi,
+Beras Premium,2024-01-01,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-02,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-03,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-04,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-05,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-06,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-07,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-08,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-09,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-10,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-11,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-12,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-13,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-14,BERAS,13985.71429,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-15,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-16,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-17,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-18,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-19,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-20,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-21,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-22,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-23,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-24,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-25,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-26,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-27,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-28,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-29,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-30,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras Premium,2024-01-31,BERAS,14000.0,14.28571429,K5,14900.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium,2024-01-01,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-02,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-03,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-04,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-05,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-06,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-07,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-08,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-09,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-10,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-11,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-12,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-13,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-14,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-15,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-16,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-17,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-18,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-19,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-20,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-21,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-22,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-23,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-24,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-25,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-26,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-27,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-28,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-29,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-30,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium,2024-01-31,BERAS,10900.0,,K6,12500.0,cakbapok,True,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-01,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-02,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-03,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-04,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-05,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-06,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-07,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-08,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-09,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-10,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-11,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-12,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-13,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-14,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-15,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-16,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-17,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-18,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-19,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-20,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-21,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-22,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-23,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-24,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-25,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-26,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-27,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-28,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-29,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-30,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+Beras IR.64 Medium Bulog,2024-01-31,BERAS,10900.0,0.0,K7,12500.0,cakbapok,False,False,HET,Aman
+BERAS SPHP,2024-01-01,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-02,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-03,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-04,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-05,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-06,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-07,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-08,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-09,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-10,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-11,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-12,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-13,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-14,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-15,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-16,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-17,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-18,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-19,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-20,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-21,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-22,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-23,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-24,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-25,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-26,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-27,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-28,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-29,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-30,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+BERAS SPHP,2024-01-31,BERAS,10900.0,,K8,12500.0,cakbapok,True,False,HET,Aman
+Cabe Merah Besar,2024-01-01,C A B E,53571.42857,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-02,C A B E,54571.42857,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-03,C A B E,55285.71429,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-04,C A B E,51000.0,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-05,C A B E,51000.0,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-06,C A B E,51428.57143,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-07,C A B E,51714.28571,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-08,C A B E,51000.0,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-09,C A B E,49571.42857,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-10,C A B E,51714.28571,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-11,C A B E,51000.0,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-12,C A B E,50285.71429,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-13,C A B E,49571.42857,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-14,C A B E,49285.71429,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-15,C A B E,50571.42857,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-16,C A B E,52428.57143,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-17,C A B E,51714.28571,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-18,C A B E,51000.0,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-19,C A B E,50714.28571,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-20,C A B E,52000.0,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-21,C A B E,52000.0,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-22,C A B E,66714.28571,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-23,C A B E,63857.14286,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-24,C A B E,64571.42857,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-25,C A B E,62428.57143,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-26,C A B E,61714.28571,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-27,C A B E,61714.28571,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-28,C A B E,61000.0,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-29,C A B E,62714.28571,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-30,C A B E,64000.0,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
+Cabe Merah Besar,2024-01-31,C A B E,65428.57143,11857.14286,K9,,tidak_ada,False,False,fluktuasi,
