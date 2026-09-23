@@ -1,5 +1,6 @@
 import { Router } from "express"
 import { prisma } from "../lib/prisma"
+import { catatAudit, ambilIp, ambilAdmin } from "../lib/audit"
 
 const router = Router()
 
@@ -20,6 +21,11 @@ router.put("/:id", async (req, res) => {
     const { id } = req.params
     const { harga, catatan, status } = req.body ?? {}
 
+    const lama = await prisma.het.findUnique({ where: { id: Number(id) } })
+    if (!lama) {
+      return res.status(404).json({ error: "Data HET tidak ditemukan" })
+    }
+
     const data = await prisma.het.update({
       where: { id: Number(id) },
       data: {
@@ -29,6 +35,17 @@ router.put("/:id", async (req, res) => {
       },
     })
 
+    await catatAudit({
+      admin: ambilAdmin(req),
+      aksi: "ubah_het",
+      entitas: "Het",
+      entitasId: data.id,
+      deskripsi: `Ubah HET ${data.komoditas} (${data.kode})`,
+      dataLama: { harga: lama.harga, catatan: lama.catatan, status: lama.status },
+      dataBaru: { harga: data.harga, catatan: data.catatan, status: data.status },
+      ip: ambilIp(req),
+    })
+
     res.json(data)
   } catch (error) {
     console.error("Gagal memperbarui HET:", error)
@@ -36,7 +53,7 @@ router.put("/:id", async (req, res) => {
   }
 })
 
-// Isi data HET awal (seed) bila tabel kosong.
+// Cek apakah data HET sudah terisi.
 router.post("/seed", async (_req, res) => {
   try {
     const jumlah = await prisma.het.count()

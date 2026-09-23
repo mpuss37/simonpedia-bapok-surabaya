@@ -1,6 +1,7 @@
 import { Router } from "express"
 import * as XLSX from "xlsx"
 import { prisma } from "../lib/prisma"
+import { catatAudit, ambilIp, ambilAdmin } from "../lib/audit"
 
 const router = Router()
 
@@ -15,6 +16,15 @@ router.post("/komoditas", async (req, res) => {
       return res.status(400).json({ error: "nama, kategori, dan satuan wajib diisi" })
     }
     const data = await prisma.komoditas.create({ data: { nama, kategori, satuan } })
+    await catatAudit({
+      admin: ambilAdmin(req),
+      aksi: "tambah_komoditas",
+      entitas: "Komoditas",
+      entitasId: data.id,
+      deskripsi: `Tambah komoditas "${data.nama}"`,
+      dataBaru: data,
+      ip: ambilIp(req),
+    })
     res.json(data)
   } catch (error) {
     console.error("Gagal menambah komoditas:", error)
@@ -26,6 +36,10 @@ router.put("/komoditas/:id", async (req, res) => {
   try {
     const { id } = req.params
     const { nama, kategori, satuan } = req.body ?? {}
+    const lama = await prisma.komoditas.findUnique({ where: { id: Number(id) } })
+    if (!lama) {
+      return res.status(404).json({ error: "Komoditas tidak ditemukan" })
+    }
     const data = await prisma.komoditas.update({
       where: { id: Number(id) },
       data: {
@@ -33,6 +47,16 @@ router.put("/komoditas/:id", async (req, res) => {
         ...(kategori !== undefined ? { kategori } : {}),
         ...(satuan !== undefined ? { satuan } : {}),
       },
+    })
+    await catatAudit({
+      admin: ambilAdmin(req),
+      aksi: "ubah_komoditas",
+      entitas: "Komoditas",
+      entitasId: data.id,
+      deskripsi: `Ubah komoditas "${lama.nama}"`,
+      dataLama: lama,
+      dataBaru: data,
+      ip: ambilIp(req),
     })
     res.json(data)
   } catch (error) {
@@ -50,7 +74,17 @@ router.delete("/komoditas/:id", async (req, res) => {
         error: `Komoditas ini masih dipakai di ${dipakai} data survei, tidak bisa dihapus.`,
       })
     }
+    const lama = await prisma.komoditas.findUnique({ where: { id: Number(id) } })
     await prisma.komoditas.delete({ where: { id: Number(id) } })
+    await catatAudit({
+      admin: ambilAdmin(req),
+      aksi: "hapus_komoditas",
+      entitas: "Komoditas",
+      entitasId: Number(id),
+      deskripsi: `Hapus komoditas "${lama?.nama ?? id}"`,
+      dataLama: lama,
+      ip: ambilIp(req),
+    })
     res.json({ ok: true })
   } catch (error) {
     console.error("Gagal menghapus komoditas:", error)
@@ -87,6 +121,15 @@ router.post("/pasar", async (req, res) => {
         wilayahId: wid,
       },
     })
+    await catatAudit({
+      admin: ambilAdmin(req),
+      aksi: "tambah_pasar",
+      entitas: "Pasar",
+      entitasId: data.id,
+      deskripsi: `Tambah pasar "${data.nama}"`,
+      dataBaru: data,
+      ip: ambilIp(req),
+    })
     res.json(data)
   } catch (error) {
     console.error("Gagal menambah pasar:", error)
@@ -103,7 +146,17 @@ router.delete("/pasar/:id", async (req, res) => {
         error: `Pasar ini masih punya ${dipakai} data survei, tidak bisa dihapus.`,
       })
     }
+    const lama = await prisma.pasar.findUnique({ where: { id: Number(id) } })
     await prisma.pasar.delete({ where: { id: Number(id) } })
+    await catatAudit({
+      admin: ambilAdmin(req),
+      aksi: "hapus_pasar",
+      entitas: "Pasar",
+      entitasId: Number(id),
+      deskripsi: `Hapus pasar "${lama?.nama ?? id}"`,
+      dataLama: lama,
+      ip: ambilIp(req),
+    })
     res.json({ ok: true })
   } catch (error) {
     console.error("Gagal menghapus pasar:", error)
@@ -233,6 +286,17 @@ router.post("/import", async (req, res) => {
         status,
         catatan: gagal > 0 ? `${gagal} baris dilewati (data tidak lengkap)` : null,
       },
+    })
+
+    await catatAudit({
+      admin: ambilAdmin(req),
+      aksi: "import",
+      entitas: "Import",
+      entitasId: riwayat.id,
+      deskripsi: `Impor "${namaFile}": ${berhasil} berhasil, ${gagal} gagal (dari ${baris.length} baris)`,
+      dataBaru: { namaFile, jenis, jumlahBaris: baris.length, berhasil, gagal, status },
+      ip: ambilIp(req),
+      berhasil: status !== "gagal",
     })
 
     res.json({ ok: true, berhasil, gagal, status, riwayat })

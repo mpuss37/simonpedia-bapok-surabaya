@@ -19,6 +19,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard"
 import AdminInput from "./pages/admin/AdminInput"
 import AdminRiwayat from "./pages/admin/AdminRiwayat"
 import AdminHet from "./pages/admin/AdminHet"
+import AdminAudit from "./pages/admin/AdminAudit"
 
 
 function App() {
@@ -133,6 +134,8 @@ function App() {
           <Route path="/admin/riwayat" element={<AdminRiwayat />} />
 
           <Route path="/admin/het" element={<AdminHet />} />
+
+          <Route path="/admin/audit" element={<AdminAudit />} />
 
         </Route>
 

@@ -10,6 +10,7 @@ import authRoutes from "./routes/auth"
 import hetRoutes from "./routes/het"
 import riwayatRoutes from "./routes/riwayat"
 import adminRoutes from "./routes/admin"
+import auditRoutes from "./routes/audit"
 import { wajibAdmin } from "./middleware/wajibAdmin"
 
 const app = express()
@@ -32,5 +33,6 @@ app.use("/api/auth", authRoutes)
 app.use("/api/het", wajibAdmin, hetRoutes)
 app.use("/api/riwayat", wajibAdmin, riwayatRoutes)
 app.use("/api/admin", wajibAdmin, adminRoutes)
+app.use("/api/audit", wajibAdmin, auditRoutes)
 
 export default app

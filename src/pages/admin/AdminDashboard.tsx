@@ -7,6 +7,7 @@ import {
   Upload,
   History,
   TrendingUp,
+  ScrollText,
   ArrowRight,
 } from "lucide-react"
 import { getStatistikAdmin, getHet } from "../../services/admin"
@@ -108,6 +109,12 @@ export default function AdminDashboard() {
             icon={TrendingUp}
             judul="Kelola HET"
             desc="Kelola Harga Eceran Tertinggi per komoditas."
+          />
+          <Pintasan
+            to="/admin/audit"
+            icon={ScrollText}
+            judul="Audit Log"
+            desc="Lihat catatan siapa mengubah apa dan kapan."
           />
         </div>
       </section>

@@ -5,6 +5,7 @@ import {
   Upload,
   History,
   Tags,
+  ScrollText,
   ArrowLeft,
   Menu,
   X,
@@ -18,6 +19,7 @@ const menu = [
   { label: "Input Data", path: "/admin/input", icon: Upload, end: false },
   { label: "Riwayat Input", path: "/admin/riwayat", icon: History, end: false },
   { label: "Kelola HET", path: "/admin/het", icon: Tags, end: false },
+  { label: "Audit Log", path: "/admin/audit", icon: ScrollText, end: false },
 ]
 
 export default function AdminLayout() {

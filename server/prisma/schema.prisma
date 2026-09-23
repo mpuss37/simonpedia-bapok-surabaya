@@ -76,3 +76,18 @@ model RiwayatInput {
   catatan     String?
   createdAt   DateTime @default(now())
 }
+
+// Catatan audit (append-only): siapa mengubah apa & kapan.
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  admin     String
+  aksi      String
+  entitas   String
+  entitasId Int?
+  deskripsi String
+  dataLama  String?
+  dataBaru  String?
+  ip        String?
+  berhasil  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}

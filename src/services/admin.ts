@@ -149,6 +149,41 @@ export async function importBaris(
 }
 
 // =====================================================
+// AUDIT LOG
+// =====================================================
+
+export interface AuditLogItem {
+  id: number
+  admin: string
+  aksi: string
+  entitas: string
+  entitasId: number | null
+  deskripsi: string
+  dataLama: string | null
+  dataBaru: string | null
+  ip: string | null
+  berhasil: boolean
+  createdAt: string
+}
+
+export async function getAuditLog(params?: {
+  cari?: string
+  aksi?: string
+  batas?: number
+}): Promise<AuditLogItem[]> {
+  const q = new URLSearchParams()
+  if (params?.cari) q.set("cari", params.cari)
+  if (params?.aksi) q.set("aksi", params.aksi)
+  if (params?.batas) q.set("batas", String(params.batas))
+
+  const url = q.toString() ? `${API_URL}/audit?${q}` : `${API_URL}/audit`
+  const res = await fetch(url, { headers: headerAdmin() })
+  cekTolak(res)
+  if (!res.ok) throw new Error("Gagal mengambil audit log")
+  return res.json()
+}
+
+// =====================================================
 // RINGKASAN UNTUK DASHBOARD
 // =====================================================
 
