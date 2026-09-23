@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "node16",
+    "moduleResolution": "node16",
     "lib": ["ES2020"],
     "outDir": "./server/dist",
     "strict": true,
@@ -10,8 +11,8 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "sourceMap": true,
-    "rootDir": "."
+    "rootDir": "./server/src"
   },
-  "include": ["api/**/*.ts", "server/src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "server/dist", "src"]
+  "include": ["server/src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "server/dist", "src", "api"]
 }
