@@ -84,7 +84,7 @@ export default function MapPage() {
         </p>
       </section>
 
-      <section className="mt-8 grid gap-4 sm:grid-cols-3">
+      <section className="mt-8 grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border border-[#C93742]/20 bg-white dark:bg-[#1E1E1E] p-5 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#C93742]/10 text-[#C93742]"><Store size={18} /></div>
@@ -100,15 +100,6 @@ export default function MapPage() {
             <div>
               <p className="text-xs font-semibold text-[#171717]/55 dark:text-white/55">Pasar aktif</p>
               <p className="mt-0.5 text-3xl font-black tracking-[-0.04em] text-emerald-600 dark:text-emerald-400">{markets.length}</p>
-            </div>
-          </div>
-        </div>
-        <div className="rounded-2xl border border-[#C93742]/20 bg-white dark:bg-[#1E1E1E] p-5 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#C93742]/10 text-[#C93742]"><MapPin size={18} /></div>
-            <div>
-              <p className="text-xs font-semibold text-[#171717]/55 dark:text-white/55">Ditampilkan</p>
-              <p className="mt-0.5 text-3xl font-black tracking-[-0.04em] text-[#C93742]">{filteredMarkets.length}</p>
             </div>
           </div>
         </div>
