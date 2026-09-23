@@ -188,7 +188,7 @@ function parseFile(filePath: string, fileName: string): MasterRow[] {
 // =====================================================
 
 async function main() {
-  const dataDir = path.resolve(__dirname, "../../data/archive/2024-keseluruhan/2024")
+  const dataDir = path.resolve(__dirname, "../../raw_data/2024-keseluruhan/2024")
   if (!fs.existsSync(dataDir)) {
     console.error("Folder tidak ada:", dataDir)
     process.exit(1)

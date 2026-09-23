@@ -9,30 +9,23 @@ import {
   TrendingUp,
   ArrowRight,
 } from "lucide-react"
-import {
-  getKomoditas,
-  getPasar,
-  getRingkasanHarga,
-} from "../../services/priceService"
-import { HET_DATA } from "../../lib/hetData"
+import { getStatistikAdmin, getHet } from "../../services/admin"
 
 export default function AdminDashboard() {
   const [jumlahKomoditas, setJumlahKomoditas] = useState(0)
   const [jumlahPasar, setJumlahPasar] = useState(0)
   const [jumlahHarga, setJumlahHarga] = useState(0)
+  const [jumlahHet, setJumlahHet] = useState(0)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const [k, p, r] = await Promise.all([
-          getKomoditas(),
-          getPasar(),
-          getRingkasanHarga(),
-        ])
-        setJumlahKomoditas(k.length)
-        setJumlahPasar(p.length)
-        setJumlahHarga(r.total)
+        const [stat, het] = await Promise.all([getStatistikAdmin(), getHet()])
+        setJumlahKomoditas(stat.komoditas)
+        setJumlahPasar(stat.pasar)
+        setJumlahHarga(stat.harga)
+        setJumlahHet(het.filter((h) => h.harga !== null).length)
       } catch (err) {
         console.error("Gagal memuat ringkasan admin:", err)
       } finally {
@@ -41,8 +34,6 @@ export default function AdminDashboard() {
     }
     fetchData()
   }, [])
-
-  const jumlahHet = HET_DATA.filter((h) => h.het !== null).length
 
   const statistik = [
     { label: "Komoditas", value: jumlahKomoditas, icon: Package, warna: "#C93742" },

@@ -52,3 +52,27 @@ model DetailSurvei {
   komoditas   Komoditas @relation(fields: [komoditasId], references: [id])
   harga       Float
 }
+
+model Het {
+  id         Int      @id @default(autoincrement())
+  kode       String   @unique
+  komoditas  String
+  harga      Float?
+  satuan     String
+  sumber     String
+  status     String
+  catatan    String?
+  updatedAt  DateTime @updatedAt
+}
+
+model RiwayatInput {
+  id          Int      @id @default(autoincrement())
+  namaFile    String
+  jenis       String
+  jumlahBaris Int
+  berhasil    Int      @default(0)
+  gagal       Int      @default(0)
+  status      String
+  catatan     String?
+  createdAt   DateTime @default(now())
+}

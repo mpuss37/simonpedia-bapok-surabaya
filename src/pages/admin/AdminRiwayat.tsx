@@ -1,32 +1,49 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { History, Trash2, CheckCircle2, AlertTriangle, FileSpreadsheet } from "lucide-react"
+import { getRiwayat, hapusRiwayat, type RiwayatItem } from "../../services/admin"
 
-interface RiwayatItem {
-  id: number
-  waktu: string
-  namaFile: string
-  jumlahBaris: number
-  status: "berhasil" | "sebagian" | "gagal"
-}
-
-const riwayatAwal: RiwayatItem[] = [
-  { id: 1, waktu: "23 Sep 2026, 14:10", namaFile: "harga-januari-2024.xlsx", jumlahBaris: 1420, status: "berhasil" },
-  { id: 2, waktu: "22 Sep 2026, 09:35", namaFile: "komoditas-master.csv", jumlahBaris: 67, status: "berhasil" },
-  { id: 3, waktu: "21 Sep 2026, 16:48", namaFile: "survei-pasar-juni.json", jumlahBaris: 890, status: "sebagian" },
-  { id: 4, waktu: "20 Sep 2026, 11:02", namaFile: "harga-desember.xlsx", jumlahBaris: 0, status: "gagal" },
-]
-
-const statusStyle: Record<RiwayatItem["status"], { bg: string; text: string; icon: typeof CheckCircle2 }> = {
+const statusStyle: Record<string, { bg: string; text: string; icon: typeof CheckCircle2 }> = {
   berhasil: { bg: "bg-[#EFFAF3] dark:bg-emerald-500/15", text: "text-[#1C8C4A] dark:text-emerald-400", icon: CheckCircle2 },
   sebagian: { bg: "bg-[#FFF8E1]", text: "text-[#B45309]", icon: AlertTriangle },
   gagal: { bg: "bg-[#FFF0F1]", text: "text-[#C93742]", icon: AlertTriangle },
 }
 
-export default function AdminRiwayat() {
-  const [data, setData] = useState<RiwayatItem[]>(riwayatAwal)
+function formatWaktu(iso: string) {
+  return new Date(iso).toLocaleString("id-ID", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  })
+}
 
-  function hapus(id: number) {
-    setData((prev) => prev.filter((d) => d.id !== id))
+export default function AdminRiwayat() {
+  const [data, setData] = useState<RiwayatItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function muat() {
+      try {
+        const hasil = await getRiwayat()
+        setData(hasil)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Gagal memuat riwayat")
+      } finally {
+        setLoading(false)
+      }
+    }
+    muat()
+  }, [])
+
+  async function hapus(id: number) {
+    try {
+      await hapusRiwayat(id)
+      setData((prev) => prev.filter((d) => d.id !== id))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menghapus")
+    }
   }
 
   return (
@@ -43,6 +60,12 @@ export default function AdminRiwayat() {
         </p>
       </section>
 
+      {error && (
+        <div className="mt-6 rounded-xl border border-[#C93742]/30 bg-[#FFF3F4] px-4 py-3 text-sm text-[#C93742]">
+          {error}
+        </div>
+      )}
+
       {/* TABEL */}
       <section className="mt-8 rounded-2xl border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] shadow-sm">
         <div className="flex items-center justify-between border-b border-[#171717]/[0.06] dark:border-white/10 px-6 py-4">
@@ -51,23 +74,29 @@ export default function AdminRiwayat() {
             Riwayat Unggahan
           </h2>
           <span className="text-xs text-[#171717]/40 dark:text-white/40">
-            {data.length} entri
+            {loading ? "memuat..." : `${data.length} entri`}
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[720px] text-left">
+          <table className="w-full min-w-[760px] text-left">
             <thead>
               <tr className="border-b border-[#171717]/[0.06] dark:border-white/10 text-[11px] uppercase tracking-wide text-[#171717]/40 dark:text-white/40">
                 <th className="px-6 py-3 font-semibold">Berkas</th>
                 <th className="px-6 py-3 font-semibold">Waktu</th>
-                <th className="px-6 py-3 text-right font-semibold">Jumlah Baris</th>
+                <th className="px-6 py-3 text-right font-semibold">Baris</th>
                 <th className="px-6 py-3 font-semibold">Status</th>
                 <th className="px-6 py-3 text-right font-semibold">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              {data.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-12 text-center text-sm text-[#171717]/40 dark:text-white/40">
+                    Memuat riwayat...
+                  </td>
+                </tr>
+              ) : data.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-sm text-[#171717]/40 dark:text-white/40">
                     Belum ada riwayat unggahan.
@@ -75,7 +104,7 @@ export default function AdminRiwayat() {
                 </tr>
               ) : (
                 data.map((d) => {
-                  const s = statusStyle[d.status]
+                  const s = statusStyle[d.status] ?? statusStyle.gagal
                   const SIcon = s.icon
                   return (
                     <tr
@@ -90,7 +119,9 @@ export default function AdminRiwayat() {
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">{d.waktu}</td>
+                      <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">
+                        {formatWaktu(d.createdAt)}
+                      </td>
                       <td className="px-6 py-3 text-right text-sm text-[#171717]/70 dark:text-white/70">
                         {d.jumlahBaris.toLocaleString("id-ID")}
                       </td>
@@ -116,13 +147,6 @@ export default function AdminRiwayat() {
               )}
             </tbody>
           </table>
-        </div>
-
-        <div className="border-t border-[#171717]/[0.06] dark:border-white/10 px-6 py-3">
-          <p className="text-xs text-[#171717]/40 dark:text-white/40">
-            Tombol hapus di atas hanya menghapus baris tampilan. Penghapusan data
-            asli akan aktif setelah backend tersambung.
-          </p>
         </div>
       </section>
     </div>

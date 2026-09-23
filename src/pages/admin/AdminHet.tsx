@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react"
-import { Tags, Search, CheckCircle2, MinusCircle, ExternalLink } from "lucide-react"
-import { HET_DATA } from "../../lib/hetData"
+import { useEffect, useMemo, useState } from "react"
+import { Tags, Search, CheckCircle2, MinusCircle, Pencil, X, Check } from "lucide-react"
+import { getHet, updateHet, type HetItem } from "../../services/admin"
 
 const statusLabel: Record<string, { bg: string; text: string }> = {
   terverifikasi: { bg: "bg-[#EFFAF3] dark:bg-emerald-500/15", text: "text-[#1C8C4A] dark:text-emerald-400" },
@@ -13,19 +13,69 @@ function formatRupiah(v: number) {
 }
 
 export default function AdminHet() {
+  const [data, setData] = useState<HetItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
   const [cari, setCari] = useState("")
   const [filter, setFilter] = useState<"semua" | "ada" | "tanpa">("semua")
 
-  const data = useMemo(() => {
-    return HET_DATA.filter((h) => {
+  // Baris yang sedang diedit + nilai sementara.
+  const [editId, setEditId] = useState<number | null>(null)
+  const [editHarga, setEditHarga] = useState("")
+  const [editCatatan, setEditCatatan] = useState("")
+  const [simpanLoading, setSimpanLoading] = useState(false)
+
+  useEffect(() => {
+    async function muat() {
+      try {
+        const hasil = await getHet()
+        setData(hasil)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Gagal memuat data")
+      } finally {
+        setLoading(false)
+      }
+    }
+    muat()
+  }, [])
+
+  const terfilter = useMemo(() => {
+    return data.filter((h) => {
       const cocokCari = h.komoditas.toLowerCase().includes(cari.toLowerCase())
       const cocokFilter =
         filter === "semua" ||
-        (filter === "ada" && h.het !== null) ||
-        (filter === "tanpa" && h.het === null)
+        (filter === "ada" && h.harga !== null) ||
+        (filter === "tanpa" && h.harga === null)
       return cocokCari && cocokFilter
     })
-  }, [cari, filter])
+  }, [data, cari, filter])
+
+  function mulaiEdit(h: HetItem) {
+    setEditId(h.id)
+    setEditHarga(h.harga !== null ? String(h.harga) : "")
+    setEditCatatan(h.catatan ?? "")
+  }
+
+  function batalEdit() {
+    setEditId(null)
+    setEditHarga("")
+    setEditCatatan("")
+  }
+
+  async function simpanEdit(h: HetItem) {
+    setSimpanLoading(true)
+    try {
+      const harga = editHarga.trim() === "" ? null : Number(editHarga.replace(/[^\d]/g, ""))
+      const diperbarui = await updateHet(h.id, { harga, catatan: editCatatan })
+      setData((prev) => prev.map((x) => (x.id === h.id ? { ...x, ...diperbarui } : x)))
+      batalEdit()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal menyimpan")
+    } finally {
+      setSimpanLoading(false)
+    }
+  }
 
   return (
     <div className="px-6 py-10 lg:px-10 lg:py-12">
@@ -36,10 +86,17 @@ export default function AdminHet() {
           Kelola HET
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-[#171717]/50 dark:text-white/50">
-          Harga Eceran Tertinggi per komoditas, mengacu pada regulasi Bapanas
-          dan CAKBAPOK. Komoditas tanpa HET resmi ditandai khusus.
+          Harga Eceran Tertinggi per komoditas. Klik Edit untuk mengubah nilai
+          HET atau catatannya. Kosongkan kolom harga bila komoditas tidak
+          memiliki HET.
         </p>
       </section>
+
+      {error && (
+        <div className="mt-6 rounded-xl border border-[#C93742]/30 bg-[#FFF3F4] px-4 py-3 text-sm text-[#C93742]">
+          {error}
+        </div>
+      )}
 
       {/* FILTER */}
       <section className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -89,46 +146,76 @@ export default function AdminHet() {
             Daftar HET
           </h2>
           <span className="text-xs text-[#171717]/40 dark:text-white/40">
-            {data.length} komoditas
+            {loading ? "memuat..." : `${terfilter.length} komoditas`}
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[860px] text-left">
+          <table className="w-full min-w-[900px] text-left">
             <thead>
               <tr className="border-b border-[#171717]/[0.06] dark:border-white/10 text-[11px] uppercase tracking-wide text-[#171717]/40 dark:text-white/40">
                 <th className="px-6 py-3 font-semibold">Kode</th>
                 <th className="px-6 py-3 font-semibold">Komoditas</th>
                 <th className="px-6 py-3 text-right font-semibold">HET</th>
                 <th className="px-6 py-3 font-semibold">Satuan</th>
-                <th className="px-6 py-3 font-semibold">Sumber</th>
                 <th className="px-6 py-3 font-semibold">Status</th>
+                <th className="px-6 py-3 text-right font-semibold">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              {data.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-sm text-[#171717]/40 dark:text-white/40">
+                    Memuat data HET...
+                  </td>
+                </tr>
+              ) : terfilter.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-sm text-[#171717]/40 dark:text-white/40">
                     Tidak ada komoditas yang cocok.
                   </td>
                 </tr>
               ) : (
-                data.map((h) => {
+                terfilter.map((h) => {
                   const s = statusLabel[h.status] ?? statusLabel.tanpa_het
+                  const sedangEdit = editId === h.id
                   return (
                     <tr
-                      key={h.kode}
+                      key={h.id}
                       className="border-b border-[#171717]/[0.04] dark:border-white/[0.06] last:border-0"
                     >
                       <td className="px-6 py-3 font-mono text-xs text-[#171717]/45 dark:text-white/45">
                         {h.kode}
                       </td>
-                      <td className="px-6 py-3 text-sm font-semibold text-[#171717] dark:text-white">
-                        {h.komoditas}
+                      <td className="px-6 py-3">
+                        <p className="text-sm font-semibold text-[#171717] dark:text-white">
+                          {h.komoditas}
+                        </p>
+                        {sedangEdit ? (
+                          <input
+                            value={editCatatan}
+                            onChange={(e) => setEditCatatan(e.target.value)}
+                            placeholder="Catatan"
+                            className="mt-1 w-full max-w-md rounded-lg border border-[#171717]/10 dark:border-white/10 bg-[#FAF7F7] dark:bg-[#121212] px-2 py-1 text-xs text-[#171717] dark:text-white outline-none"
+                          />
+                        ) : (
+                          h.catatan && (
+                            <p className="mt-0.5 max-w-md text-[11px] leading-4 text-[#171717]/40 dark:text-white/40">
+                              {h.catatan}
+                            </p>
+                          )
+                        )}
                       </td>
                       <td className="px-6 py-3 text-right text-sm font-bold">
-                        {h.het !== null ? (
-                          <span className="text-[#171717] dark:text-white">{formatRupiah(h.het)}</span>
+                        {sedangEdit ? (
+                          <input
+                            value={editHarga}
+                            onChange={(e) => setEditHarga(e.target.value)}
+                            placeholder="kosong = tanpa HET"
+                            className="w-32 rounded-lg border border-[#171717]/10 dark:border-white/10 bg-[#FAF7F7] dark:bg-[#121212] px-2 py-1 text-right text-sm text-[#171717] dark:text-white outline-none"
+                          />
+                        ) : h.harga !== null ? (
+                          <span className="text-[#171717] dark:text-white">{formatRupiah(h.harga)}</span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-[#171717]/35 dark:text-white/35">
                             <MinusCircle size={13} />
@@ -137,12 +224,43 @@ export default function AdminHet() {
                         )}
                       </td>
                       <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">{h.satuan}</td>
-                      <td className="px-6 py-3 text-xs text-[#171717]/55 dark:text-white/55">{h.sumber}</td>
                       <td className="px-6 py-3">
                         <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold ${s.bg} ${s.text}`}>
                           <CheckCircle2 size={12} />
                           {h.status.replace("_", " ")}
                         </span>
+                      </td>
+                      <td className="px-6 py-3 text-right">
+                        {sedangEdit ? (
+                          <div className="flex justify-end gap-2">
+                            <button
+                              type="button"
+                              onClick={() => simpanEdit(h)}
+                              disabled={simpanLoading}
+                              className="inline-flex items-center gap-1 rounded-lg bg-[#1C8C4A] px-2.5 py-1.5 text-xs font-semibold text-white transition hover:bg-[#15703a]"
+                            >
+                              <Check size={13} />
+                              Simpan
+                            </button>
+                            <button
+                              type="button"
+                              onClick={batalEdit}
+                              className="inline-flex items-center gap-1 rounded-lg border border-[#171717]/10 dark:border-white/10 px-2.5 py-1.5 text-xs font-semibold text-[#171717]/60 dark:text-white/60 transition hover:border-[#C93742]/40"
+                            >
+                              <X size={13} />
+                              Batal
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => mulaiEdit(h)}
+                            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-[#171717]/45 transition hover:bg-[#FFF3F4] hover:text-[#C93742] dark:text-white/45 dark:hover:bg-white/[0.06]"
+                          >
+                            <Pencil size={14} />
+                            Edit
+                          </button>
+                        )}
                       </td>
                     </tr>
                   )
@@ -150,14 +268,6 @@ export default function AdminHet() {
               )}
             </tbody>
           </table>
-        </div>
-
-        <div className="border-t border-[#171717]/[0.06] dark:border-white/10 px-6 py-3">
-          <p className="flex items-center gap-1.5 text-xs text-[#171717]/40 dark:text-white/40">
-            <ExternalLink size={12} />
-            Sumber data: hasil analisis HET (regulasi Bapanas &amp; CAKBAPOK).
-            Pengubahan nilai akan aktif setelah backend tersambung.
-          </p>
         </div>
       </section>
     </div>

@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+import * as XLSX from "xlsx"
 import {
   Upload,
   FileSpreadsheet,
@@ -7,27 +8,137 @@ import {
   Check,
   Info,
   X,
+  AlertTriangle,
 } from "lucide-react"
+import { importBaris, type BarisImport } from "../../services/admin"
 
-const contohBaris = [
-  { tanggal: "2024-01-01", kategori: "BUMBU DAPUR", komoditas: "Cabai Rawit", satuan: "kg", pasar: "Pasar Wonokromo", harga: "85.000" },
-  { tanggal: "2024-01-01", kategori: "PANGAN POKOK", komoditas: "Beras Premium", satuan: "kg", pasar: "Pasar Wonokromo", harga: "14.900" },
-  { tanggal: "2024-01-01", kategori: "PANGAN POKOK", komoditas: "Gula Pasir", satuan: "kg", pasar: "Pasar Keputran", harga: "17.500" },
-]
+interface BarisPratinjau {
+  tanggal: string
+  kategori: string
+  komoditas: string
+  satuan: string
+  pasar: string
+  harga: string
+}
+
+const KOLOM = ["tanggal", "kategori", "komoditas", "satuan", "pasar", "harga"]
 
 export default function AdminInput() {
   const inputRef = useRef<HTMLInputElement>(null)
   const [namaFile, setNamaFile] = useState<string | null>(null)
-  const [notified, setNotified] = useState(false)
+  const [baris, setBaris] = useState<BarisPratinjau[]>([])
+  const [jenis, setJenis] = useState("json")
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [hasil, setHasil] = useState<{ berhasil: number; gagal: number; status: string } | null>(null)
+
+  function normalisasi(raw: BarisImport): BarisPratinjau {
+    return {
+      tanggal: String(raw.tanggal ?? "").trim(),
+      kategori: String(raw.kategori ?? "").trim(),
+      komoditas: String(raw.komoditas ?? "").trim(),
+      satuan: String(raw.satuan ?? "").trim(),
+      pasar: String(raw.pasar ?? "").trim(),
+      harga: String(raw.harga ?? "").trim(),
+    }
+  }
+
+  function setDataBaris(rows: BarisImport[], nama: string, tipe: string) {
+    setNamaFile(nama)
+    setJenis(tipe)
+    setBaris(rows.map(normalisasi))
+    setHasil(null)
+    setError(null)
+  }
 
   function handlePilih(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0]
-    if (f) setNamaFile(f.name)
+    if (!f) return
+    setError(null)
+    setHasil(null)
+
+    const ext = f.name.split(".").pop()?.toLowerCase()
+
+    if (ext === "json") {
+      const reader = new FileReader()
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(String(reader.result))
+          const rows: BarisImport[] = Array.isArray(parsed)
+            ? parsed
+            : parsed.baris ?? parsed.data ?? []
+          setDataBaris(rows, f.name, "json")
+        } catch {
+          setError("File JSON tidak valid.")
+        }
+      }
+      reader.readAsText(f)
+    } else if (ext === "csv" || ext === "xlsx" || ext === "xls") {
+      const reader = new FileReader()
+      reader.onload = () => {
+        try {
+          const wb = XLSX.read(reader.result, { type: "array" })
+          const sheet = wb.Sheets[wb.SheetNames[0]]
+          const rows = XLSX.utils.sheet_to_json<BarisImport>(sheet, { defval: "" })
+          setDataBaris(rows, f.name, ext)
+        } catch {
+          setError("Gagal membaca file Excel/CSV.")
+        }
+      }
+      reader.readAsArrayBuffer(f)
+    } else {
+      setError("Format file tidak didukung. Gunakan .xlsx, .csv, atau .json.")
+    }
   }
 
-  function handleSimpan() {
-    setNotified(true)
-    window.setTimeout(() => setNotified(false), 3500)
+  async function handleSimpan() {
+    if (!namaFile || baris.length === 0) return
+    setLoading(true)
+    setError(null)
+    try {
+      const hasilImport = await importBaris(namaFile, jenis, baris.map((b) => ({ ...b })))
+      setHasil({ berhasil: hasilImport.berhasil, gagal: hasilImport.gagal, status: hasilImport.status })
+      setBaris([])
+      setNamaFile(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal mengimpor data")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  function unduhTemplate(ext: "csv" | "json") {
+    let isi: string
+    let mime: string
+
+    if (ext === "csv") {
+      isi = KOLOM.join(",") + "\n2024-01-01,PANGAN POKOK,Beras Premium,kg,Pasar Wonokromo,14900\n"
+      mime = "text/csv"
+    } else {
+      isi = JSON.stringify(
+        [
+          {
+            tanggal: "2024-01-01",
+            kategori: "PANGAN POKOK",
+            komoditas: "Beras Premium",
+            satuan: "kg",
+            pasar: "Pasar Wonokromo",
+            harga: 14900,
+          },
+        ],
+        null,
+        2,
+      )
+      mime = "application/json"
+    }
+
+    const blob = new Blob([isi], { type: mime })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `template-harga.${ext}`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   return (
@@ -39,8 +150,8 @@ export default function AdminInput() {
           Input Data
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-[#171717]/50 dark:text-white/50">
-          Unggah data harga sesuai template. Sistem akan menampilkan pratinjau
-          sebelum data disimpan.
+          Unggah data harga sesuai template. Sistem menampilkan pratinjau
+          sebelum data disimpan ke database.
         </p>
       </section>
 
@@ -83,10 +194,16 @@ export default function AdminInput() {
                 <span className="text-sm font-medium text-[#171717] dark:text-white">
                   {namaFile}
                 </span>
+                <span className="text-xs text-[#171717]/40 dark:text-white/40">
+                  ({baris.length} baris)
+                </span>
               </div>
               <button
                 type="button"
-                onClick={() => setNamaFile(null)}
+                onClick={() => {
+                  setNamaFile(null)
+                  setBaris([])
+                }}
                 className="text-[#171717]/40 transition hover:text-[#C93742] dark:text-white/40"
                 aria-label="Hapus berkas"
               >
@@ -98,21 +215,29 @@ export default function AdminInput() {
           <button
             type="button"
             onClick={handleSimpan}
-            disabled={!namaFile}
+            disabled={!namaFile || baris.length === 0 || loading}
             className={`mt-5 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white transition ${
-              namaFile
+              namaFile && baris.length > 0 && !loading
                 ? "bg-[#C93742] hover:bg-[#B52F39]"
                 : "cursor-not-allowed bg-[#171717]/20 dark:bg-white/10"
             }`}
           >
             <Check size={16} />
-            Simpan ke Database
+            {loading ? "Menyimpan..." : "Simpan ke Database"}
           </button>
 
-          {notified && (
+          {error && (
+            <p className="mt-3 flex items-start gap-1.5 text-xs text-[#C93742]">
+              <AlertTriangle size={13} className="mt-0.5 shrink-0" />
+              {error}
+            </p>
+          )}
+
+          {hasil && (
             <p className="mt-3 flex items-start gap-1.5 text-xs text-[#1C8C4A] dark:text-emerald-400">
               <Info size={13} className="mt-0.5 shrink-0" />
-              Fitur simpan belum aktif. Tampilan ini masih tahap rancangan.
+              Selesai. {hasil.berhasil} baris berhasil, {hasil.gagal} dilewati
+              (status: {hasil.status}).
             </p>
           )}
         </div>
@@ -132,16 +257,21 @@ export default function AdminInput() {
           <div className="space-y-3">
             <TemplateBtn
               icon={FileSpreadsheet}
-              label="Template Excel"
-              ext=".xlsx"
+              label="Template CSV"
+              ext=".csv"
+              onClick={() => unduhTemplate("csv")}
             />
-            <TemplateBtn icon={FileSpreadsheet} label="Template CSV" ext=".csv" />
-            <TemplateBtn icon={FileJson} label="Template JSON" ext=".json" />
+            <TemplateBtn
+              icon={FileJson}
+              label="Template JSON"
+              ext=".json"
+              onClick={() => unduhTemplate("json")}
+            />
           </div>
 
           <div className="mt-5 rounded-xl bg-[#FAF7F7] dark:bg-[#121212] p-4">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-[#171717]/40 dark:text-white/40">
-              Kolom wajib (CSV/Excel)
+              Kolom wajib
             </p>
             <p className="font-mono text-[11px] leading-6 text-[#171717]/70 dark:text-white/70">
               tanggal, kategori, komoditas, satuan, pasar, harga
@@ -158,48 +288,54 @@ export default function AdminInput() {
             Pratinjau Data
           </h2>
           <span className="text-xs text-[#171717]/40 dark:text-white/40">
-            {namaFile ? "Contoh pratinjau" : "Belum ada berkas"}
+            {baris.length > 0 ? `${baris.length} baris` : "Belum ada berkas"}
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[720px] text-left">
+          <table className="w-full min-w-[820px] text-left">
             <thead>
               <tr className="border-b border-[#171717]/[0.06] dark:border-white/10 text-[11px] uppercase tracking-wide text-[#171717]/40 dark:text-white/40">
-                <th className="px-6 py-3 font-semibold">Tanggal</th>
-                <th className="px-6 py-3 font-semibold">Kategori</th>
-                <th className="px-6 py-3 font-semibold">Komoditas</th>
-                <th className="px-6 py-3 font-semibold">Satuan</th>
-                <th className="px-6 py-3 font-semibold">Pasar</th>
-                <th className="px-6 py-3 text-right font-semibold">Harga</th>
+                {KOLOM.map((k) => (
+                  <th key={k} className={`px-6 py-3 font-semibold ${k === "harga" ? "text-right" : ""}`}>
+                    {k}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {contohBaris.map((r, i) => (
-                <tr
-                  key={i}
-                  className="border-b border-[#171717]/[0.04] dark:border-white/[0.06] last:border-0"
-                >
-                  <td className="px-6 py-3 text-sm text-[#171717] dark:text-white">{r.tanggal}</td>
-                  <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">{r.kategori}</td>
-                  <td className="px-6 py-3 text-sm font-semibold text-[#171717] dark:text-white">{r.komoditas}</td>
-                  <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">{r.satuan}</td>
-                  <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">{r.pasar}</td>
-                  <td className="px-6 py-3 text-right text-sm font-semibold text-[#171717] dark:text-white">
-                    Rp{r.harga}
+              {baris.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-sm text-[#171717]/40 dark:text-white/40">
+                    Unggah berkas untuk melihat pratinjau di sini.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                baris.slice(0, 50).map((r, i) => (
+                  <tr
+                    key={i}
+                    className="border-b border-[#171717]/[0.04] dark:border-white/[0.06] last:border-0"
+                  >
+                    <td className="px-6 py-3 text-sm text-[#171717] dark:text-white">{r.tanggal || "-"}</td>
+                    <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">{r.kategori || "-"}</td>
+                    <td className="px-6 py-3 text-sm font-semibold text-[#171717] dark:text-white">{r.komoditas || "-"}</td>
+                    <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">{r.satuan || "-"}</td>
+                    <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">{r.pasar || "-"}</td>
+                    <td className="px-6 py-3 text-right text-sm font-semibold text-[#171717] dark:text-white">{r.harga || "-"}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
 
-        <div className="border-t border-[#171717]/[0.06] dark:border-white/10 px-6 py-3">
-          <p className="text-xs text-[#171717]/40 dark:text-white/40">
-            Pratinjau di atas hanya contoh. Nanti akan menampilkan isi berkas
-            yang benar-benar diunggah.
-          </p>
-        </div>
+        {baris.length > 50 && (
+          <div className="border-t border-[#171717]/[0.06] dark:border-white/10 px-6 py-3">
+            <p className="text-xs text-[#171717]/40 dark:text-white/40">
+              Menampilkan 50 baris pertama dari {baris.length} baris.
+            </p>
+          </div>
+        )}
       </section>
     </div>
   )
@@ -209,14 +345,17 @@ function TemplateBtn({
   icon: Icon,
   label,
   ext,
+  onClick,
 }: {
   icon: typeof FileSpreadsheet
   label: string
   ext: string
+  onClick: () => void
 }) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className="flex w-full items-center gap-3 rounded-xl border border-[#171717]/[0.08] dark:border-white/10 p-3 text-left transition hover:border-[#C93742]/40"
     >
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FFF3F4] dark:bg-white/[0.05] text-[#C93742]">
