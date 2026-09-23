@@ -1,6 +1,6 @@
-import app from "../server/src/app"
+import app from "./app"
 
 // Vercel Serverless Function.
-// Express app diimpor langsung (static) agar Vercel ikut men-trace dan
-// membundel seluruh dependency-nya (server/src, @prisma/client, engine).
+// Express app berada di folder api/ agar ikut dibundel oleh Vercel.
+// Semua request ke /api/* diarahkan ke sini lewat vercel.json.
 export default app

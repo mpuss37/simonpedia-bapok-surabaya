@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:api": "ts-node-dev --respawn --transpile-only server/src/index.ts",
+    "dev:api": "ts-node-dev --respawn --transpile-only --project tsconfig.server.json server/src/index.ts",
     "build": "prisma generate && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
