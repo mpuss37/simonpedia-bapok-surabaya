@@ -12,6 +12,7 @@ import Monitoring from "./pages/Monitoring"
 import Pasar from "./pages/Pasar"
 import Prediction from "./pages/Prediksi"
 import Recommendations from "./pages/Recommendations"
+import NotFound from "./pages/NotFound"
 
 import AdminLogin from "./pages/admin/AdminLogin"
 import AdminDashboard from "./pages/admin/AdminDashboard"
@@ -134,6 +135,9 @@ function App() {
           <Route path="/admin/het" element={<AdminHet />} />
 
         </Route>
+
+        {/* 404 — route tak dikenal */}
+        <Route path="*" element={<NotFound />} />
 
       </Routes>
 
