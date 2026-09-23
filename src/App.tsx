@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import DashboardLayout from "./components/layout/DashboardLayout"
+import AdminLayout from "./components/layout/AdminLayout"
 
 import CommodityDetail from "./pages/CommodityDetail"
 import DataExport from "./pages/DataExport"
@@ -11,6 +12,12 @@ import Monitoring from "./pages/Monitoring"
 import Pasar from "./pages/Pasar"
 import Prediction from "./pages/Prediksi"
 import Recommendations from "./pages/Recommendations"
+
+import AdminLogin from "./pages/admin/AdminLogin"
+import AdminDashboard from "./pages/admin/AdminDashboard"
+import AdminInput from "./pages/admin/AdminInput"
+import AdminRiwayat from "./pages/admin/AdminRiwayat"
+import AdminHet from "./pages/admin/AdminHet"
 
 
 function App() {
@@ -106,6 +113,25 @@ function App() {
             path="/settings"
             element={<div>Halaman Pengaturan</div>}
           />
+
+        </Route>
+
+        {/* ADMIN */}
+
+        <Route
+          path="/login-admin"
+          element={<AdminLogin />}
+        />
+
+        <Route element={<AdminLayout />}>
+
+          <Route path="/admin" element={<AdminDashboard />} />
+
+          <Route path="/admin/input" element={<AdminInput />} />
+
+          <Route path="/admin/riwayat" element={<AdminRiwayat />} />
+
+          <Route path="/admin/het" element={<AdminHet />} />
 
         </Route>
 
