@@ -3,17 +3,21 @@
 // (mis. Prisma) dapat ditangkap dan dikembalikan sebagai JSON.
 type HandlerFn = (req: unknown, res: unknown) => unknown
 
-let modPromise: Promise<{ app: HandlerFn }> | null = null
-function muat() {
-  if (!modPromise) modPromise = import("./app")
+let modPromise: Promise<HandlerFn> | null = null
+
+function muat(): Promise<HandlerFn> {
+  if (!modPromise) {
+    modPromise = import("./app").then(
+      (mod) => ((mod as { default?: unknown }).default ?? mod) as unknown as HandlerFn,
+    )
+  }
   return modPromise
 }
 
 export default async function handler(req: unknown, res: unknown) {
   const r = res as { status?: (n: number) => { json: (o: unknown) => void } }
   try {
-    const mod = await muat()
-    const app = (mod.default ?? mod) as unknown as HandlerFn
+    const app = await muat()
     return app(req, res)
   } catch (error) {
     modPromise = null
