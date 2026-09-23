@@ -10,6 +10,7 @@ import authRoutes from "./routes/auth"
 import hetRoutes from "./routes/het"
 import riwayatRoutes from "./routes/riwayat"
 import adminRoutes from "./routes/admin"
+import { wajibAdmin } from "./middleware/wajibAdmin"
 
 const app = express()
 
@@ -26,8 +27,10 @@ app.use("/api/harga", hargaRoutes)
 app.use("/api/ews", ewsRoutes)
 app.use("/api/prediction", predictionRoutes)
 app.use("/api/auth", authRoutes)
-app.use("/api/het", hetRoutes)
-app.use("/api/riwayat", riwayatRoutes)
-app.use("/api/admin", adminRoutes)
+
+// Route berikut hanya untuk admin (butuh token yang valid).
+app.use("/api/het", wajibAdmin, hetRoutes)
+app.use("/api/riwayat", wajibAdmin, riwayatRoutes)
+app.use("/api/admin", wajibAdmin, adminRoutes)
 
 export default app

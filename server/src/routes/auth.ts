@@ -1,22 +1,21 @@
 import { Router } from "express"
+import { buatToken, cekKredensial, verifikasiToken, ADMIN_USERNAME } from "../lib/auth"
 
 const router = Router()
-
-// Kredensial admin default (dapat diubah lewat env).
-const ADMIN_USER = process.env.ADMIN_USER || "admin"
-const ADMIN_PASS = process.env.ADMIN_PASS || "admin"
-
-// Token sesi sederhana. Catatan: ini bukan JWT, hanya penanda untuk tahap ini.
-const ADMIN_TOKEN = "simonpedia-admin-session"
 
 router.post("/login", (req, res) => {
   const { username, password } = req.body ?? {}
 
-  if (username === ADMIN_USER && password === ADMIN_PASS) {
+  if (typeof username !== "string" || typeof password !== "string") {
+    return res.status(400).json({ error: "Username dan password wajib diisi" })
+  }
+
+  if (cekKredensial(username, password)) {
+    const token = buatToken(username, "admin")
     return res.json({
       ok: true,
-      token: ADMIN_TOKEN,
-      user: { username: ADMIN_USER, role: "admin" },
+      token,
+      user: { username: ADMIN_USERNAME, role: "admin" },
     })
   }
 
@@ -24,9 +23,12 @@ router.post("/login", (req, res) => {
 })
 
 router.get("/me", (req, res) => {
-  const token = req.header("authorization")?.replace("Bearer ", "")
-  if (token === ADMIN_TOKEN) {
-    return res.json({ ok: true, user: { username: ADMIN_USER, role: "admin" } })
+  const header = req.header("authorization") ?? ""
+  const token = header.startsWith("Bearer ") ? header.slice(7) : undefined
+  const payload = verifikasiToken(token)
+
+  if (payload && payload.role === "admin") {
+    return res.json({ ok: true, user: { username: payload.sub, role: "admin" } })
   }
   return res.status(401).json({ ok: false, error: "Belum masuk" })
 })

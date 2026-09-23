@@ -22,6 +22,20 @@ export function sudahMasuk(): boolean {
   return !!ambilToken()
 }
 
+/** Header Authorization untuk request yang butuh hak admin. */
+function headerAdmin(): Record<string, string> {
+  const token = ambilToken()
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
+/** Jika server menolak (401), bersihkan token agar user diminta masuk lagi. */
+function cekTolak(res: Response) {
+  if (res.status === 401) {
+    hapusToken()
+    throw new Error("Sesi berakhir. Silakan masuk kembali.")
+  }
+}
+
 export async function loginAdmin(username: string, password: string) {
   const res = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
@@ -51,7 +65,8 @@ export interface HetItem {
 }
 
 export async function getHet(): Promise<HetItem[]> {
-  const res = await fetch(`${API_URL}/het`)
+  const res = await fetch(`${API_URL}/het`, { headers: headerAdmin() })
+  cekTolak(res)
   if (!res.ok) throw new Error("Gagal mengambil data HET")
   return res.json()
 }
@@ -62,9 +77,10 @@ export async function updateHet(
 ): Promise<HetItem> {
   const res = await fetch(`${API_URL}/het/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...headerAdmin() },
     body: JSON.stringify(data),
   })
+  cekTolak(res)
   if (!res.ok) throw new Error("Gagal memperbarui HET")
   return res.json()
 }
@@ -86,13 +102,18 @@ export interface RiwayatItem {
 }
 
 export async function getRiwayat(): Promise<RiwayatItem[]> {
-  const res = await fetch(`${API_URL}/riwayat`)
+  const res = await fetch(`${API_URL}/riwayat`, { headers: headerAdmin() })
+  cekTolak(res)
   if (!res.ok) throw new Error("Gagal mengambil riwayat input")
   return res.json()
 }
 
 export async function hapusRiwayat(id: number): Promise<void> {
-  const res = await fetch(`${API_URL}/riwayat/${id}`, { method: "DELETE" })
+  const res = await fetch(`${API_URL}/riwayat/${id}`, {
+    method: "DELETE",
+    headers: headerAdmin(),
+  })
+  cekTolak(res)
   if (!res.ok) throw new Error("Gagal menghapus riwayat")
 }
 
@@ -116,9 +137,10 @@ export async function importBaris(
 ) {
   const res = await fetch(`${API_URL}/admin/import`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...headerAdmin() },
     body: JSON.stringify({ namaFile, jenis, baris }),
   })
+  cekTolak(res)
   if (!res.ok) {
     const err = await res.json().catch(() => ({}))
     throw new Error(err.error || "Gagal mengimpor data")

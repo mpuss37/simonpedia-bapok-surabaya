@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { NavLink, Outlet } from "react-router-dom"
+import { NavLink, Outlet, Navigate } from "react-router-dom"
 import {
   LayoutDashboard,
   Upload,
@@ -9,7 +9,9 @@ import {
   Menu,
   X,
   ShieldCheck,
+  LogOut,
 } from "lucide-react"
+import { sudahMasuk, hapusToken } from "../../services/admin"
 
 const menu = [
   { label: "Dashboard Admin", path: "/admin", icon: LayoutDashboard, end: true },
@@ -20,6 +22,16 @@ const menu = [
 
 export default function AdminLayout() {
   const [open, setOpen] = useState(false)
+
+  // Penjaga route: bila belum masuk, arahkan ke halaman login admin.
+  if (!sudahMasuk()) {
+    return <Navigate to="/login-admin" replace />
+  }
+
+  function keluar() {
+    hapusToken()
+    window.location.href = "/login-admin"
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF7F7] dark:bg-[#121212]">
@@ -111,6 +123,15 @@ export default function AdminLayout() {
             <ArrowLeft size={17} className="text-white/40" />
             <span>Kembali ke Situs</span>
           </NavLink>
+
+          <button
+            type="button"
+            onClick={keluar}
+            className="flex w-full items-center gap-3 rounded-[10px] px-3 py-2.5 text-[13px] font-medium text-[#F87171] transition hover:bg-white/[0.07]"
+          >
+            <LogOut size={17} className="text-[#F87171]/70" />
+            <span>Keluar</span>
+          </button>
         </div>
       </aside>
 
