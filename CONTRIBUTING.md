@@ -15,7 +15,7 @@ dipakai tim.
 - Node.js versi 20 ke atas dan npm
 - Git
 - PostgreSQL — boleh lokal, tapi lebih mudah pakai cloud gratis seperti
-  Neon (lihat `DEPLOY_VERCEL.md`)
+  [Neon](https://neon.tech)
 - Akun GitHub
 
 ---
