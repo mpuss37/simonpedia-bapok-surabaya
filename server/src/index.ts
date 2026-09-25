@@ -1,5 +1,9 @@
 import dotenv from "dotenv"
+import path from "node:path"
 
+// Muat .env dari beberapa lokasi: root project dan folder server/.
+// (Dev dijalankan dari root, sedangkan file .env ada di server/.)
+dotenv.config({ path: path.resolve(process.cwd(), "server/.env") })
 dotenv.config()
 
 import app from "./app"
