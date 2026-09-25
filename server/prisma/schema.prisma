@@ -89,6 +89,12 @@ model AuditLog {
   dataLama  String?
   dataBaru  String?
   ip        String?
+  // Informasi perangkat & jaringan pengguna.
+  userAgent String?
+  os        String?
+  browser   String?
+  hostname  String?
+  isp       String?
   berhasil  Boolean  @default(true)
   createdAt DateTime @default(now())
 }

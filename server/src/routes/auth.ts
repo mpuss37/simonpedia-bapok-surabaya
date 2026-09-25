@@ -19,6 +19,7 @@ router.post("/login", async (req, res) => {
       aksi: "login",
       entitas: "Auth",
       deskripsi: `Login admin berhasil`,
+      req,
       ip,
       berhasil: true,
     })
@@ -35,6 +36,7 @@ router.post("/login", async (req, res) => {
     entitas: "Auth",
     deskripsi: `Percobaan login gagal untuk username "${username}"`,
     ip,
+    req,
     berhasil: false,
   })
 

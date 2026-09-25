@@ -44,6 +44,7 @@ router.put("/:id", async (req, res) => {
       dataLama: { harga: lama.harga, catatan: lama.catatan, status: lama.status },
       dataBaru: { harga: data.harga, catatan: data.catatan, status: data.status },
       ip: ambilIp(req),
+      req,
     })
 
     res.json(data)

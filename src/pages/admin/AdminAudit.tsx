@@ -208,15 +208,27 @@ export default function AdminAudit() {
                       {terbuka && (
                         <tr className="border-b border-[#171717]/[0.04] dark:border-white/[0.06] bg-[#FAF7F7] dark:bg-[#121212]">
                           <td colSpan={6} className="px-6 py-4">
+                            {/* Info perangkat & jaringan */}
+                            <div className="mb-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                              <InfoItem label="IP" nilai={d.ip} />
+                              <InfoItem label="Sistem operasi" nilai={d.os} />
+                              <InfoItem label="Peramban (browser)" nilai={d.browser} />
+                              <InfoItem label="Hostname (domain)" nilai={d.hostname} />
+                              <InfoItem label="Penyedia internet (ISP)" nilai={d.isp} />
+                              <InfoItem
+                                label="Entitas"
+                                nilai={`${d.entitas}${d.entitasId ? ` #${d.entitasId}` : ""}`}
+                              />
+                            </div>
                             <div className="grid gap-3 sm:grid-cols-2">
                               <DetailBlok judul="Sebelum" isi={d.dataLama} />
                               <DetailBlok judul="Sesudah" isi={d.dataBaru} />
                             </div>
-                            <p className="mt-3 text-[11px] text-[#171717]/40 dark:text-white/40">
-                              Entitas: {d.entitas}
-                              {d.entitasId ? ` #${d.entitasId}` : ""}
-                              {d.ip ? ` · IP: ${d.ip}` : ""}
-                            </p>
+                            {d.userAgent && (
+                              <p className="mt-3 break-all text-[10px] leading-4 text-[#171717]/35 dark:text-white/35">
+                                User-Agent: {d.userAgent}
+                              </p>
+                            )}
                           </td>
                         </tr>
                       )}
@@ -249,6 +261,19 @@ function DetailBlok({ judul, isi }: { judul: string; isi: string | null }) {
       <pre className="max-h-48 overflow-auto rounded-lg border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] p-3 font-mono text-[11px] leading-5 text-[#171717]/75 dark:text-white/75">
         {teks}
       </pre>
+    </div>
+  )
+}
+
+function InfoItem({ label, nilai }: { label: string; nilai: string | null }) {
+  return (
+    <div className="rounded-lg border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] px-3 py-2">
+      <p className="text-[9px] font-bold uppercase tracking-wide text-[#171717]/35 dark:text-white/35">
+        {label}
+      </p>
+      <p className="mt-0.5 break-all text-[11px] font-semibold text-[#171717] dark:text-white">
+        {nilai || "-"}
+      </p>
     </div>
   )
 }

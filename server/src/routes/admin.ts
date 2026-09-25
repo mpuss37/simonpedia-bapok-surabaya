@@ -24,6 +24,7 @@ router.post("/komoditas", async (req, res) => {
       deskripsi: `Tambah komoditas "${data.nama}"`,
       dataBaru: data,
       ip: ambilIp(req),
+      req,
     })
     res.json(data)
   } catch (error) {
@@ -57,6 +58,7 @@ router.put("/komoditas/:id", async (req, res) => {
       dataLama: lama,
       dataBaru: data,
       ip: ambilIp(req),
+      req,
     })
     res.json(data)
   } catch (error) {
@@ -84,6 +86,7 @@ router.delete("/komoditas/:id", async (req, res) => {
       deskripsi: `Hapus komoditas "${lama?.nama ?? id}"`,
       dataLama: lama,
       ip: ambilIp(req),
+      req,
     })
     res.json({ ok: true })
   } catch (error) {
@@ -129,6 +132,7 @@ router.post("/pasar", async (req, res) => {
       deskripsi: `Tambah pasar "${data.nama}"`,
       dataBaru: data,
       ip: ambilIp(req),
+      req,
     })
     res.json(data)
   } catch (error) {
@@ -156,6 +160,7 @@ router.delete("/pasar/:id", async (req, res) => {
       deskripsi: `Hapus pasar "${lama?.nama ?? id}"`,
       dataLama: lama,
       ip: ambilIp(req),
+      req,
     })
     res.json({ ok: true })
   } catch (error) {
@@ -296,6 +301,7 @@ router.post("/import", async (req, res) => {
       deskripsi: `Impor "${namaFile}": ${berhasil} berhasil, ${gagal} gagal (dari ${baris.length} baris)`,
       dataBaru: { namaFile, jenis, jumlahBaris: baris.length, berhasil, gagal, status },
       ip: ambilIp(req),
+      req,
       berhasil: status !== "gagal",
     })
 

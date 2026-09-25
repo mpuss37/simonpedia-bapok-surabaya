@@ -36,6 +36,7 @@ router.delete("/:id", async (req, res) => {
       deskripsi: `Hapus riwayat input "${lama.namaFile}" (${lama.jumlahBaris} baris)`,
       dataLama: lama,
       ip: ambilIp(req),
+      req,
     })
 
     res.json({ ok: true })

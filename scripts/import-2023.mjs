@@ -292,6 +292,24 @@ async function main() {
 
   const minT = await prisma.survei.aggregate({ _min: { tanggal: true } })
   const maxT = await prisma.survei.aggregate({ _max: { tanggal: true } })
+
+  // Catat ke tabel RiwayatInput agar tampil di halaman admin.
+  await denganRetry(
+    () => prisma.riwayatInput.create({
+      data: {
+        namaFile: "rekap_2023-keseluruhan.xlsx",
+        jenis: "xlsx",
+        jumlahBaris: finalDetails.length,
+        berhasil: terkirim,
+        gagal: finalDetails.length - terkirim,
+        status: "berhasil",
+        catatan: `Impor data harga 2023 (sumber: script import-2023)`,
+      },
+    }),
+    "catat riwayat",
+  )
+  console.log("Riwayat input dicatat.")
+
   console.log("\n=== SELESAI ===")
   console.log("Total survei :", await prisma.survei.count())
   console.log("Total detail :", (await prisma.detailSurvei.count()).toLocaleString("id-ID"))

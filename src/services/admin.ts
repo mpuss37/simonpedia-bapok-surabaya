@@ -162,6 +162,11 @@ export interface AuditLogItem {
   dataLama: string | null
   dataBaru: string | null
   ip: string | null
+  userAgent: string | null
+  os: string | null
+  browser: string | null
+  hostname: string | null
+  isp: string | null
   berhasil: boolean
   createdAt: string
 }
