@@ -1,5 +1,6 @@
 import { Router } from "express"
 import { PrismaClient } from "@prisma/client"
+import { ambilIdKomoditasTahunTerbaru } from "../lib/komoditasAktif"
 
 const router = Router()
 const prisma = new PrismaClient()
@@ -391,7 +392,9 @@ router.get("/backtest/:komoditasId", async (req, res) => {
 
 router.get("/all", async (_req, res) => {
   try {
+    const idAktif = await ambilIdKomoditasTahunTerbaru()
     const komoditasList = await prisma.komoditas.findMany({
+      where: { id: { in: idAktif } },
       orderBy: { nama: "asc" },
     })
 

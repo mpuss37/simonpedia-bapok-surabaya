@@ -1,5 +1,6 @@
 import { Router } from "express"
 import { prisma } from "../lib/prisma"
+import { ambilIdKomoditasTahunTerbaru } from "../lib/komoditasAktif"
 
 const router = Router()
 
@@ -9,7 +10,9 @@ const router = Router()
 // Jauh lebih ringan dari /api/harga (yang mengirim 138rb baris mentah).
 router.get("/ringkasan", async (_req, res) => {
   try {
+    const idAktif = await ambilIdKomoditasTahunTerbaru()
     const komoditasList = await prisma.komoditas.findMany({
+      where: { id: { in: idAktif } },
       orderBy: { nama: "asc" },
     })
 

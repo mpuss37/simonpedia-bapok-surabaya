@@ -1,11 +1,15 @@
 import { Router } from "express"
 import { prisma } from "../lib/prisma"
+import { ambilIdKomoditasTahunTerbaru } from "../lib/komoditasAktif"
 
 const router = Router()
 
 router.get("/", async (_req, res) => {
   try {
+    // Hanya tampilkan komoditas yang punya data pada TAHUN TERBARU.
+    const idAktif = await ambilIdKomoditasTahunTerbaru()
     const komoditas = await prisma.komoditas.findMany({
+      where: { id: { in: idAktif } },
       orderBy: { nama: "asc" },
     })
     res.json(komoditas)
