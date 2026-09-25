@@ -63,34 +63,55 @@ export function tebakBrowser(ua: string): string {
   return "Tidak diketahui"
 }
 
+/** Cek apakah IP termasuk privat/lokal. */
+function ipPrivat(ip: string): boolean {
+  const b = ip.replace(/^::ffff:/, "")
+  return (
+    b === "::1" ||
+    b === "127.0.0.1" ||
+    b.startsWith("10.") ||
+    b.startsWith("192.168.") ||
+    /^172\.(1[6-9]|2[0-9]|3[01])\./.test(b) ||
+    b.startsWith("169.254.")
+  )
+}
+
 /**
- * Tebak penyedia internet (ISP) dari alamat IP publik.
+ * Deteksi penyedia internet (ISP) dari IP publik.
  *
- * CATATAN: ini perkiraan kasar berbasis blok IP. Tidak ada lookup DNS
- * online agar tetap cepat & tanpa dependensi eksternal. Untuk akurasi
- * tinggi, gunakan layanan geolokasi IP (butuh jaringan internet).
- * IP privat / lokal ditandai khusus.
+ * Untuk IP publik, dipakai lookup geolokasi gratis (ipapi.co) dengan timeout
+ * singkat. Bila gagal (offline/timeout), dikembalikan penanda umum agar
+ * pencatatan audit tetap berjalan.
  */
-export function tebakIsp(ip: string | null): string {
+export async function tebakIsp(ip: string | null): Promise<string> {
   if (!ip) return "Tidak diketahui"
   const bersih = ip.replace(/^::ffff:/, "")
 
-  if (
-    bersih === "::1" ||
-    bersih === "127.0.0.1" ||
-    bersih.startsWith("10.") ||
-    bersih.startsWith("192.168.") ||
-    bersih.startsWith("172.16.") ||
-    bersih.startsWith("172.17.") ||
-    bersih.startsWith("172.18.") ||
-    bersih.startsWith("172.19.") ||
-    /^172\.(2[0-9]|3[01])\./.test(bersih) ||
-    bersih.startsWith("169.254.")
-  ) {
-    return "Jaringan Lokal"
+  if (ipPrivat(bersih)) return "Jaringan Lokal"
+
+  try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 4000)
+    const res = await fetch(
+      `http://ip-api.com/json/${encodeURIComponent(bersih)}?fields=status,isp,org,as,country`,
+      { signal: controller.signal },
+    )
+    clearTimeout(timeout)
+    if (!res.ok) return "Tidak dapat dideteksi"
+    const data = (await res.json()) as {
+      status?: string
+      isp?: string
+      org?: string
+      as?: string
+      country?: string
+    }
+    if (data.status && data.status !== "success") return "Tidak dapat dideteksi"
+    const nama = data.isp || data.org || data.as || ""
+    if (nama) return data.country ? `${nama} (${data.country})` : nama
+    return "Tidak dapat dideteksi"
+  } catch {
+    return "Tidak dapat dideteksi (lookup gagal)"
   }
-  // Vercel serverless umumnya berada di AWS.
-  return "Tidak dapat dideteksi otomatis (perlu lookup IP)"
 }
 
 /**
@@ -116,7 +137,7 @@ export async function catatAudit(input: AuditInput): Promise<void> {
         os: ua ? tebakOS(ua) : null,
         browser: ua ? tebakBrowser(ua) : null,
         hostname: hostHeader,
-        isp: tebakIsp(input.ip ?? null),
+        isp: await tebakIsp(input.ip ?? null),
         berhasil: input.berhasil ?? true,
       },
     })
