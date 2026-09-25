@@ -1,36 +1,36 @@
-# Panduan Kontribusi — SIMONPEDIA Bapok Surabaya
+# Contributing — SIMONPEDIA Bapok Surabaya
 
-Terima kasih mau ikut mengembangkan project ini. Panduan ini menjelaskan cara
-menyiapkan project di komputermu, cara mengirim perubahan, dan aturan yang
-dipakai tim.
+Thanks for contributing to this project. This guide explains how to set up the
+project on your machine, how to submit changes, and the conventions the team
+follows.
 
-> **Catatan alur branch:** untuk sementara semua pekerjaan memakai branch
-> `main`. Kalau nanti tim bertambah besar, kita bisa pindah ke alur
-> `fitur/xxx` → PR → `main`. Panduan akan diperbarui kalau itu terjadi.
+> **Branch workflow note:** for now, all work uses the `main` branch. If the
+> team grows, we may switch to a `feature/xxx` → PR → `main` flow. This guide
+> will be updated if that happens.
 
 ---
 
-## 1. Prasyarat
+## 1. Prerequisites
 
-- Node.js versi 20 ke atas dan npm
+- Node.js 20 or later and npm
 - Git
-- PostgreSQL — boleh lokal, tapi lebih mudah pakai cloud gratis seperti
-  [Neon](https://neon.tech)
-- Akun GitHub
+- PostgreSQL — local is fine, but a free cloud option like
+  [Neon](https://neon.tech) is easier
+- A GitHub account
 
 ---
 
-## 2. Jadi Collaborator
+## 2. Become a Collaborator
 
-1. Owner repo mengundangmu: **Settings → Collaborators → Add people**.
-2. Kamu akan dapat email/notifikasi GitHub. Klik **Accept invitation**.
-3. Setelah diterima, kamu punya akses **Write** ke repo ini.
+1. The repo owner invites you: **Settings → Collaborators → Add people**.
+2. You'll receive a GitHub email/notification. Click **Accept invitation**.
+3. Once accepted, you have **Write** access to this repo.
 
-Kalau belum menerima undangan, cek juga folder spam di emailmu.
+If you haven't received the invitation, check your email's spam folder too.
 
 ---
 
-## 3. Clone Project
+## 3. Clone the Project
 
 ```bash
 git clone https://github.com/mpuss37/simonpedia-bapok-surabaya.git
@@ -39,50 +39,50 @@ cd simonpedia-bapok-surabaya
 
 ---
 
-## 4. Atur Identitas Git (PENTING)
+## 4. Configure Your Git Identity (IMPORTANT)
 
-Supaya kontribusimu tercatat benar di GitHub, pastikan nama dan email Git
-sama dengan akun GitHub-mu:
+To make sure your contributions are attributed correctly on GitHub, ensure your
+Git name and email match your GitHub account:
 
 ```bash
-git config --global user.name "Nama GitHub Kamu"
-git config --global user.email "email-github-kamu@example.com"
+git config --global user.name "Your GitHub Name"
+git config --global user.email "your-github-email@example.com"
 ```
 
-Email ini bisa dilihat di https://github.com/settings/emails. Kalau tidak
-ingin memakai email pribadi, GitHub menyediakan email `noreply` khusus.
+You can find this email at https://github.com/settings/emails. If you don't
+want to use your personal email, GitHub provides a dedicated `noreply` email.
 
-Kalau email Git dan email GitHub berbeda, commitmu tetap masuk ke repo, tapi
-tidak akan terhitung sebagai kontribusimu di grafik kontributor.
+If your Git email differs from your GitHub email, your commits still land in the
+repo, but they won't count toward your contributor graph.
 
 ---
 
-## 5. Setup Project di Lokal
+## 5. Set Up the Project Locally
 
 ```bash
 npm install
 ```
 
-Buat file `.env` di root (contoh lengkap ada di `.env.example`):
+Create a `.env` file at the root (see `.env.example` for the full example):
 
 ```
 DATABASE_URL="postgresql://user:password@host/dbname?sslmode=require"
 VITE_API_URL=
 ```
 
-Keterangan:
-- `DATABASE_URL` — connection string PostgreSQL (Neon atau lokal).
-- `VITE_API_URL` — biarkan kosong. Frontend otomatis memakai path `/api`.
+Notes:
+- `DATABASE_URL` — the PostgreSQL connection string (Neon or local).
+- `VITE_API_URL` — leave empty. The frontend automatically uses the `/api` path.
 
-Siapkan database:
+Prepare the database:
 
 ```bash
 npx prisma generate
-npx prisma migrate deploy        # atau: npx prisma migrate dev
-npm run db:seed                  # opsional, untuk mengisi data awal
+npx prisma migrate deploy        # or: npx prisma migrate dev
+npm run db:seed                  # optional: seed initial data
 ```
 
-Jalankan aplikasi (butuh dua terminal):
+Run the app (two terminals required):
 
 ```bash
 # Terminal 1 — backend (port 3001)
@@ -92,98 +92,98 @@ npm run dev:api
 npm run dev
 ```
 
-Lalu buka http://localhost:5173
+Then open http://localhost:5173
 
-> Frontend saat mode dev meneruskan request `/api` ke backend port 3001
-> (lihat `vite.config.ts`). Jadi kamu cukup membuka satu alamat saja.
-
----
-
-## 6. Struktur Project
-
-```
-src/         Frontend React + Vite + Tailwind
-server/      Backend Express + Prisma + PostgreSQL
-  prisma/    Schema dan migrasi database
-  src/       Route API
-api/         Serverless function untuk deploy di Vercel
-docs/        Dokumen proyek (BPMN, dsb.)
-```
+> In dev mode, the frontend proxies `/api` requests to the backend on port 3001
+> (see `vite.config.ts`). So you only need to open one address.
 
 ---
 
-## 7. Cara Mengirim Perubahan
+## 6. Project Structure
 
-Karena sementara memakai `main`, alurnya sederhana:
+```
+src/         Frontend — React + Vite + Tailwind
+server/      Backend — Express + Prisma + PostgreSQL
+  prisma/    Database schema and migrations
+  src/       API routes
+api/         Serverless function for Vercel deployment
+docs/        Project documents (BPMN, etc.)
+```
+
+---
+
+## 7. How to Submit Changes
+
+Since we currently use `main`, the flow is simple:
 
 ```bash
-git pull origin main            # pastikan kode terbaru dulu
-# kerjakan perubahan...
+git pull origin main            # make sure you have the latest code first
+# make your changes...
 git add .
-git commit -m "feat: deskripsi singkat"
+git commit -m "feat: short description"
 git push origin main
 ```
 
-**Tips:** kalau mengerjakan sesuatu yang cukup besar, lebih aman buat branch
-sendiri dulu supaya `main` tetap stabil:
+**Tip:** for anything reasonably large, it's safer to create your own branch so
+`main` stays stable:
 
 ```bash
-git checkout -b fitur/nama-singkat
-# kerjakan, commit, lalu push
-git push -u origin fitur/nama-singkat
+git checkout -b feature/short-name
+# work, commit, then push
+git push -u origin feature/short-name
 ```
 
-Setelah itu ajukan **Pull Request** dari branch kamu ke `main` agar bisa
-diperiksa dulu sebelum digabung.
+Then open a **Pull Request** from your branch to `main` so it can be reviewed
+before merging.
 
 ---
 
-## 8. Standar Kode & Commit
+## 8. Code & Commit Conventions
 
-- Bahasa: **TypeScript**. Jalankan pemeriksaan tipe sebelum kirim:
+- Language: **TypeScript**. Run the type check before submitting:
   ```bash
   npx tsc -b
   ```
-- **Lint**: `npx eslint src/` — usahakan bersih tanpa error.
-- Format pesan commit (Conventional Commits):
+- **Lint**: `npx eslint src/` — aim for a clean run with no errors.
+- Commit message format (Conventional Commits):
   ```
-  feat: fitur baru
-  fix: perbaikan bug
-  refactor: ubah kode tanpa mengubah perilaku
-  docs: perubahan dokumentasi
+  feat: new feature
+  fix: bug fix
+  refactor: change code without changing behavior
+  docs: documentation changes
   ```
-- Satu commit/kontribusi sebaiknya fokus pada satu hal.
-- **Jangan pernah** commit file `.env`, token, atau kredensial apa pun.
+- Each commit/contribution should focus on a single concern.
+- **Never** commit `.env` files, tokens, or any credentials.
 
 ---
 
-## 9. Checklist Sebelum Mengirim
+## 9. Checklist Before Submitting
 
-- [ ] `npx tsc -b` lolos tanpa error
-- [ ] `npx eslint src/` bersih
-- [ ] `npm run build` berhasil
-- [ ] Tidak ada file `.env` atau token yang ikut ter-commit
-- [ ] Pesan commit jelas dan sesuai format
+- [ ] `npx tsc -b` passes with no errors
+- [ ] `npx eslint src/` is clean
+- [ ] `npm run build` succeeds
+- [ ] No `.env` files or tokens are included in the commit
+- [ ] Commit messages are clear and follow the format
 
 ---
 
-## 10. Ambil Update Terbaru
+## 10. Get the Latest Updates
 
 ```bash
 git checkout main
 git pull origin main
 ```
 
-Kalau sedang bekerja di branch sendiri dan ingin menggabungkan update terbaru:
+If you're working on your own branch and want to merge the latest updates:
 
 ```bash
-git checkout fitur/nama-singkat
+git checkout feature/short-name
 git merge main
 ```
 
 ---
 
-## 11. Butuh Bantuan?
+## 11. Need Help?
 
-Buka **Issue** di repo ini dan jelaskan kendalanya. Sertakan pesan error dan
-langkah yang sudah kamu coba supaya lebih mudah dibantu.
+Open an **Issue** in this repo and describe your problem. Include the error
+message and the steps you've already tried so it's easier to help.
