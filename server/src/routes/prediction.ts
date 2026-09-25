@@ -427,9 +427,33 @@ router.get("/all", async (_req, res) => {
       trenPersen: number
       prediksiHarga: number
       perubahanPrediksi: number
+      // Ketidakpastian: berdasarkan MAPE rolling historis per komoditas.
+      mape: number | null
+      keandalan: "tinggi" | "sedang" | "rendah"
+      batasBawah: number
+      batasAtas: number
+      rentangPersen: number
     }
 
     const results: PredictionResult[] = []
+
+    // Hitung MAPE rolling (walk-forward 1 langkah) dgn model produksi (ES).
+    // Dipakai sebagai ukuran ketidakpastian per komoditas.
+    function mapeRolling(prices: number[]): number | null {
+      if (prices.length < 14) return null
+      const errs: number[] = []
+      // batasi maksimum 120 titik terakhir agar tetap cepat
+      const mulai = Math.max(7, prices.length - 120)
+      for (let t = mulai; t < prices.length; t++) {
+        const hist = prices.slice(0, t)
+        const aktual = prices[t]
+        if (aktual <= 0) continue
+        const pred = forecastRange(hist, 1)[0].harga
+        errs.push(Math.abs(pred - aktual) / aktual)
+      }
+      if (errs.length === 0) return null
+      return (errs.reduce((a, b) => a + b, 0) / errs.length) * 100
+    }
 
     for (const k of komoditasList) {
       const perTgl = perKom.get(k.id)
@@ -456,6 +480,15 @@ router.get("/all", async (_req, res) => {
       const lastPrice = prices[prices.length - 1]
       const perubahanPrediksi = Math.round(((prediksiHarga - lastPrice) / lastPrice) * 100 * 100) / 100
 
+      // Ketidakpastian dari MAPE rolling.
+      const mape = mapeRolling(prices)
+      const keandalan: PredictionResult["keandalan"] =
+        mape == null ? "sedang" : mape <= 1.5 ? "tinggi" : mape <= 4 ? "sedang" : "rendah"
+      const mapePersen = mape != null ? mape : 5
+      const batasBawah = Math.max(0, Math.round(prediksiHarga * (1 - mapePersen / 100)))
+      const batasAtas = Math.round(prediksiHarga * (1 + mapePersen / 100))
+      const rentangPersen = Math.round((mapePersen) * 10) / 10
+
       results.push({
         id: k.id,
         nama: k.nama,
@@ -466,6 +499,11 @@ router.get("/all", async (_req, res) => {
         trenPersen: trendPersen,
         prediksiHarga,
         perubahanPrediksi,
+        mape: mape != null ? Math.round(mape * 100) / 100 : null,
+        keandalan,
+        batasBawah,
+        batasAtas,
+        rentangPersen,
       })
     }
 

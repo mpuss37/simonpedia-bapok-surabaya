@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { TrendingUp, TrendingDown, Minus, Target, BarChart3 } from "lucide-react"
+import { TrendingUp, TrendingDown, Minus, Target, BarChart3, Gauge } from "lucide-react"
 import { useChartTheme } from "../hooks/useChartTheme"
 import MobileMenuButton from "../components/layout/MobileMenuButton"
 import ChartTooltip from "../components/charts/ChartTooltip"
@@ -30,6 +30,11 @@ interface PrediksiItem {
   trenPersen: number
   prediksiHarga: number
   perubahanPrediksi: number
+  mape: number | null
+  keandalan: "tinggi" | "sedang" | "rendah"
+  batasBawah: number
+  batasAtas: number
+  rentangPersen: number
 }
 
 interface DetailPrediksi {
@@ -116,6 +121,8 @@ export default function Prediksi() {
     ? prediksiList
     : prediksiList.filter(p => p.kategori === filterKategori)
 
+  const itemTerpilih = selectedId ? prediksiList.find(p => p.id === selectedId) ?? null : null
+
   const kategoriList = ["Semua", ...Array.from(new Set(prediksiList.map(p => p.kategori)))]
 
   const chartHistoris = detail?.dataHistoris || []
@@ -199,6 +206,7 @@ export default function Prediksi() {
                   <th className="pb-3 text-right text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Prediksi</th>
                   <th className="pb-3 text-right text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Perubahan</th>
                   <th className="pb-3 text-center text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Tren</th>
+                  <th className="pb-3 text-center text-[10px] font-bold uppercase tracking-[0.1em] text-[#171717]/30 dark:text-white/30">Keandalan</th>
                 </tr>
               </thead>
               <tbody>
@@ -213,7 +221,12 @@ export default function Prediksi() {
                     <td className="py-4 text-xs font-bold text-[#171717] dark:text-white">{item.nama}</td>
                     <td className="py-4 text-xs text-[#171717]/40 dark:text-white/40">{item.kategori}</td>
                     <td className="py-4 text-right text-xs font-bold text-[#171717] dark:text-white">{formatRupiah(item.hargaTerakhir)}</td>
-                    <td className="py-4 text-right text-xs font-bold text-[#C93742]">{formatRupiah(item.prediksiHarga)}</td>
+                    <td className="py-4 text-right">
+                      <div className="text-xs font-bold text-[#C93742]">{formatRupiah(item.prediksiHarga)}</div>
+                      <div className="mt-0.5 text-[10px] font-medium text-[#171717]/40 dark:text-white/40">
+                        ± {formatRupiah(item.batasBawah)} – {formatRupiah(item.batasAtas)}
+                      </div>
+                    </td>
                     <td className="py-4 text-right">
                       <span className={`inline-flex items-center gap-1 text-xs font-bold ${
                         item.perubahanPrediksi > 0 ? "text-[#C93742]" : item.perubahanPrediksi < 0 ? "text-emerald-600 dark:text-emerald-400" : "text-[#171717]/40 dark:text-white/40"
@@ -224,6 +237,9 @@ export default function Prediksi() {
                     </td>
                     <td className="py-4 text-center">
                       <TrendBadge tren={item.tren} />
+                    </td>
+                    <td className="py-4 text-center">
+                      <KeandalanBadge keandalan={item.keandalan} />
                     </td>
                   </tr>
                 ))}
@@ -247,7 +263,10 @@ export default function Prediksi() {
                     <h3 className="mt-1 text-lg font-bold text-[#171717] dark:text-white">{detail.komoditas.nama}</h3>
                     <p className="text-xs text-[#171717]/40 dark:text-white/40">{detail.komoditas.kategori} • {detail.komoditas.satuan}</p>
                   </div>
-                  <TrendBadge tren={detail.analisis.tren} large />
+                  <div className="flex flex-col items-end gap-2">
+                    <TrendBadge tren={detail.analisis.tren} large />
+                    {itemTerpilih && <KeandalanBadge keandalan={itemTerpilih.keandalan} large />}
+                  </div>
                 </div>
 
                 {/* RINGKASAN */}
@@ -407,6 +426,22 @@ function TrendBadge({ tren, large = false }: { tren: string; large?: boolean }) 
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-bold ${c.bg} ${c.text} ${large ? "text-xs" : "text-[10px]"}`}>
       <c.icon size={large ? 14 : 11} />
+      {c.label}
+    </span>
+  )
+}
+
+/** Label tingkat keandalan prediksi (berdasarkan MAPE historis). */
+function KeandalanBadge({ keandalan, large = false }: { keandalan: string; large?: boolean }) {
+  const config: Record<string, { bg: string; text: string; label: string }> = {
+    tinggi: { bg: "bg-emerald-50 dark:bg-emerald-500/15", text: "text-emerald-600 dark:text-emerald-400", label: "Tinggi" },
+    sedang: { bg: "bg-[#FFF8E1] dark:bg-amber-500/15", text: "text-[#B45309] dark:text-amber-400", label: "Sedang" },
+    rendah: { bg: "bg-[#FFF0F1] dark:bg-red-500/15", text: "text-[#C93742]", label: "Rendah" },
+  }
+  const c = config[keandalan] || config.sedang
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-bold ${c.bg} ${c.text} ${large ? "text-xs" : "text-[10px]"}`}>
+      <Gauge size={large ? 14 : 11} />
       {c.label}
     </span>
   )
