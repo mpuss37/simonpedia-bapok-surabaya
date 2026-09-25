@@ -68,15 +68,18 @@ function exponentialSmoothingLast(data, alpha) {
   return s
 }
 
-// Blend produksi: sama seperti forecastRange hari ke-1 (w = 1/days, days=7 default produksi).
-// Untuk uji 1-langkah, ambil komponen tren + lastPrice dengan bobot konsisten.
-function blendPrediksi(history) {
-  const { slope, intercept } = linearRegression(history)
-  const lastPrice = history[history.length - 1]
-  const trendValue = intercept + slope * history.length
-  const days = 7
-  const w = 1 / days
-  return Math.round(trendValue * (1 - w) + lastPrice * w)
+// Model produksi = Exponential Smoothing (alpha 0.3), sama seperti
+// forecastRange di server/src/routes/prediction.ts setelah perbaikan.
+function produksiPrediksi(history) {
+  const ALPHA = 0.3
+  let level = history[0]
+  for (let i = 1; i < history.length; i++) level = ALPHA * history[i] + (1 - ALPHA) * level
+  const nTail = Math.min(7, history.length)
+  const rataTail = history.slice(-nTail).reduce((a, b) => a + b, 0) / nTail
+  const trenMentah = rataTail !== 0 ? (level - rataTail) / rataTail : 0
+  const tren = Math.max(-0.02, Math.min(0.02, trenMentah))
+  // Prediksi 1 langkah (i=1).
+  return Math.round(level * (1 + tren * 1))
 }
 
 // =====================================================
@@ -153,12 +156,12 @@ async function main() {
       const lr = intercept + slope * history.length
       const ma = movingAverageLast(history, 7)
       const es = exponentialSmoothingLast(history, 0.3)
-      const blend = blendPrediksi(history)
+      const produksi = produksiPrediksi(history)
 
       accLR.push([aktual, Math.round(lr)])
       accMA.push([aktual, Math.round(ma)])
       accES.push([aktual, Math.round(es)])
-      accBlend.push([aktual, Math.round(blend)])
+      accBlend.push([aktual, Math.round(produksi)])
     }
 
     if (accBlend.length === 0) continue
@@ -181,8 +184,8 @@ async function main() {
   console.log(`  Linear Regression : ${rerata("mapeLR").toFixed(2)}%`)
   console.log(`  Moving Average 7  : ${rerata("mapeMA").toFixed(2)}%`)
   console.log(`  Exponential Smooth: ${rerata("mapeES").toFixed(2)}%`)
-  console.log(`  Blend (dipakai)   : ${rerata("mapeBlend").toFixed(2)}%`)
-  console.log(`\nBlend → MAPE ${rerata("mapeBlend").toFixed(2)}% | MAE ${rerata("maeBlend").toFixed(0)} | RMSE ${rerata("rmseBlend").toFixed(0)}`)
+  console.log(`  Produksi (Exp. Smoothing)   : ${rerata("mapeBlend").toFixed(2)}%`)
+  console.log(`\nProduksi → MAPE ${rerata("mapeBlend").toFixed(2)}% | MAE ${rerata("maeBlend").toFixed(0)} | RMSE ${rerata("rmseBlend").toFixed(0)}`)
   console.log(`Akurasi (100-MAPE): ${(100 - rerata("mapeBlend")).toFixed(2)}%`)
 
   console.log("\n=== 10 KOMODITAS PALING AKURAT ===")

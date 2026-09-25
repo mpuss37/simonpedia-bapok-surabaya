@@ -1,68 +1,68 @@
 komoditas,n_hari,mape_lr,mape_ma7,mape_es,mape_blend,mae_blend,rmse_blend
+Tempe Kw II (campuran jagung),366,6.89,0.00,0.00,0.00,0,0
+Sabun Detergen Rinso (Anti Noda),366,2.47,0.00,0.00,0.00,0,0
 "Sabun Colek ""Wing's Biru""",366,0.00,0.00,0.00,0.00,0,0
-"Susu Kental Manis ""BENDERA"" Putih",366,0.38,0.04,0.04,0.33,41,48
-"Tepung Terigu ""Segitiga Biru"" Kemasan",282,0.49,0.13,0.11,0.42,51,80
-Indomie Goreng,366,0.60,0.01,0.01,0.51,16,23
-Daging Sapi Grade Sedang,366,0.76,0.14,0.11,0.65,729,828
-Gas LPG Tabung (3 Kg.),366,0.95,0.03,0.02,0.82,149,182
-Air Mineral (Aqua Galon),366,0.97,0.04,0.04,0.83,152,196
-Kacang Tanah (Jenis Besar),366,1.01,0.43,0.34,0.87,245,304
-Daging Sapi Grade Atas,366,1.10,0.15,0.12,0.95,1164,1513
-Ikan Lele Segar (Ukuran Sedang),366,1.10,0.22,0.19,0.95,236,294
-"Tepung Terigu ""Segitiga Biru"" Curah",366,1.11,0.15,0.12,0.96,97,124
-Pisang,266,1.29,0.31,0.24,1.12,240,357
-"Susu Kental Manis ""INDOMILK"" Putih",366,1.40,0.04,0.04,1.20,149,163
-Daging Sapi Grade Bawah,366,1.66,0.20,0.16,1.43,1460,1761
-Tahu susu,366,1.89,0.14,0.12,1.63,181,272
-Pepaya,273,2.16,0.61,0.50,1.87,153,176
-Udang Segar (Uk. Sedang),366,2.18,0.86,0.72,1.88,1212,1557
-Mentega Curah (Amanda),366,2.25,0.22,0.18,1.94,428,486
-Sabun Detergen Rinso (Anti Noda),366,2.47,0.00,0.00,2.12,370,374
-Semangka,273,2.43,1.15,0.93,2.12,261,306
-Beras Jagung,366,2.48,0.33,0.27,2.13,244,342
-Minyak Kita,366,2.56,0.13,0.11,2.20,343,580
-Ikan Bandeng Segar (Uk. Sedang),366,2.60,1.28,1.07,2.26,815,1005
-Ketela Pohon,366,2.72,0.36,0.30,2.34,136,153
-Kangkung (Jenis Panjang),366,2.85,0.74,0.60,2.47,37,48
-Ubi Jalar,366,2.98,0.33,0.29,2.57,168,218
-Beras Medium Bulog,366,3.13,0.39,0.31,2.70,323,376
-Kacang Hijau,366,3.48,0.70,0.57,3.00,674,733
-Gula Jawa/Merah (Bahan Kelapa),366,3.50,0.25,0.21,3.00,514,594
-Beras Medium,312,3.53,0.60,0.48,3.03,385,431
-Jeruk,273,3.56,0.93,0.77,3.09,824,1080
-Apel,273,3.60,0.92,0.77,3.11,955,1268
-Tahu biasa,366,3.67,0.32,0.27,3.15,253,302
-Tempe Kw I (campuran kedelai),366,3.68,0.15,0.12,3.16,456,580
-Melon,273,3.69,0.81,0.66,3.17,450,517
-Ikan Tongkol Segar (Uk. Sedang),366,3.68,1.05,0.90,3.17,1131,1302
-Ikan Teri Asin (Bukan Teri Medan),366,3.85,1.47,1.23,3.37,2913,3603
-Kacang Kedelai (Kualitas Lokal),366,4.02,0.65,0.53,3.46,533,619
-Bayam (Jenis Sayur),366,4.03,0.61,0.50,3.47,61,70
-Beras Premium,366,4.17,0.44,0.36,3.58,547,660
-Telur Ayam Broiler,366,4.22,1.27,1.04,3.65,1015,1410
-Gula pasir lokal curah,366,4.58,0.39,0.31,3.93,648,781
-Telur Ayam Kampung,366,4.72,0.88,0.79,4.11,118,195
-Garam Halus (Cap Kapal),366,4.79,0.24,0.20,4.11,162,181
-Terong Ungu (Jenis Sayur),366,4.84,1.45,1.18,4.16,363,457
-Daging Ayam Broiler,366,5.00,1.11,0.89,4.29,1422,1671
-Ikan Mujair Segar (Uk. Sedang),366,5.04,1.38,1.12,4.34,1325,1574
-Minyak Goreng Curah (Bening),366,5.07,0.43,0.35,4.35,735,773
-Beras Ketan (Jenis Siyem),366,5.07,0.38,0.31,4.36,892,1022
-Bawang Putih (Jenis Sinco),366,5.14,1.10,0.90,4.42,1584,1815
-Kacang Kedelai (Kualitas Import),366,5.35,0.53,0.44,4.60,668,766
-Bawang Putih (Jenis Kating),366,5.44,1.14,0.98,4.68,1878,2406
-Kentang,366,5.83,1.72,1.40,5.02,824,972
-Jagung Pipilan Kering (Jenis Besar),366,6.47,1.23,1.08,5.63,585,933
-Sawi (Jenis Hijau),366,6.58,0.80,0.68,5.68,118,147
-Tempe Kw III (campuran kulit),366,6.64,0.66,0.56,5.73,151,167
-Tempe Kw II (campuran jagung),366,6.89,0.00,0.00,5.91,354,425
-Jagung Pipilan Kering (Jenis Kecil),366,6.97,0.88,0.72,5.99,720,920
-Wortel (Kualitas Lokal),366,9.50,2.66,2.29,8.18,901,1167
-Bawang Bombay,366,9.76,1.59,1.38,8.38,2881,3736
-Kubis,366,12.25,3.09,2.57,10.54,954,1220
-Buncis,366,12.96,4.50,3.72,11.15,1535,1964
-Bawang Merah (Kualitas Lokal),366,23.21,3.58,3.03,19.92,6201,7648
-Cabe Merah Kecil-Rawit,366,34.40,8.93,7.49,29.63,9651,11389
-Cabe Merah Kriting,366,42.34,6.55,5.34,36.35,10426,11455
-Tomat,366,53.24,5.67,4.70,45.68,4941,5640
-Cabe Merah Besar,366,64.55,7.26,6.01,55.39,13919,15177
+Indomie Goreng,366,0.60,0.01,0.01,0.01,0,2
+Gas LPG Tabung (3 Kg.),366,0.95,0.03,0.02,0.02,3,25
+"Susu Kental Manis ""BENDERA"" Putih",366,0.38,0.04,0.04,0.03,4,15
+"Susu Kental Manis ""INDOMILK"" Putih",366,1.40,0.04,0.04,0.03,4,15
+Air Mineral (Aqua Galon),366,0.97,0.04,0.04,0.03,5,35
+Minyak Kita,366,2.56,0.13,0.11,0.08,13,59
+"Tepung Terigu ""Segitiga Biru"" Kemasan",282,0.49,0.13,0.11,0.08,10,32
+Daging Sapi Grade Sedang,366,0.76,0.14,0.11,0.09,101,335
+"Tepung Terigu ""Segitiga Biru"" Curah",366,1.11,0.15,0.12,0.10,10,37
+Tahu susu,366,1.89,0.14,0.12,0.10,11,57
+Tempe Kw I (campuran kedelai),366,3.68,0.15,0.12,0.10,14,84
+Daging Sapi Grade Atas,366,1.10,0.15,0.12,0.11,131,596
+Mentega Curah (Amanda),366,2.25,0.22,0.18,0.14,30,146
+Daging Sapi Grade Bawah,366,1.66,0.20,0.16,0.14,147,427
+Ikan Lele Segar (Ukuran Sedang),366,1.10,0.22,0.19,0.16,41,104
+Garam Halus (Cap Kapal),366,4.79,0.24,0.20,0.17,7,41
+Gula Jawa/Merah (Bahan Kelapa),366,3.50,0.25,0.21,0.18,31,74
+Pisang,266,1.29,0.31,0.24,0.19,39,210
+Tahu biasa,366,3.67,0.32,0.27,0.22,17,68
+Beras Jagung,366,2.48,0.33,0.27,0.24,28,95
+Ketela Pohon,366,2.72,0.36,0.30,0.24,14,39
+Ubi Jalar,366,2.98,0.33,0.29,0.25,16,73
+Beras Medium Bulog,366,3.13,0.39,0.31,0.25,29,94
+Gula pasir lokal curah,366,4.58,0.39,0.31,0.25,42,64
+Beras Ketan (Jenis Siyem),366,5.07,0.38,0.31,0.25,50,166
+Kacang Tanah (Jenis Besar),366,1.01,0.43,0.34,0.26,73,154
+Beras Premium,366,4.17,0.44,0.36,0.29,44,107
+Minyak Goreng Curah (Bening),366,5.07,0.43,0.35,0.29,49,79
+Kacang Kedelai (Kualitas Import),366,5.35,0.53,0.44,0.36,50,113
+Bayam (Jenis Sayur),366,4.03,0.61,0.50,0.39,7,18
+Beras Medium,312,3.53,0.60,0.48,0.40,52,209
+Pepaya,273,2.16,0.61,0.50,0.40,33,79
+Kacang Kedelai (Kualitas Lokal),366,4.02,0.65,0.53,0.42,63,167
+Kacang Hijau,366,3.48,0.70,0.57,0.46,102,202
+Kangkung (Jenis Panjang),366,2.85,0.74,0.60,0.50,7,22
+Melon,273,3.69,0.81,0.66,0.53,77,181
+Tempe Kw III (campuran kulit),366,6.64,0.66,0.56,0.54,16,89
+Jagung Pipilan Kering (Jenis Kecil),366,6.97,0.88,0.72,0.56,67,158
+Sawi (Jenis Hijau),366,6.58,0.80,0.68,0.60,14,46
+Udang Segar (Uk. Sedang),366,2.18,0.86,0.72,0.61,389,685
+Apel,273,3.60,0.92,0.77,0.62,187,442
+Jeruk,273,3.56,0.93,0.77,0.66,175,460
+Telur Ayam Kampung,366,4.72,0.88,0.79,0.71,24,170
+Daging Ayam Broiler,366,5.00,1.11,0.89,0.73,246,366
+Semangka,273,2.43,1.15,0.93,0.75,92,176
+Bawang Putih (Jenis Sinco),366,5.14,1.10,0.90,0.79,291,482
+Ikan Tongkol Segar (Uk. Sedang),366,3.68,1.05,0.90,0.81,289,442
+Telur Ayam Broiler,366,4.22,1.27,1.04,0.86,236,407
+Bawang Putih (Jenis Kating),366,5.44,1.14,0.98,0.93,380,700
+Ikan Mujair Segar (Uk. Sedang),366,5.04,1.38,1.12,0.95,286,446
+Ikan Bandeng Segar (Uk. Sedang),366,2.60,1.28,1.07,0.96,344,540
+Jagung Pipilan Kering (Jenis Besar),366,6.47,1.23,1.08,0.97,115,707
+Terong Ungu (Jenis Sayur),366,4.84,1.45,1.18,1.00,85,140
+Ikan Teri Asin (Bukan Teri Medan),366,3.85,1.47,1.23,1.04,879,1876
+Kentang,366,5.83,1.72,1.40,1.20,200,291
+Bawang Bombay,366,9.76,1.59,1.38,1.24,431,770
+Wortel (Kualitas Lokal),366,9.50,2.66,2.29,2.05,237,346
+Kubis,366,12.25,3.09,2.57,2.23,196,321
+Bawang Merah (Kualitas Lokal),366,23.21,3.58,3.03,2.67,813,1222
+Buncis,366,12.96,4.50,3.72,3.25,469,683
+Tomat,366,53.24,5.67,4.70,4.17,591,920
+Cabe Merah Kriting,366,42.34,6.55,5.34,4.58,1666,2362
+Cabe Merah Besar,366,64.55,7.26,6.01,5.32,1864,2764
+Cabe Merah Kecil-Rawit,366,34.40,8.93,7.49,6.76,2541,4019
