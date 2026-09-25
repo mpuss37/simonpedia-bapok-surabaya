@@ -3,7 +3,6 @@ import {
   ArrowDownRight,
   ArrowRight,
   ArrowUpRight,
-  Bell,
   TrendingDown,
   TrendingUp,
   Wallet,
@@ -24,6 +23,7 @@ import { Link } from "react-router-dom"
 import { getRingkasanHarga } from "../services/priceService"
 import ThemeToggle from "../components/ThemeToggle"
 import MobileMenuButton from "../components/layout/MobileMenuButton"
+import NotificationBell from "../components/layout/NotificationBell"
 import ChartTooltip from "../components/charts/ChartTooltip"
 import HetReferenceLine from "../components/charts/HetReferenceLine"
 import HetNote from "../components/charts/HetNote"
@@ -189,10 +189,7 @@ export default function Home() {
             Data survei terakhir: {lastUpdateText}
           </div>
           <ThemeToggle />
-          <button className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#171717]/[0.06] dark:border-white/10 bg-white dark:bg-[#1E1E1E] text-[#171717]/60 dark:text-white/60 dark:border-white/10 dark:bg-white/5 dark:text-white/70">
-            <Bell size={17} />
-            <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#C93742]" />
-          </button>
+          <NotificationBell />
         </div>
       </header>
 

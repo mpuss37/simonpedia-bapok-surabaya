@@ -1,6 +1,6 @@
-import { Bell } from "lucide-react"
 import ThemeToggle from "../ThemeToggle"
 import MobileMenuButton from "./MobileMenuButton"
+import NotificationBell from "./NotificationBell"
 
 export default function PageHeader({
   breadcrumb,
@@ -26,13 +26,7 @@ export default function PageHeader({
           <span className="text-xs text-[#171717]/40 dark:text-white/40">{statusText ?? "Monitoring aktif"}</span>
         </div>
         <ThemeToggle />
-        <button
-          className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#171717]/[0.06] bg-white text-[#171717]/60 dark:border-white/10 dark:bg-white/5 dark:text-white/70"
-          title="Notifikasi"
-        >
-          <Bell size={17} />
-          <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#C93742]" />
-        </button>
+        <NotificationBell />
       </div>
     </header>
   )
