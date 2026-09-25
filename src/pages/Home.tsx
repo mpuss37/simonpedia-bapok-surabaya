@@ -24,6 +24,7 @@ import { getRingkasanHarga } from "../services/priceService"
 import ThemeToggle from "../components/ThemeToggle"
 import MobileMenuButton from "../components/layout/MobileMenuButton"
 import NotificationBell from "../components/layout/NotificationBell"
+import DashboardAlertBanner from "../components/DashboardAlertBanner"
 import ChartTooltip from "../components/charts/ChartTooltip"
 import HetReferenceLine from "../components/charts/HetReferenceLine"
 import HetNote from "../components/charts/HetNote"
@@ -46,6 +47,7 @@ interface EWSAnalisis {
   kategori: string
   hargaRataRata: number
   persenPerubahan: number
+  levelRisiko?: "Normal" | "Siaga" | "Waspada" | "Kritis"
 }
 
 interface KomoditasItem {
@@ -163,6 +165,17 @@ export default function Home() {
   const normalCount = ewsSummary?.normal || 0
   const alertCount = (ewsSummary?.siaga || 0) + waspadaCount
 
+  // Komoditas yang perlu perhatian (risiko Kritis / Waspada) untuk banner.
+  const peringatanList = ewsAnalisis
+    .filter((a) => a.levelRisiko === "Kritis" || a.levelRisiko === "Waspada")
+    .sort((a, b) => Math.abs(b.persenPerubahan) - Math.abs(a.persenPerubahan))
+    .map((a) => ({
+      id: a.id,
+      nama: a.nama,
+      persenPerubahan: a.persenPerubahan,
+      levelRisiko: a.levelRisiko as string,
+    }))
+
   const lastUpdateText = lastUpdate
     ? new Date(lastUpdate).toLocaleString("id-ID", {
         dateStyle: "full",
@@ -194,6 +207,9 @@ export default function Home() {
       </header>
 
       <main className="px-6 py-8 lg:px-10 lg:py-10">
+        {/* BANNER PERINGATAN HARGA */}
+        <DashboardAlertBanner items={peringatanList} />
+
         {/* HERO */}
         <section className="relative overflow-hidden rounded-[28px] bg-[#171717] px-6 py-8 text-white lg:px-9 lg:py-10">
           <div className="relative z-10 max-w-2xl">
