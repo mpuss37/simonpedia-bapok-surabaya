@@ -134,13 +134,15 @@ export default function AdminAudit() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[960px] text-left">
+          <table className="w-full min-w-[1100px] text-left">
             <thead>
               <tr className="border-b border-[#171717]/[0.06] dark:border-white/10 text-[11px] uppercase tracking-wide text-[#171717]/40 dark:text-white/40">
                 <th className="px-6 py-3 font-semibold">Waktu</th>
                 <th className="px-6 py-3 font-semibold">Admin</th>
                 <th className="px-6 py-3 font-semibold">Aksi</th>
                 <th className="px-6 py-3 font-semibold">Deskripsi</th>
+                <th className="px-6 py-3 font-semibold">Perangkat</th>
+                <th className="px-6 py-3 font-semibold">IP / ISP</th>
                 <th className="px-6 py-3 font-semibold">Status</th>
                 <th className="px-6 py-3" />
               </tr>
@@ -148,20 +150,19 @@ export default function AdminAudit() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-sm text-[#171717]/40 dark:text-white/40">
+                  <td colSpan={8} className="px-6 py-12 text-center text-sm text-[#171717]/40 dark:text-white/40">
                     Memuat audit log...
                   </td>
                 </tr>
               ) : terfilter.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-sm text-[#171717]/40 dark:text-white/40">
+                  <td colSpan={8} className="px-6 py-12 text-center text-sm text-[#171717]/40 dark:text-white/40">
                     Belum ada aktivitas yang tercatat.
                   </td>
                 </tr>
               ) : (
                 terfilter.map((d) => {
                   const terbuka = bukaId === d.id
-                  const punyaDetail = !!(d.dataLama || d.dataBaru)
                   return (
                     <Fragment key={d.id}>
                       <tr
@@ -181,6 +182,16 @@ export default function AdminAudit() {
                         <td className="px-6 py-3 text-sm text-[#171717]/70 dark:text-white/70">
                           {d.deskripsi}
                         </td>
+                        <td className="px-6 py-3 text-xs text-[#171717]/60 dark:text-white/60">
+                          <div className="font-semibold text-[#171717] dark:text-white">{d.os || "-"}</div>
+                          <div className="text-[#171717]/45 dark:text-white/45">{d.browser || "-"}</div>
+                        </td>
+                        <td className="px-6 py-3 text-xs text-[#171717]/60 dark:text-white/60">
+                          <div className="font-mono text-[#171717] dark:text-white">{d.ip || "-"}</div>
+                          <div className="max-w-[180px] truncate text-[#171717]/45 dark:text-white/45" title={d.isp || ""}>
+                            {d.isp || "-"}
+                          </div>
+                        </td>
                         <td className="px-6 py-3">
                           {d.berhasil ? (
                             <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#1C8C4A] dark:text-emerald-400">
@@ -193,21 +204,19 @@ export default function AdminAudit() {
                           )}
                         </td>
                         <td className="px-4 py-3 text-right">
-                          {punyaDetail && (
-                            <button
-                              type="button"
-                              onClick={() => setBukaId(terbuka ? null : d.id)}
-                              className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold text-[#171717]/45 transition hover:bg-[#FFF3F4] hover:text-[#C93742] dark:text-white/45 dark:hover:bg-white/[0.06]"
-                            >
-                              {terbuka ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                              Detail
-                            </button>
-                          )}
+                          <button
+                            type="button"
+                            onClick={() => setBukaId(terbuka ? null : d.id)}
+                            className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold text-[#171717]/45 transition hover:bg-[#FFF3F4] hover:text-[#C93742] dark:text-white/45 dark:hover:bg-white/[0.06]"
+                          >
+                            {terbuka ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                            Detail
+                          </button>
                         </td>
                       </tr>
                       {terbuka && (
                         <tr className="border-b border-[#171717]/[0.04] dark:border-white/[0.06] bg-[#FAF7F7] dark:bg-[#121212]">
-                          <td colSpan={6} className="px-6 py-4">
+                          <td colSpan={8} className="px-6 py-4">
                             {/* Info perangkat & jaringan */}
                             <div className="mb-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                               <InfoItem label="IP" nilai={d.ip} />
