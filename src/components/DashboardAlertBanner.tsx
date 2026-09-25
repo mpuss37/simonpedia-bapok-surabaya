@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { AlertTriangle, ArrowRight, X } from "lucide-react"
 
@@ -9,23 +9,49 @@ export interface PeringatanItem {
   levelRisiko: string
 }
 
+/** Lama banner tampil sebelum hilang otomatis (detik). */
+const DURASI_DETIK = 10
+
 /**
  * Banner peringatan di Dashboard: menampilkan komoditas dengan tingkat
  * risiko Kritis / Waspada (harga perlu intervensi). Tidak muncul bila
- * tidak ada. Bisa ditutup (per kunjungan).
+ * tidak ada. Bisa ditutup, dan otomatis hilang setelah beberapa detik
+ * (dengan animasi progress countdown).
  */
 export default function DashboardAlertBanner({ items }: { items: PeringatanItem[] }) {
   const [ditutup, setDitutup] = useState(false)
+  const [sisa, setSisa] = useState(DURASI_DETIK)
 
-  if (ditutup || items.length === 0) return null
+  const aktif = !ditutup && items.length > 0
+
+  // Auto-hilang setelah DURASI_DETIK, dengan hitung mundur tiap detik.
+  useEffect(() => {
+    if (!aktif) return
+
+    const timer = setInterval(() => {
+      setSisa((s) => {
+        if (s <= 1) {
+          clearInterval(timer)
+          setDitutup(true)
+          return 0
+        }
+        return s - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [aktif])
+
+  if (!aktif) return null
 
   // Warna mengikuti level risiko tertinggi yang ada.
   const adaKritis = items.some((i) => i.levelRisiko === "Kritis")
   const warna = adaKritis
-    ? { bg: "bg-[#FFF0F1] dark:bg-red-500/10", border: "border-[#C93742]/30", teks: "text-[#C93742]" }
-    : { bg: "bg-[#FFF8E1] dark:bg-amber-500/10", border: "border-[#EA580C]/30", teks: "text-[#B45309] dark:text-amber-400" }
+    ? { bg: "bg-[#FFF0F1] dark:bg-red-500/10", border: "border-[#C93742]/30", teks: "text-[#C93742]", bar: "bg-[#C93742]" }
+    : { bg: "bg-[#FFF8E1] dark:bg-amber-500/10", border: "border-[#EA580C]/30", teks: "text-[#B45309] dark:text-amber-400", bar: "bg-[#EA580C]" }
 
   const kritis = items.filter((i) => i.levelRisiko === "Kritis")
+  const persenBar = (sisa / DURASI_DETIK) * 100
 
   return (
     <div className={`mb-6 rounded-2xl border ${warna.border} ${warna.bg} p-4 lg:p-5`}>
@@ -82,13 +108,26 @@ export default function DashboardAlertBanner({ items }: { items: PeringatanItem[
         ))}
       </div>
 
-      <Link
-        to="/ews"
-        className={`mt-3 inline-flex items-center gap-1.5 text-xs font-bold ${warna.teks} hover:underline`}
-      >
-        Lihat Early Warning System
-        <ArrowRight size={13} />
-      </Link>
+      <div className="mt-3 flex items-center justify-between gap-3">
+        <Link
+          to="/ews"
+          className={`inline-flex items-center gap-1.5 text-xs font-bold ${warna.teks} hover:underline`}
+        >
+          Lihat Early Warning System
+          <ArrowRight size={13} />
+        </Link>
+        <span className="text-[10px] font-medium text-[#171717]/40 dark:text-white/40">
+          Menutup otomatis dalam {sisa} dtk
+        </span>
+      </div>
+
+      {/* Progress bar hitung mundur */}
+      <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-[#171717]/[0.06] dark:bg-white/10">
+        <div
+          className={`h-full rounded-full ${warna.bar} transition-[width] duration-1000 ease-linear`}
+          style={{ width: `${persenBar}%` }}
+        />
+      </div>
     </div>
   )
 }
