@@ -1,10 +1,8 @@
 # SIMONPEDIA Bapok Surabaya
 
 A web application for monitoring staple food (*bahan pokok* / "bapok") prices in
-Surabaya, Indonesia. It provides price monitoring, an Early Warning System,
-price forecasting, action recommendations, and an admin panel for managing data.
-
-Built by **Tim EWS**.
+Surabaya, Indonesia. It provides price monitoring, an EWS bapok, price
+forecasting, action recommendations, and an admin panel for managing data.
 
 ## Features
 
@@ -76,14 +74,6 @@ Open http://localhost:5173. The frontend proxies `/api` to the backend (see
 
 7 markets · 67 commodities · Jan–Dec 2024 (138,054 price points).
 Source: Bapanas / SP2KP.
-
-## Admin
-
-- **URL:** `/login-admin`
-- **Default credentials:** `admin` / `admin` — change these in production
-  (set `ADMIN_USER` and `ADMIN_PASS` in the environment).
-- **Features:** manage HET (price ceiling), import data (Excel / CSV / JSON),
-  and view the audit log.
 
 ## Documentation
 
