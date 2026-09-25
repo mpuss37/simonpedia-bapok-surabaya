@@ -10,8 +10,11 @@ import {
   Menu,
   X,
   LogOut,
+  Sun,
+  Moon,
 } from "lucide-react"
 import { sudahMasuk, hapusToken } from "../../services/admin"
+import { useTheme } from "../../context/theme-context"
 
 const menu = [
   { label: "Dashboard Admin", path: "/admin", icon: LayoutDashboard, end: true },
@@ -23,6 +26,8 @@ const menu = [
 
 export default function AdminLayout() {
   const [open, setOpen] = useState(false)
+  const { theme, toggleTheme } = useTheme()
+  const isDark = theme === "dark"
 
   // Penjaga route: bila belum masuk, arahkan ke halaman login admin.
   if (!sudahMasuk()) {
@@ -113,6 +118,17 @@ export default function AdminLayout() {
 
         {/* KEMBALI KE SITUS */}
         <div className="border-t border-white/10 p-4">
+          {/* TOGGLE TEMA */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={isDark ? "Aktifkan mode terang" : "Aktifkan mode gelap"}
+            className="mb-1 flex w-full items-center gap-3 rounded-[10px] px-3 py-2.5 text-[13px] font-medium text-white/70 transition hover:bg-white/[0.07] hover:text-white"
+          >
+            {isDark ? <Sun size={17} className="text-white/40" /> : <Moon size={17} className="text-white/40" />}
+            <span>{isDark ? "Mode Terang" : "Mode Gelap"}</span>
+          </button>
+
           <NavLink
             to="/"
             onClick={() => setOpen(false)}
@@ -146,10 +162,18 @@ export default function AdminLayout() {
         <span className="text-[15px] font-black tracking-[-0.04em] text-white">
           Panel Admin
         </span>
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={isDark ? "Aktifkan mode terang" : "Aktifkan mode gelap"}
+          className="ml-auto flex h-10 w-10 items-center justify-center rounded-xl text-white/80 transition hover:bg-white/10"
+        >
+          {isDark ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
       </header>
 
       {/* KONTEN */}
-      <main className="min-h-screen lg:ml-[250px]">
+      <main className="min-h-screen bg-[#FAF7F7] lg:ml-[250px] dark:bg-[#121212]">
         <Outlet />
       </main>
     </div>
