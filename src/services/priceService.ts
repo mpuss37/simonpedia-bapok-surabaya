@@ -90,3 +90,22 @@ export async function getRingkasanHarga(): Promise<RingkasanResponse> {
   if (!res.ok) throw new Error("Gagal mengambil ringkasan harga")
   return res.json()
 }
+
+// Hasil prediksi harga per komoditas (harga terakhir, tren, prediksi 7 hari).
+export interface PrediksiItem {
+  id: number
+  nama: string
+  kategori: string
+  satuan: string
+  hargaTerakhir: number
+  tren: string
+  trenPersen: number
+  prediksiHarga: number
+  perubahanPrediksi: number
+}
+
+export async function getPrediksiSemua(): Promise<PrediksiItem[]> {
+  const res = await fetch(`${API_URL}/prediction/all`)
+  if (!res.ok) throw new Error("Gagal mengambil data prediksi")
+  return res.json()
+}

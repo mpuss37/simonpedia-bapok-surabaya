@@ -11,6 +11,8 @@ import {
   Check,
   Info,
   AlertTriangle,
+  Table2,
+  TrendingUp,
 } from "lucide-react"
 import PageHeader from "../components/layout/PageHeader"
 import {
@@ -18,13 +20,16 @@ import {
   getPasar,
   getHarga,
   getRingkasanHarga,
+  getPrediksiSemua,
   type Komoditas,
   type Pasar,
   type Harga,
   type RingkasanHarga,
+  type PrediksiItem,
 } from "../services/priceService"
 
 type Format = "csv" | "json" | "excel"
+type JenisData = "mentah" | "prediksi"
 
 const formatOptions: {
   id: Format
@@ -36,6 +41,16 @@ const formatOptions: {
   { id: "csv", label: "CSV", ext: ".csv", desc: "Buka di mana saja, cocok untuk spreadsheet.", icon: FileText },
   { id: "json", label: "JSON", ext: ".json", desc: "Untuk pengembang atau integrasi sistem.", icon: FileJson },
   { id: "excel", label: "Excel", ext: ".xlsx", desc: "Siap diolah dengan Microsoft Excel.", icon: FileSpreadsheet },
+]
+
+const jenisOptions: {
+  id: JenisData
+  label: string
+  desc: string
+  icon: typeof FileText
+}[] = [
+  { id: "mentah", label: "Data Mentah", desc: "Harga survei per pasar per tanggal.", icon: Table2 },
+  { id: "prediksi", label: "Prediksi", desc: "Hasil prediksi harga 7 hari per komoditas.", icon: TrendingUp },
 ]
 
 // Batas jumlah baris per export agar browser & database tetap ringan.
@@ -53,6 +68,17 @@ interface BarisData {
   sumber: string
 }
 
+interface BarisPrediksi {
+  komoditas: string
+  kategori: string
+  satuan: string
+  harga_terakhir: number
+  tren: string
+  tren_persen: number
+  prediksi_harga: number
+  perubahan_prediksi: number
+}
+
 function keBaris(h: Harga): BarisData {
   return {
     tanggal: String(h.tanggal).slice(0, 10),
@@ -62,6 +88,19 @@ function keBaris(h: Harga): BarisData {
     pasar: h.pasar.nama,
     harga: h.harga,
     sumber: h.sumber ?? "-",
+  }
+}
+
+function keBarisPrediksi(p: PrediksiItem): BarisPrediksi {
+  return {
+    komoditas: p.nama,
+    kategori: p.kategori,
+    satuan: p.satuan,
+    harga_terakhir: p.hargaTerakhir,
+    tren: p.tren,
+    tren_persen: p.trenPersen,
+    prediksi_harga: p.prediksiHarga,
+    perubahan_prediksi: p.perubahanPrediksi,
   }
 }
 
@@ -77,14 +116,14 @@ function unduhBlob(isi: BlobPart, mime: string, namaFile: string) {
   URL.revokeObjectURL(url)
 }
 
-function keCsv(rows: BarisData[]): string {
+// Bangun string CSV generik dari daftar objek + urutan kolom.
+function keCsv<T extends object>(rows: T[], kolom: (keyof T)[]): string {
   if (rows.length === 0) return ""
-  const kolom: (keyof BarisData)[] = ["tanggal", "komoditas", "kategori", "satuan", "pasar", "harga", "sumber"]
-  const escape = (v: string | number) => {
+  const escape = (v: unknown) => {
     const s = String(v)
     return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
   }
-  const header = kolom.join(",")
+  const header = kolom.map(String).join(",")
   const isi = rows.map((r) => kolom.map((k) => escape(r[k])).join(",")).join("\n")
   return `${header}\n${isi}`
 }
@@ -93,8 +132,10 @@ export default function DataExport() {
   const [komoditas, setKomoditas] = useState<Komoditas[]>([])
   const [pasar, setPasar] = useState<Pasar[]>([])
   const [ringkasan, setRingkasan] = useState<RingkasanHarga[]>([])
+  const [prediksi, setPrediksi] = useState<PrediksiItem[]>([])
   const [loadingRef, setLoadingRef] = useState(true)
 
+  const [jenisData, setJenisData] = useState<JenisData>("mentah")
   const [komoditasId, setKomoditasId] = useState<string>("semua")
   const [pasarId, setPasarId] = useState<string>("semua")
   const [periode, setPeriode] = useState<string>("30")
@@ -103,18 +144,20 @@ export default function DataExport() {
   const [loadingUnduh, setLoadingUnduh] = useState(false)
   const [pesan, setPesan] = useState<{ tipe: "sukses" | "peringatan" | "error"; teks: string } | null>(null)
 
-  // Muat daftar komoditas, pasar, dan ringkasan harga (ringan) untuk pratinjau.
+  // Muat daftar komoditas, pasar, ringkasan, dan prediksi untuk pratinjau & referensi.
   useEffect(() => {
     async function fetchRef() {
       try {
-        const [k, p, r] = await Promise.all([
+        const [k, p, r, pr] = await Promise.all([
           getKomoditas(),
           getPasar(),
           getRingkasanHarga(),
+          getPrediksiSemua(),
         ])
         setKomoditas(k)
         setPasar(p)
         setRingkasan(r.data)
+        setPrediksi(pr)
       } catch (err) {
         console.error("Gagal memuat referensi data:", err)
       } finally {
@@ -127,22 +170,61 @@ export default function DataExport() {
   // Perkiraan jumlah baris untuk ditampilkan (berdasarkan filter terpilih).
   // Data mentah lengkap baru ditarik saat tombol unduh diklik.
   const perkiraanBaris = useMemo(() => {
+    if (jenisData === "prediksi") {
+      return komoditasId === "semua" ? prediksi.length : 1
+    }
     const dasar = komoditasId === "semua" ? ringkasan.length : 1
     const faktorPasar = pasarId === "semua" ? pasar.length || 1 : 1
     const hari = periode === "all" ? 365 : Number(periode) || 30
     return Math.max(1, Math.round(dasar * faktorPasar * hari))
-  }, [ringkasan, pasar, komoditasId, pasarId, periode])
+  }, [jenisData, prediksi, ringkasan, pasar, komoditasId, pasarId, periode])
 
   const ringkasanTerpilih = useMemo(() => {
     if (komoditasId === "semua") return ringkasan
     return ringkasan.filter((r) => String(r.id) === komoditasId)
   }, [ringkasan, komoditasId])
 
-  // Ambil data mentah sesuai filter, terapkan periode, lalu unduh.
+  const prediksiTerpilih = useMemo(() => {
+    if (komoditasId === "semua") return prediksi
+    return prediksi.filter((p) => String(p.id) === komoditasId)
+  }, [prediksi, komoditasId])
+
+  // Ambil data sesuai filter, lalu unduh.
   async function handleExport() {
     setPesan(null)
     setLoadingUnduh(true)
+    const tanggalFile = new Date().toISOString().slice(0, 10)
     try {
+      // ---------- MODE PREDIKSI ----------
+      if (jenisData === "prediksi") {
+        const baris = prediksiTerpilih.map(keBarisPrediksi)
+        if (baris.length === 0) {
+          setPesan({ tipe: "peringatan", teks: "Tidak ada data prediksi untuk filter ini." })
+          return
+        }
+        const kolom: (keyof BarisPrediksi)[] = [
+          "komoditas", "kategori", "satuan", "harga_terakhir",
+          "tren", "tren_persen", "prediksi_harga", "perubahan_prediksi",
+        ]
+        const namaDasar = `prediksi-bapok-${tanggalFile}`
+        if (format === "csv") {
+          unduhBlob(keCsv(baris, kolom), "text/csv;charset=utf-8;", `${namaDasar}.csv`)
+        } else if (format === "json") {
+          unduhBlob(JSON.stringify(baris, null, 2), "application/json", `${namaDasar}.json`)
+        } else {
+          const ws = XLSX.utils.json_to_sheet(baris)
+          const wb = XLSX.utils.book_new()
+          XLSX.utils.book_append_sheet(wb, ws, "Prediksi")
+          XLSX.writeFile(wb, `${namaDasar}.xlsx`)
+        }
+        setPesan({
+          tipe: "sukses",
+          teks: `Berhasil mengunduh ${baris.length.toLocaleString("id-ID")} baris prediksi (${formatOptions.find((f) => f.id === format)!.label}).`,
+        })
+        return
+      }
+
+      // ---------- MODE DATA MENTAH ----------
       const harga = await getHarga({
         komoditasId: komoditasId === "semua" ? undefined : Number(komoditasId),
         pasarId: pasarId === "semua" ? undefined : Number(pasarId),
@@ -172,11 +254,11 @@ export default function DataExport() {
         return
       }
 
-      const tanggalFile = new Date().toISOString().slice(0, 10)
-      const namaDasar = `harga-bapok-${tanggalFile}`
+      const kolom: (keyof BarisData)[] = ["tanggal", "komoditas", "kategori", "satuan", "pasar", "harga", "sumber"]
+      const namaDasar = `datamentah-bapok-${tanggalFile}`
 
       if (format === "csv") {
-        unduhBlob(keCsv(baris), "text/csv;charset=utf-8;", `${namaDasar}.csv`)
+        unduhBlob(keCsv(baris, kolom), "text/csv;charset=utf-8;", `${namaDasar}.csv`)
       } else if (format === "json") {
         unduhBlob(JSON.stringify(baris, null, 2), "application/json", `${namaDasar}.json`)
       } else {
@@ -228,6 +310,49 @@ export default function DataExport() {
               </h2>
             </div>
 
+            {/* JENIS DATA */}
+            <div className="mb-5">
+              <label className="mb-1.5 block text-xs font-semibold text-[#171717]/55 dark:text-white/55">
+                Jenis data
+              </label>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {jenisOptions.map((opt) => {
+                  const Icon = opt.icon
+                  const aktif = jenisData === opt.id
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => setJenisData(opt.id)}
+                      className={`flex items-start gap-3 rounded-xl border p-3 text-left transition ${
+                        aktif
+                          ? "border-[#C93742] bg-[#FFF3F4] dark:bg-white/[0.04]"
+                          : "border-[#171717]/[0.08] dark:border-white/10 hover:border-[#C93742]/40"
+                      }`}
+                    >
+                      <span
+                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+                          aktif
+                            ? "bg-[#C93742] text-white"
+                            : "bg-[#171717]/[0.04] dark:bg-white/[0.06] text-[#171717]/55 dark:text-white/55"
+                        }`}
+                      >
+                        <Icon size={17} />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-bold text-[#171717] dark:text-white">
+                          {opt.label}
+                        </span>
+                        <span className="mt-0.5 block text-xs text-[#171717]/45 dark:text-white/45">
+                          {opt.desc}
+                        </span>
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-[#171717]/55 dark:text-white/55">
@@ -248,33 +373,36 @@ export default function DataExport() {
                 </select>
               </div>
 
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold text-[#171717]/55 dark:text-white/55">
-                  Pasar
-                </label>
-                <select
-                  value={pasarId}
-                  onChange={(e) => setPasarId(e.target.value)}
-                  disabled={loadingRef}
-                  className="h-11 w-full rounded-xl border border-[#171717]/[0.08] dark:border-white/10 bg-[#FFF8F9] dark:bg-[#121212] px-3 text-sm font-medium text-[#171717]/70 dark:text-white/70 outline-none focus:border-[#C93742]/40"
-                >
-                  <option value="semua">Semua pasar</option>
-                  {pasar.map((p) => (
-                    <option key={p.id} value={String(p.id)}>
-                      {p.nama}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {jenisData === "mentah" && (
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold text-[#171717]/55 dark:text-white/55">
+                    Pasar
+                  </label>
+                  <select
+                    value={pasarId}
+                    onChange={(e) => setPasarId(e.target.value)}
+                    disabled={loadingRef}
+                    className="h-11 w-full rounded-xl border border-[#171717]/[0.08] dark:border-white/10 bg-[#FFF8F9] dark:bg-[#121212] px-3 text-sm font-medium text-[#171717]/70 dark:text-white/70 outline-none focus:border-[#C93742]/40"
+                  >
+                    <option value="semua">Semua pasar</option>
+                    {pasar.map((p) => (
+                      <option key={p.id} value={String(p.id)}>
+                        {p.nama}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold text-[#171717]/55 dark:text-white/55">
-                  Periode
-                </label>
-                <div className="relative">
-                  <Calendar
-                    size={15}
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#171717]/35 dark:text-white/35"
+              {jenisData === "mentah" && (
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold text-[#171717]/55 dark:text-white/55">
+                    Periode
+                  </label>
+                  <div className="relative">
+                    <Calendar
+                      size={15}
+                      className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#171717]/35 dark:text-white/35"
                   />
                   <select
                     value={periode}
@@ -288,8 +416,9 @@ export default function DataExport() {
                     <option value="365">1 tahun terakhir</option>
                     <option value="all">Seluruh data</option>
                   </select>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-[#171717]/55 dark:text-white/55">
@@ -401,74 +530,140 @@ export default function DataExport() {
             <div className="flex items-center gap-2">
               <Database size={16} className="text-[#C93742]" />
               <h2 className="text-sm font-bold text-[#171717] dark:text-white">
-                Pratinjau data
+                Pratinjau data {jenisData === "prediksi" ? "prediksi" : "harga"}
               </h2>
             </div>
             <span className="text-xs text-[#171717]/40 dark:text-white/40">
               {loadingRef
                 ? "memuat..."
-                : ringkasanTerpilih.length === 0
+                : (jenisData === "prediksi" ? prediksiTerpilih : ringkasanTerpilih).length === 0
                   ? "tidak ada data"
-                  : `${ringkasanTerpilih.length.toLocaleString("id-ID")} komoditas`}
+                  : `${(jenisData === "prediksi" ? prediksiTerpilih : ringkasanTerpilih).length.toLocaleString("id-ID")} komoditas`}
             </span>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[680px] text-left">
-              <thead>
-                <tr className="border-b border-[#171717]/[0.06] dark:border-white/10 text-[11px] uppercase tracking-wide text-[#171717]/40 dark:text-white/40">
-                  <th className="px-6 py-3 font-semibold">Komoditas</th>
-                  <th className="px-6 py-3 font-semibold">Kategori</th>
-                  <th className="px-6 py-3 text-right font-semibold">Harga rata-rata</th>
-                  <th className="px-6 py-3 text-right font-semibold">Perubahan</th>
-                  <th className="px-6 py-3 font-semibold">Satuan</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loadingRef ? (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-10 text-center text-sm text-[#171717]/40 dark:text-white/40">
-                      Memuat data...
-                    </td>
+          {/* PRATINJAU PREDIKSI */}
+          {jenisData === "prediksi" ? (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px] text-left">
+                <thead>
+                  <tr className="border-b border-[#171717]/[0.06] dark:border-white/10 text-[11px] uppercase tracking-wide text-[#171717]/40 dark:text-white/40">
+                    <th className="px-6 py-3 font-semibold">Komoditas</th>
+                    <th className="px-6 py-3 text-right font-semibold">Harga Terakhir</th>
+                    <th className="px-6 py-3 font-semibold">Tren</th>
+                    <th className="px-6 py-3 text-right font-semibold">Tren (%)</th>
+                    <th className="px-6 py-3 text-right font-semibold">Prediksi Harga</th>
+                    <th className="px-6 py-3 text-right font-semibold">Perubahan Prediksi</th>
                   </tr>
-                ) : ringkasanTerpilih.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-10 text-center text-sm text-[#171717]/40 dark:text-white/40">
-                      Tidak ada data untuk filter ini.
-                    </td>
-                  </tr>
-                ) : (
-                  ringkasanTerpilih.slice(0, BATAS_PRATINJAU).map((r) => (
-                    <tr
-                      key={r.id}
-                      className="border-b border-[#171717]/[0.04] dark:border-white/[0.06] last:border-0"
-                    >
-                      <td className="px-6 py-3 text-sm font-semibold text-[#171717] dark:text-white">{r.nama}</td>
-                      <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">{r.kategori}</td>
-                      <td className="px-6 py-3 text-right text-sm font-semibold text-[#171717] dark:text-white">
-                        Rp{Math.round(r.hargaRataRata).toLocaleString("id-ID")}
+                </thead>
+                <tbody>
+                  {loadingRef ? (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-10 text-center text-sm text-[#171717]/40 dark:text-white/40">
+                        Memuat data...
                       </td>
-                      <td
-                        className={`px-6 py-3 text-right text-sm font-semibold ${
-                          r.persenPerubahan >= 0 ? "text-[#C93742]" : "text-emerald-600 dark:text-emerald-400"
-                        }`}
-                      >
-                        {r.persenPerubahan >= 0 ? "+" : ""}
-                        {r.persenPerubahan.toFixed(1)}%
-                      </td>
-                      <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">{r.satuan}</td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+                  ) : prediksiTerpilih.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-10 text-center text-sm text-[#171717]/40 dark:text-white/40">
+                        Tidak ada data untuk filter ini.
+                      </td>
+                    </tr>
+                  ) : (
+                    prediksiTerpilih.slice(0, BATAS_PRATINJAU).map((p) => (
+                      <tr
+                        key={p.id}
+                        className="border-b border-[#171717]/[0.04] dark:border-white/[0.06] last:border-0"
+                      >
+                        <td className="px-6 py-3 text-sm font-semibold text-[#171717] dark:text-white">{p.nama}</td>
+                        <td className="px-6 py-3 text-right text-sm text-[#171717]/70 dark:text-white/70">
+                          Rp{Math.round(p.hargaTerakhir).toLocaleString("id-ID")}
+                        </td>
+                        <td className="px-6 py-3 text-sm capitalize text-[#171717]/70 dark:text-white/70">{p.tren}</td>
+                        <td
+                          className={`px-6 py-3 text-right text-sm font-semibold ${
+                            p.trenPersen >= 0 ? "text-[#C93742]" : "text-emerald-600 dark:text-emerald-400"
+                          }`}
+                        >
+                          {p.trenPersen >= 0 ? "+" : ""}
+                          {p.trenPersen.toFixed(2)}%
+                        </td>
+                        <td className="px-6 py-3 text-right text-sm font-bold text-[#171717] dark:text-white">
+                          Rp{Math.round(p.prediksiHarga).toLocaleString("id-ID")}
+                        </td>
+                        <td
+                          className={`px-6 py-3 text-right text-sm font-semibold ${
+                            p.perubahanPrediksi >= 0 ? "text-[#C93742]" : "text-emerald-600 dark:text-emerald-400"
+                          }`}
+                        >
+                          {p.perubahanPrediksi >= 0 ? "+" : ""}
+                          {p.perubahanPrediksi.toFixed(2)}%
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            /* PRATINJAU DATA MENTAH (ringkasan harga terkini) */
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[680px] text-left">
+                <thead>
+                  <tr className="border-b border-[#171717]/[0.06] dark:border-white/10 text-[11px] uppercase tracking-wide text-[#171717]/40 dark:text-white/40">
+                    <th className="px-6 py-3 font-semibold">Komoditas</th>
+                    <th className="px-6 py-3 font-semibold">Kategori</th>
+                    <th className="px-6 py-3 text-right font-semibold">Harga rata-rata</th>
+                    <th className="px-6 py-3 text-right font-semibold">Perubahan</th>
+                    <th className="px-6 py-3 font-semibold">Satuan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loadingRef ? (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-10 text-center text-sm text-[#171717]/40 dark:text-white/40">
+                        Memuat data...
+                      </td>
+                    </tr>
+                  ) : ringkasanTerpilih.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-10 text-center text-sm text-[#171717]/40 dark:text-white/40">
+                        Tidak ada data untuk filter ini.
+                      </td>
+                    </tr>
+                  ) : (
+                    ringkasanTerpilih.slice(0, BATAS_PRATINJAU).map((r) => (
+                      <tr
+                        key={r.id}
+                        className="border-b border-[#171717]/[0.04] dark:border-white/[0.06] last:border-0"
+                      >
+                        <td className="px-6 py-3 text-sm font-semibold text-[#171717] dark:text-white">{r.nama}</td>
+                        <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">{r.kategori}</td>
+                        <td className="px-6 py-3 text-right text-sm font-semibold text-[#171717] dark:text-white">
+                          Rp{Math.round(r.hargaRataRata).toLocaleString("id-ID")}
+                        </td>
+                        <td
+                          className={`px-6 py-3 text-right text-sm font-semibold ${
+                            r.persenPerubahan >= 0 ? "text-[#C93742]" : "text-emerald-600 dark:text-emerald-400"
+                          }`}
+                        >
+                          {r.persenPerubahan >= 0 ? "+" : ""}
+                          {r.persenPerubahan.toFixed(1)}%
+                        </td>
+                        <td className="px-6 py-3 text-sm text-[#171717]/55 dark:text-white/55">{r.satuan}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           <div className="border-t border-[#171717]/[0.06] dark:border-white/10 px-6 py-3">
             <p className="text-xs text-[#171717]/40 dark:text-white/40">
-              Di atas adalah ringkasan harga terkini per komoditas. Saat mengunduh, data harga
-              mentah (per pasar per tanggal) sesuai filter akan disertakan — maks{" "}
-              {BATAS_EXPORT.toLocaleString("id-ID")} baris.
+              {jenisData === "prediksi"
+                ? "Pratinjau memperlihatkan sebagian komoditas. Saat mengunduh, seluruh hasil prediksi sesuai filter akan disertakan."
+                : `Di atas adalah ringkasan harga terkini per komoditas. Saat mengunduh, data harga mentah (per pasar per tanggal) sesuai filter akan disertakan — maks ${BATAS_EXPORT.toLocaleString("id-ID")} baris.`}
             </p>
           </div>
         </section>
